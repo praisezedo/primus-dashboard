@@ -34,7 +34,7 @@ export default function RootLayout({
       >
         {header}
         {sidebar}
-        <main className="absolute left-50 top-17 right-0 overflow-scroll">
+        <main className="absolute left-50 top-17 right-0 overflow-y-scroll overflow-x-hidden">
           {children}
           </main>
       </body>

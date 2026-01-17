@@ -6,7 +6,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation";
 
 export default function SideBar() {
-
         const pathname = usePathname();
         const isActive = (href: string) => pathname === href;
     return <>
@@ -35,12 +34,12 @@ export default function SideBar() {
         </nav>
 
         <div className="justify-center flex flex-col gap-10 px-7 mt-16 border-t border-b py-4  border-gray-200">
-            <Link className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/students/upload') ? 'bg-gray-400' : 'bg-white'}`} href={'/settings'}>
+            <Link className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/students/settings') ? 'bg-gray-400' : 'bg-white'}`} href={'/settings'}>
          <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Settings</span>
             <FontAwesomeIcon icon={faGear} className="w-5 h-5 text-blue-700"/>
                 <span className="font-bold">Settings</span>
             </Link> 
-            <Link className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/students/upload') ? 'bg-gray-400' : 'bg-white'}`} href={'/logout'}>
+            <Link className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/students/logout') ? 'bg-gray-400' : 'bg-white'}`} href={'/logout'}>
                        <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Logout</span>
             <FontAwesomeIcon icon={faArrowRightFromBracket} className="w-5 h-5 text-blue-700"/>
                 <span className="font-bold">Logout</span>
