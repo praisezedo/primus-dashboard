@@ -8,7 +8,7 @@ export default function BulkUploadForm() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-
+  const [errorMessage , setErrorMessage] = useState<string>('');
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -26,7 +26,7 @@ export default function BulkUploadForm() {
     if (droppedFile && droppedFile.type === "text/csv") {
       setFile(droppedFile);
     } else {
-      alert("Please upload a CSV file");
+      setErrorMessage("Please upload a CSV file")
     }
   };
 
@@ -72,11 +72,15 @@ export default function BulkUploadForm() {
             or click to select a file
           </p>
 
-          {file && (
+          {file ? 
             <p className="mt-3 text-sm text-green-600">
-              Selected: {file.name}
-            </p>
-          )}
+              Selected: {file.name} 
+            </p>  : <p className="mt-3 text-sm text-red-600">{errorMessage}</p>
+          }
+
+          {
+             
+          }
         </div>
       </div>
 
