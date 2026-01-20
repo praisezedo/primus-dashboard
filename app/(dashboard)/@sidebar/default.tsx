@@ -1,7 +1,7 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faHouse  } from "@fortawesome/free-regular-svg-icons"
-import { faUsers, faUserPlus , faCloudArrowUp  , faGear , faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons"
+import { faBell,  faUsers , faUserPlus , faCloudArrowUp  , faGear , faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import { usePathname } from "next/navigation";
 
@@ -30,6 +30,12 @@ export default function SideBar() {
            <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Bulk Upload</span>
            <FontAwesomeIcon className="w-5 h-5 text-blue-700" icon={faCloudArrowUp}/> 
            <h1>Bulk Upload</h1>
+           </Link>
+
+           <Link href="/notifications" className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/students/upload') ? 'bg-gray-200' : 'bg-white'}`}>
+           <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Notifications</span>
+             <FontAwesomeIcon  className="w-5 h-5 text-blue-700"icon={faBell}/>
+             <h1>Notifications</h1>
            </Link>
         </nav>
 

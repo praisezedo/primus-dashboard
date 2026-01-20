@@ -1,3 +1,4 @@
+"use client";
 import BulkUploadForm from "@/components/Forms/BulkUploadForm";
 import BulkUploadDirection from "@/components/UI/BulkUploadDirection";
 import Footer from "@/components/UI/Footer";

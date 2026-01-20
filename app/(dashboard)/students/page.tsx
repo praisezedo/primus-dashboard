@@ -1,4 +1,4 @@
-
+"use client";
 import Link from "next/link"
 import StudentTable from "@/components/Table/StudentTable"
 import Footer from "@/components/UI/Footer"

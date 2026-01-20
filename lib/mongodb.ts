@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const MONGODB_URL = process.env.MONGODB_URL!;
+const MONGODB_URL = process.env.MONGO_URI!;
 
 type MongooseCache = {
   conn: typeof mongoose | null;

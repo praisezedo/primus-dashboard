@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import {connectDB} from '@/lib/mogodb'
+import {connectDB} from '@/lib/mongodb'
 import Admin from "@/app/models/Admin";
 import { AdminType } from "@/types/admin";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
+
 export async function POST(req: Request) {
 
     try {
@@ -34,7 +37,7 @@ export async function POST(req: Request) {
         // compare password
         const isMatch = await bcrypt.compare(
             adminPassword ,
-            admin.adminPassword
+            admin.password
         )
        if (!isMatch) {
           return NextResponse.json({
@@ -43,8 +46,29 @@ export async function POST(req: Request) {
         );
        }
 
+
+
+    const token = jwt.sign (
+        {
+            adminId: admin.adminId,
+            schoolId: admin.schoolId,
+        },
+       process.env.JWT_SECRET!,
+
+       {expiresIn: "7d"}
+    );
+    
+    (await cookies()).set("primus_token" , token , {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+    })
+
        return NextResponse.json({
         message: "Login Successful",
+        token,
         admin: {
              adminId: admin._id.toString(),
              adminName: admin.adminName,

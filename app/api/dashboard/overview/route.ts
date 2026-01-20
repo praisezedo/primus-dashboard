@@ -1,11 +1,45 @@
-import { NextResponse } from "next/server";
-import { getDashBoardOverview } from "@/lib/dashboard/overview.service";
+import {  NextResponse } from "next/server";
+import { verifyAuth } from "@/lib/auth";
+import { connectDB } from "@/lib/mongodb";
+import Student from "@/app/models/Students";
+import { DashboardOverview } from "@/types/dashboard";
+import Admin from "@/app/models/Admin";
 
 export async function GET() {
-    const adminId = 'demo-admin-id';
 
-    const data = await getDashBoardOverview(adminId);
+try {
+     const { schoolId } = await verifyAuth();
 
-    return NextResponse.json(data)
+     await connectDB();
+
+ const totalStudents = await Student.countDocuments({schoolId});
+ const paid = await Student.countDocuments({
+    schoolId,
+    feesStatus: "PAID"
+ });
+
+ const unpaid = await Student.countDocuments({
+    schoolId,
+    feesStatus: "UNPAID",
+ });
+
+ const admin = await Admin.findOne({schoolId})
+
+ 
+
+ return NextResponse.json({
+    totalStudents,
+    paid,
+    unpaid,
+     adminName: admin.adminName,
+       
+ } as DashboardOverview);
+
+} catch  {
+    return NextResponse.json(
+        {message: "Unauthorized"},
+        {status: 401}
+    );
+}
 }
 
