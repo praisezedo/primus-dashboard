@@ -38,7 +38,7 @@ const StudentSchema = new Schema(
 
     lastSmsStatus: {
       type: String,
-      enum: ["PAID", "UNPAID", null],
+      enum: ["PAID", "UNPAID", "PENDING"],
       default: null,
     },
   },

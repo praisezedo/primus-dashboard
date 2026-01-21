@@ -4,7 +4,7 @@ import { faEnvelope } from "@fortawesome/free-regular-svg-icons"
 import { faLock , faLockOpen } from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import PrimusLogo from "@/components/UI/PrimusLogo"
-import { useReducer } from "react";
+import { useReducer , useState } from "react";
 import { FormState , FormAction } from "@/types/admin";
 import { useRouter } from "next/navigation";
 
@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
  }
 export default function SignupPage () {
    const router = useRouter();
+   const[show , setShow] = useState<boolean>(false)
 const [state , dispatch] = useReducer(reducer , intitalState);
 
 async function handleSignUp (e: React.FormEvent) {
@@ -42,7 +43,10 @@ async function handleSignUp (e: React.FormEvent) {
    const data = await res.json();
 
    if(!res.ok) {
-      alert(data.message);
+      alert(data.message)
+      if(data.message ===  "Admin already exists" ) {
+       router.push('/login')
+      }
       return;
    }
 
@@ -104,9 +108,9 @@ async function handleSignUp (e: React.FormEvent) {
       <div className="flex flex-col gap-2">
       <label className="font-bold" htmlFor="admin-password">Password</label>
        <span className="w-80 border shadow-sm p-3 rounded-lg flex items-center gap-3 border-gray-300">
-       <FontAwesomeIcon icon={faLock} className={'w-5 h-5 text-sm'}/>
+       <span className="hover:opacity-50" onClick={() => setShow(!show)}>{show ? <FontAwesomeIcon icon={faLockOpen} className={'w-5 h-5 text-sm'}/> : <FontAwesomeIcon icon={faLock} className={'w-5 h-5 text-sm'}/>}</span>
        <input  className="focus:outline-none focus:border-none " 
-         type="password"
+         type={show ? "text" : "password"}
         name="adminPassword" 
         id="adminPassword"
         placeholder="*********"
@@ -119,7 +123,7 @@ async function handleSignUp (e: React.FormEvent) {
         />
       </span>
 </div>
-            </div>
+      </div>
 
 <button type="submit" className="hover:bg-blue-500 bg-blue-700 text-white text-lg rounded-lg p-3">Create School Account</button>
           </form>

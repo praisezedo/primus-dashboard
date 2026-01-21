@@ -1,12 +1,11 @@
-import mongoose, { Schema, models, model } from "mongoose";
-
-
+import  { Schema, models, model } from "mongoose";
 
 const SettingSchema = new Schema({
   schoolId: { type: String, unique: true },
   classes: [String],
   sections: [String],
   semester: String,
+  profilePic: String,
   academicYear: String,
   smsTemplate: {
     paid: String,
