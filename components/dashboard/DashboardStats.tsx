@@ -4,28 +4,47 @@ import PaidStatsCard from "./PaidStatsCard";
 import TotalStatsCard from "./TotalStatsCard";
 import UnpaidStatsCard from "./UnpaidStatsCard";
 import { DashboardOverview } from "@/types/dashboard";
-import axios from 'axios';
 import { useState , useEffect} from "react";
 import SkeletonInlineText from "../UI/SkelectonInlineText";
+import api from "@/lib/axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import SentSMS from "./SentSMS";
+import NotSentSMS from "./NotSentSMS";
+import BulkUploadReview from "./BulkUploadReview";
 
 export default function DashboardStats  () {
 
 const [dashboardOverview , setDashboardOverview] = useState<DashboardOverview>({totalStudents: 0 , paid: 0 , unpaid: 0 , adminName: ""})
+const [academicSession , setAcademicSession] = useState<string>("");
 const [isLoading , setIsLoading] = useState(true);
 useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const [dashBoard , academicSession] = await Promise.all([api.get("/api/dashboard/overview"), api.get("/api/session/current")]);
 
-    axios.get('/api/dashboard/overview')
-        .then(res => {
-            setDashboardOverview(res.data)
-            setIsLoading(false)
-    })
+            setDashboardOverview(dashBoard.data);
+
+            setAcademicSession(academicSession.data.name);
+           console.log(academicSession)
+            setIsLoading(false);
+
+        } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+        }
+    };
+    fetchData();
 },[])
 
 
     return <>
-    <section className="relative bg-white px-6 py-10 mb-5 border-b border-gray-200 shadow-sm flex flex-col gap-3">
-    <h1 className="font-bold text-3xl">Welcome , Admin {isLoading ?<SkeletonInlineText length={12}/> : dashboardOverview.adminName.split(" ")[0]}</h1>
-    <p className="text-gray-500">{new Date().toDateString()}</p>
+    <section className="relative bg-white px-6 py-10 mb-5 border-b border-gray-200 shadow-sm flex flex-col gap-7">
+    <h1 className="font-bold text-3xl text-black">Welcome , Admin  {isLoading ?<SkeletonInlineText length={12}/> : <span className="text-blue-700">{dashboardOverview.adminName}</span>}</h1>
+    <span className="font-bold flex gap-3">
+        <p className="text-gray-500">{new Date().toDateString()}</p>
+        {isLoading ? <SkeletonInlineText length={7}/> : <p>{academicSession} Academic Session <FontAwesomeIcon icon={faCircle} className={'text-green-700 w-4 h-4 text-sm'}/> </p>}
+    </span>
     <p className="font-bold">Embrace the challenges , for they are opportunities in disguise.</p>
      </section> 
 
@@ -36,6 +55,9 @@ useEffect(() => {
             <TotalStatsCard loadingState={isLoading}  totalStudents={dashboardOverview.totalStudents} />
             <PaidStatsCard loadingState={isLoading} paidStudents={dashboardOverview.paid}/>
             <UnpaidStatsCard loadingState={isLoading} unpaidStudents={dashboardOverview.unpaid}/>
+            <SentSMS/>
+            <NotSentSMS/>
+            <BulkUploadReview/>
         </div>
         
       </section>

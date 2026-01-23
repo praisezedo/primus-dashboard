@@ -1,10 +1,9 @@
-import mongoose from "mongoose";
-import { unique } from "next/dist/build/utils";
+import mongoose , {Schema} from "mongoose";
 import {v4 as uuid} from "uuid";
 
-const AcademicSessionSchema = new mongoose.Schema(
+const AcademicSessionSchema = new Schema(
     {
-        sessionId: {
+    sessionId: {
             type: String,
             default: uuid,
             unique: true

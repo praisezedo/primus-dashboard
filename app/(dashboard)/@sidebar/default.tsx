@@ -9,8 +9,8 @@ export default function SideBar() {
         const pathname = usePathname();
         const isActive = (href: string) => pathname === href;
     return <>
-       <aside className="pt-7 fixed border-r border-gray-200 shadow-md top-17 bg-white bottom-0 left-0  w-50 text-black ">
-        <nav className="justify-center flex flex-col gap-7 px-7">
+       <aside className="pt-7 fixed border-r border-gray-200 shadow-md top-17 bg-white bottom-0  left-0  w-50 text-black ">
+        <nav className="justify-center flex flex-col gap-12 px-7">
            <Link className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/') ? 'bg-gray-200' : 'bg-white'}`} href="/">
            <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Dashboard</span>
            <FontAwesomeIcon className="w-5 h-5 text-blue-700" icon={faHouse}/> 
@@ -30,12 +30,6 @@ export default function SideBar() {
            <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Bulk Upload</span>
            <FontAwesomeIcon className="w-5 h-5 text-blue-700" icon={faCloudArrowUp}/> 
            <h1>Bulk Upload</h1>
-           </Link>
-
-           <Link href="/notifications" className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/notifications') ? 'bg-gray-200' : 'bg-white'}`}>
-           <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Notifications</span>
-             <FontAwesomeIcon  className="w-5 h-5 text-blue-700"icon={faBell}/>
-             <h1>Notifications</h1>
            </Link>
         </nav>
 

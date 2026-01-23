@@ -2,18 +2,21 @@
 import PrimusLogo from "@/components/UI/PrimusLogo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
  export default function LoginPage() {
+   const router = useRouter();
  const [adminEmail, setAdminEmail] = useState("");
  const [adminPassword, setAdminPassword] = useState("");
  const [error, setError] = useState("");
  const [loading, setLoading] = useState(false);
-
+ const [show , setShow] = useState<boolean>(false)
 
 async function handleLogin(e: React.FormEvent) {
+
      e.preventDefault();
      setLoading(true);
      setError("");
@@ -28,18 +31,18 @@ async function handleLogin(e: React.FormEvent) {
         })
      });
 
-     if (!res.ok) {
-       const data = await res.json();
-       setError(data.message || "Login failed");
-       setLoading(false);
-       return;
-     }
+    const data = await res.json();
 
-     const data = await res.json();
-     window.location.href = "/";
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-      setLoading(false);
+    if (!res.ok) {
+        setError(data.message || "Login failed");
+        setLoading(false);
+        return;
+    }
+
+    router.push("/academic-session");
+     
+    }catch (error) {
+        setError(error as string)
     }
 }
      return (
@@ -65,8 +68,12 @@ async function handleLogin(e: React.FormEvent) {
                 <div className="flex flex-col gap-3">
                     <label className="font-bold text-lg" htmlFor="admin-password">Password</label>
                     <span className="flex gap-2 border rounded-lg p-3 border-gray-300 shadow-sm justify-between items-center">
-                        <FontAwesomeIcon icon={faLock} className={'text-xs h-5 w-5'}/>
-                        <input className="w-80 px-2 items-center justify-center focus:outline-none focus:border-none" type="password"  name="admin-password" id="admin-password"  placeholder="*******" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)}/>
+                       <span className="hover:opacity-50" onClick={() => setShow(!show)}>{show ?  <FontAwesomeIcon icon={faLockOpen} className={'text-xs h-5 w-5'}/> :  <FontAwesomeIcon icon={faLock} className={'text-xs h-5 w-5'}/> }</span>
+                        <input className="w-80 px-2 items-center justify-center focus:outline-none focus:border-none" 
+                        type={show ? "text" : "password"} 
+                         name="admin-password" 
+                         id="admin-password" 
+                          placeholder="*******" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)}/>
                     </span>
                 </div>
 

@@ -8,13 +8,12 @@ export default function StudentTable() {
             <h1 className="font-bold text-xl">Student Records</h1>
             <p className="text-gray-500">Displaying 5 student(s)</p>
         </div>
-
         <table className="text-center justify-center w-fit">
             <thead>
                 <tr>
                     <th className="p-2">Student Name</th>
                     <th className="p-2">Student ID</th>
-                    <th className="p-2">Class</th>
+                     <th className="p-2">Class</th>
                     <th className="p-2">Section</th>
                     <th className="p-2">Parent Name</th>
                     <th className="p-2">Parent Phone</th>

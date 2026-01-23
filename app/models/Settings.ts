@@ -5,8 +5,6 @@ const SettingSchema = new Schema({
   classes: [String],
   sections: [String],
   semester: String,
-  profilePic: String,
-  academicYear: String,
   smsTemplate: {
     paid: String,
     unpaid: String,

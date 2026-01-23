@@ -1,4 +1,4 @@
 export type HeaderData = {
     schoolName: string;
-    profilePic: string;
+    adminName: string;
 }

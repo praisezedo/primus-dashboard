@@ -1,42 +1,99 @@
 "use client";
-import {FontAwesomeIcon} from  '@fortawesome/react-fontawesome';
-import axios from 'axios';
-import {faUser as faUserSolid} from '@fortawesome/free-solid-svg-icons';
-import PrimusLogo from '@/components/UI/PrimusLogo';
-import { useEffect, useState } from 'react';
-import { HeaderData } from '@/types/headerdata';
-import SkeletonInlineText from '@/components/UI/SkelectonInlineText';
+
+import PrimusLogo from "@/components/UI/PrimusLogo";
+import { useEffect, useState } from "react";
+import SkeletonInlineText from "@/components/UI/SkelectonInlineText";
+import api from "@/lib/axios";
+import { useRouter } from "next/navigation";
+
+type Session = {
+  _id: string;
+  name: string;
+  isActive: boolean;
+};
 
 export default function Header() {
+  const router = useRouter();
 
-const [headerData , setHeaderData] = useState({} as HeaderData)
+  const [isLoading, setIsLoading] = useState(true);
+  const [schoolName, setSchoolName] = useState("");
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [activeSessionId, setActiveSessionId] = useState("");
 
   useEffect(() => {
-     axios.get('/api/dashboard/headerdata')
-     .then(res => {
-         setHeaderData(res.data.body) 
-     })
-     .catch(error => {
-         console.error(error);
-     })
-  }, [])
+    async function fetchHeaderData() {
+      try {
+        const [headerRes, sessionRes] = await Promise.all([
+          api.get("/api/dashboard/headerdata"),
+          api.get("/api/session/all"),
+        ]);
 
-    return <>
-      <header className=" border-b border-gray-200 bg-white p-2  z-70 justify-between fixed top-0 left-0 right-0 ">
-        <div className='flex justify-between items-center'>
-      <h1><PrimusLogo/></h1>
+        setSchoolName(headerRes.data.body.schoolName);
 
-<div className='flex gap-7 items-center'>
-<div className='flex gap-7'>
-   <div className='relative inline-block group'>
-  <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-1 z-80 text-white text-xs px-2  py-1 top-0.3 rounded whitespace-nowrap">Profile</span>
- <FontAwesomeIcon className='w-7 h-7 text-2xl text-blue-700' icon={faUserSolid}/>
- {/*<img src={headerData.profilePic} alt="ProfilePic"/>*/}
- </div>
-<h1 className='font-bold text-lg'>{headerData?.schoolName || <SkeletonInlineText length={12}/>}</h1>
-</div>
+        setSessions(sessionRes.data);
+
+        const active = sessionRes.data.find((s: Session) => s.isActive);
+        if (active) setActiveSessionId(active._id);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchHeaderData();
+  }, []);
+
+  async function handleSessionChange(sessionId: string) {
+    if (sessionId === "new") {
+      router.push("/academic-session");
+      return;
+    }
+
+    try {
+      await api.post("/api/session/switch", { sessionId });
+      window.location.reload(); // refresh dashboard data safely
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return (
+    <header className="border-b border-gray-200 bg-white p-3 fixed top-0 left-0 right-0 z-50">
+      <div className="flex justify-between items-center">
+        <PrimusLogo />
+
+          <select
+            value={activeSessionId}
+            onChange={(e) => handleSessionChange(e.target.value)}
+            className="border  border-gray-300 rounded-lg p-2 font-bold focus:outline-none"
+          >
+            {sessions.map((session) => (
+              <option className="font-bold" key={session._id} value={session._id}>
+                {session.name} Academic Session {session.isActive ? "(Active)" : ""}
+              </option>
+            ))}
+
+            <option value="new">➕ Start new academic session</option>
+          </select>
+
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3">
+            {isLoading ? (
+              <SkeletonInlineText length={10} />
+            ) : (
+              <span className="font-bold text-white bg-blue-700 py-2 px-4 rounded-full">
+                {schoolName[0]}
+              </span>
+            )}
+            <h1 className="font-bold text-lg">
+              {schoolName || <SkeletonInlineText length={12} />}
+            </h1>
+          </div>
+
         </div>
-        </div>
-      </header>
-    </>
+
+      </div>
+    </header>
+  );
 }

@@ -8,6 +8,10 @@ const StudentSchema = new Schema(
       index: true,
     },
 
+    sessionId: {
+      type: String,
+      required: true,
+    },
     studentName: {
       type: String,
       required: true,
@@ -32,8 +36,9 @@ const StudentSchema = new Schema(
     },
 
     smsStatus: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["SENT" , "NOTSENT" , "PENDING"],
+      default: null,
     },
 
     lastSmsStatus: {

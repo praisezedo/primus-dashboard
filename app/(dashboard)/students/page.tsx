@@ -2,6 +2,7 @@
 import Link from "next/link"
 import StudentTable from "@/components/Table/StudentTable"
 import Footer from "@/components/UI/Footer"
+
     export default function StudentsPage() {
     return <>
     <section className="p-7 flex flex-col gap-10">
@@ -26,8 +27,8 @@ import Footer from "@/components/UI/Footer"
 
     <select className="border border-gray-200 shadow-sm rounded-lg p-3" name="status" id="status">
         <option value="fees-status">Fees Status</option>
-            <option value="paid">Paid</option>
-            <option value="unpaid">Unpaid</option>
+            <option value="paid">PAID</option>
+            <option value="unpaid">UNPAID</option>
     </select>
 
     <select className="border border-gray-200 shadow-sm rounded-lg p-3" name="sms-status" id="sms-status">

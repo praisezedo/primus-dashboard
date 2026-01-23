@@ -4,7 +4,7 @@ export default function LoginLayout(
 ) {
     return (
         <>
-      <main className="flex flex-col items-center justify-center h-screen">
+      <main className="bg-white flex flex-col items-center justify-center h-screen">
         {children}
         </main>
         </>

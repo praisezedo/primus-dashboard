@@ -1,4 +1,4 @@
-export type Student = {
+export  type Student = {
     StudentName: string;
     StudentID: string;
     Class: string;
@@ -7,4 +7,6 @@ export type Student = {
     ParentEmail: string;
     FeesStatus: "Paid" | "Unpaid";
     SMSStatus: "Sent" | "Not Sent";
+    LastSMSStatus: "Sent" | "Not Sent";
 }
+
