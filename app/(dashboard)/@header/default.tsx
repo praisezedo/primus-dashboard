@@ -13,10 +13,11 @@ type Session = {
 };
 
 export default function Header() {
+
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [schoolName, setSchoolName] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [schoolName, setSchoolName] = useState<string>("");
   const [sessions, setSessions] = useState<Session[]>([]);
   const [activeSessionId, setActiveSessionId] = useState("");
 
@@ -44,7 +45,9 @@ export default function Header() {
     fetchHeaderData();
   }, []);
 
+
   async function handleSessionChange(sessionId: string) {
+
     if (sessionId === "new") {
       router.push("/academic-session");
       return;
@@ -52,7 +55,7 @@ export default function Header() {
 
     try {
       await api.post("/api/session/switch", { sessionId });
-      window.location.reload(); // refresh dashboard data safely
+        window.location.reload();// refresh dashboard data safely
     } catch (error) {
       console.error(error);
     }
@@ -83,7 +86,7 @@ export default function Header() {
               <SkeletonInlineText length={10} />
             ) : (
               <span className="font-bold text-white bg-blue-700 py-2 px-4 rounded-full">
-                {schoolName[0]}
+                {schoolName.trim()[0]}
               </span>
             )}
             <h1 className="font-bold text-lg">

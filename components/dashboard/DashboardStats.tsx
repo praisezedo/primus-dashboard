@@ -7,8 +7,6 @@ import { DashboardOverview } from "@/types/dashboard";
 import { useState , useEffect} from "react";
 import SkeletonInlineText from "../UI/SkelectonInlineText";
 import api from "@/lib/axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import SentSMS from "./SentSMS";
 import NotSentSMS from "./NotSentSMS";
 import BulkUploadReview from "./BulkUploadReview";
@@ -43,8 +41,8 @@ useEffect(() => {
     <h1 className="font-bold text-3xl text-black">Welcome , Admin  {isLoading ?<SkeletonInlineText length={12}/> : <span className="text-blue-700">{dashboardOverview.adminName}</span>}</h1>
     <span className="font-bold flex gap-3">
         <p className="text-gray-500">{new Date().toDateString()}</p>
-        {isLoading ? <SkeletonInlineText length={7}/> : <p>{academicSession} Academic Session <FontAwesomeIcon icon={faCircle} className={'text-green-700 w-4 h-4 text-sm'}/> </p>}
-    </span>
+        {isLoading ? <SkeletonInlineText length={7}/> : <p>{academicSession} Academic Session</p>}
+        </span>
     <p className="font-bold">Embrace the challenges , for they are opportunities in disguise.</p>
      </section> 
 

@@ -43,14 +43,13 @@ async function handleSignUp (e: React.FormEvent) {
    const data = await res.json();
 
    if(!res.ok) {
-      alert(data.message)
       if(data.message ===  "Admin already exists" ) {
-       router.push('/login')
+          router.push('/login')
       }
       return;
    }
 
-   router.push('/login')
+   
 }
      return (
         <>

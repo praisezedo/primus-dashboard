@@ -16,13 +16,14 @@ export default function AcademicSessionSignUp() {
 
     try {
       await api.post("/api/session/create", { name });
-      router.push("/");
+      router.push("/settings-setup")
     } catch (err) {
       console.error(err);
       alert("Failed to create academic session");
     } finally {
       setLoading(false);
     }
+
   };
 
   return (

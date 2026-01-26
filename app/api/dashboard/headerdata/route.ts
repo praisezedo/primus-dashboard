@@ -1,14 +1,15 @@
 
 import Admin from "@/app/models/Admin";
 import { NextResponse } from "next/server";
-import { getAdminFromToken } from "@/lib/getadminfromtoken";
+import { validateSession } from "@/lib/validatesession";
 import { connectDB } from "@/lib/mongodb";
+import { verifyAuth } from "@/lib/auth";
 
 export async function GET() {
 
     await connectDB()
     
-  const { schoolId } = (await getAdminFromToken());
+  const { schoolId } = await verifyAuth();
 
 
      if (!schoolId) {

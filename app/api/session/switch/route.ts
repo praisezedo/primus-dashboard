@@ -1,24 +1,33 @@
 import { verifyAuth } from "@/lib/auth";
 import AcademicSession from "@/app/models/AcademicSession";
 import { NextResponse } from "next/server";
-import { connect } from "http2";
 import { connectDB } from "@/lib/mongodb";
-
 export async function POST(req: Request) {
-   
-    await connectDB();
+  await connectDB();
 
-    const {schoolId} = await verifyAuth();
+  const { schoolId } = await verifyAuth();
+  const { sessionId } = await req.json();
 
-    const {sessionId} = await req.json();
+  await AcademicSession.updateMany(
+    { schoolId },
+    { isActive: false }
+  );
 
-    await AcademicSession.updateMany({
-        schoolId
-    } , {isActive: false});
+  const updated = await AcademicSession.updateOne(
+    { schoolId, _id: sessionId },
+    { isActive: true }
+  );
 
-    await AcademicSession.updateOne({schoolId , sessionId} , {isActive: true});
+  if (updated.matchedCount === 0) {
+    return NextResponse.json(
+      { message: "Session not found" },
+      { status: 404 }
+    );
+  }
 
-    return NextResponse.json({message: "Academic Session Switched" });
+  return NextResponse.json({
+    message: "Academic Session Switched",
+  });
 }
 
 

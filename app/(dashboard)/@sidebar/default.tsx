@@ -9,7 +9,7 @@ export default function SideBar() {
         const pathname = usePathname();
         const isActive = (href: string) => pathname === href;
     return <>
-       <aside className="pt-7 fixed border-r border-gray-200 shadow-md top-17 bg-white bottom-0  left-0  w-50 text-black ">
+       <aside className="pt-7 fixed border-r border-gray-200 shadow-md top-17 bg-white bottom-0  left-0  w-50 text-black z-40">
         <nav className="justify-center flex flex-col gap-12 px-7">
            <Link className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/') ? 'bg-gray-200' : 'bg-white'}`} href="/">
            <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Dashboard</span>

@@ -3,14 +3,14 @@ import { connectDB } from "@/lib/mongodb";
 import Student from "@/app/models/Students";
 import { DashboardOverview } from "@/types/dashboard";
 import Admin from "@/app/models/Admin";
-import { getAdminFromToken } from "@/lib/getadminfromtoken";
+import { validateSession } from "@/lib/validatesession";
 
 export async function GET() {
 
 try {
     await connectDB();
     
-      const {schoolId , sessionId} = (await getAdminFromToken());
+      const {schoolId , sessionId} = await validateSession();
       
  const totalStudents = await Student.countDocuments({schoolId , sessionId});
 

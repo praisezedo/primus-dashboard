@@ -1,4 +1,4 @@
-type Session = {
+export type Session = {
   sessionId: string;
   name: string;
   isActive: boolean;

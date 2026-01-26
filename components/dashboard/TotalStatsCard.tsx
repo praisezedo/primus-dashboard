@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import LoadingSpinner from "../UI/LoadingSpinner";
+
 export default function TotalStatsCard(props: {totalStudents: number , loadingState: boolean}) {
 
     return <>

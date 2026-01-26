@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongodb";
 import Admin from "@/app/models/Admin";
-import Setting from "@/app/models/Settings";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req: Request) {
@@ -28,9 +27,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+ const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
-    const schoolId = uuidv4();
+ const schoolId = uuidv4();
 
 
 await Admin.create({
@@ -40,19 +39,6 @@ await Admin.create({
   password: hashedPassword,
   schoolId,
 });
-
-await Setting.create({
-  schoolId,
-  classes: [],
-  sections: [],
-  semester: "",
-  academicYear: "",
-  smsTemplate: {
-    paid: "...",
-    unpaid: "...",
-  },
-});
-
 
     return NextResponse.json(
       {

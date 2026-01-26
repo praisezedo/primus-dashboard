@@ -37,10 +37,10 @@ async function handleLogin(e: React.FormEvent) {
         setError(data.message || "Login failed");
         setLoading(false);
         return;
-    }
+    } 
 
-    router.push("/academic-session");
-     
+    router.push("/academic-session")
+
     }catch (error) {
         setError(error as string)
     }
