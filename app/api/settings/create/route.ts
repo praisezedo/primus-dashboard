@@ -3,6 +3,7 @@ import { verifyAuth } from "@/lib/auth";
 import Setting from "@/app/models/Settings";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
+import Admin from "@/app/models/Admin";
 
 export async function POST(req: Request) {
 
@@ -28,6 +29,8 @@ export async function POST(req: Request) {
        smsTemplate: body.smsTemplate,
        settingsCompleted: true,
     });
+
+    await Admin.updateOne({schoolId}, {hasCompletedSetup: true})
 
     return NextResponse.json({settings} , {status: 200});
 }

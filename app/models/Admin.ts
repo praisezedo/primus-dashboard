@@ -12,6 +12,11 @@ const AdminSchema = new Schema({
   adminEmail: { type: String, unique: true },
   schoolName: String,
   password: String,
+
+  hasCompletedSetup: {
+  type: Boolean,
+  default: false,
+},
 },
 {timestamps: true}
 );

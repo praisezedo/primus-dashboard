@@ -6,7 +6,7 @@ import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import api from "@/lib/axios";
  export default function LoginPage() {
    const router = useRouter();
  const [adminEmail, setAdminEmail] = useState("");
@@ -39,7 +39,13 @@ async function handleLogin(e: React.FormEvent) {
         return;
     } 
 
-    router.push("/academic-session")
+    const activeSession =  await api.get("api/session/current");
+
+    if (activeSession) {
+        router.push("/")
+    }else {
+       router.push("/academic-session")
+    }
 
     }catch (error) {
         setError(error as string)

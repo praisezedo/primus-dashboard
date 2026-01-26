@@ -4,8 +4,11 @@ import { faHouse  } from "@fortawesome/free-regular-svg-icons"
 import { faBell,  faUsers , faUserPlus , faCloudArrowUp  , faGear , faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import LogOut from "@/components/UI/LogOut";
 
 export default function SideBar() {
+    const [showLogout , setShowLogout] = useState<boolean>(false);
         const pathname = usePathname();
         const isActive = (href: string) => pathname === href;
     return <>
@@ -39,12 +42,13 @@ export default function SideBar() {
             <FontAwesomeIcon icon={faGear} className="w-5 h-5 text-blue-700"/>
                 <span className="font-bold">Settings</span>
             </Link> 
-            <Link className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold ${isActive('/students/logout') ? 'bg-gray-200' : 'bg-white'}`} href={'/logout'}>
+            <button onClick={() => setShowLogout(true)} className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold 'bg-white'}`}>
                        <span className="absolute bottom-full hidden group-hover:block bg-blue-700 right-3 text-white text-xs px-2 py-1 rounded whitespace-nowrap">Logout</span>
             <FontAwesomeIcon icon={faArrowRightFromBracket} className="w-5 h-5 text-blue-700"/>
                 <span className="font-bold">Logout</span>
-            </Link>   
+            </button>   
         </div>
        </aside>
+       <LogOut open={showLogout} onClose={() => setShowLogout(false)}/>
     </>
 }

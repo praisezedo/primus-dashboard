@@ -8,15 +8,16 @@ export async function POST(req: Request) {
   const { schoolId } = await verifyAuth();
   const { sessionId } = await req.json();
 
-  await AcademicSession.updateMany(
-    { schoolId },
-    { isActive: false }
-  );
+await AcademicSession.updateMany(
+  { schoolId, _id: { $ne: sessionId } },
+  { isActive: false }
+);
 
-  const updated = await AcademicSession.updateOne(
-    { schoolId, _id: sessionId },
-    { isActive: true }
-  );
+const updated = await AcademicSession.updateOne(
+  { schoolId, _id: sessionId },
+  { isActive: true }
+);
+
 
   if (updated.matchedCount === 0) {
     return NextResponse.json(

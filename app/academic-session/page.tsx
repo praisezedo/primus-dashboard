@@ -7,6 +7,7 @@ import { useState } from "react";
 
 export default function AcademicSessionSignUp() {
   const router = useRouter();
+
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -16,6 +17,7 @@ export default function AcademicSessionSignUp() {
 
     try {
       await api.post("/api/session/create", { name });
+      
       router.push("/settings-setup")
     } catch (err) {
       console.error(err);

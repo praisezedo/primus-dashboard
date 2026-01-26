@@ -8,6 +8,7 @@ import Settings from "@/app/models/Settings";
 import { connectDB } from "@/lib/mongodb";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import Admin from "../models/Admin";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -35,33 +36,36 @@ export default async function RootLayout({
 }>) {
 
   const { schoolId } = await verifyAuth();
+
   await connectDB();
 
   const pathname = (await headers()).get("x-pathname") ?? "";
 
-  const activeSession = await AcademicSession.findOne({
-    schoolId,
-    isActive: true,
-  });
-
-// 1 Academic session gate
-if (
-  !activeSession &&
-  !pathname.startsWith("/academic-session")
-) {
-  redirect("/academic-session");
-}
-
+const activeSessionData = await AcademicSession.findOne({
+  schoolId,
+  isActive: true,
+});
 
 const settings = await Settings.findOne({ schoolId });
 
-// 2 settings gate (ONLY AFTER session exists)
-if (
-  activeSession &&
-  (!settings || !settings.settingsCompleted) &&
-  !pathname.startsWith("/settings-setup")
-) {
+const admin = await Admin.findOne({schoolId});
+
+const isSetupRoute =
+  pathname.startsWith("/academic-session") ||
+  pathname.startsWith("/settings-setup");
+
+if (!admin.hasCompletedSetup) {
+  // 1️⃣ Academic session guard
+if (!activeSessionData && !isSetupRoute) {
+  redirect("/academic-session");
+}
+
+// 2️⃣ Settings guard (ONLY after session exists)
+if (activeSessionData && (!settings || !settings.settingsCompleted) && !isSetupRoute) {
   redirect("/settings-setup");
+}
+} else {
+  redirect("/")
 }
 
   return (
