@@ -3,6 +3,7 @@ import { Props } from "@/types/logout";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import api from "@/lib/axios";
+import { toast } from "sonner";
 export default function LogOut({open , onClose}: Props) {
 
     const router = useRouter();
@@ -16,11 +17,12 @@ export default function LogOut({open , onClose}: Props) {
 
         try {
            await api.post("/api/auth/logout");
+           toast.success("Logged out successfully");
            router.replace("/login");
 
         } catch (err) {
              console.error(err);
-             alert("Failed to Logout");
+             toast.error("Logging out failed");
         } finally {
             setLoading(false);
         }

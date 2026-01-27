@@ -1,63 +1,139 @@
-import {useRef , useState} from 'react';
+
+
+import api from '@/lib/axios';
+import { Settings } from '@/types/settings';
+import {useEffect, useRef , useState} from 'react';
+import PrimusLoader from '../UI/PrimusLoader';
+import Input from './Input';
+import Select from './Select';
+import { StudentInput } from '@/types/student';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 export default function StudentDataForm() {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [loading , setLoading] = useState<boolean>(true);
     const [notify , setNotify] = useState<boolean>(true);
+    const [settings , setSettings] = useState<Settings | null>(null);
 
-    const setNotification = () => {
-        setNotify(!notify)
+    const [form , setForm] = useState<StudentInput>({
+        studentName: "",
+        studentId: "",
+        className: "",
+        section: "",
+        parentName: "",
+        parentPhone: "",
+        parentEmail: "",
+        feesStatus: "",
+    });
+
+    useEffect(() => {
+        api.get("/api/settings/get")
+        .then(res =>  setSettings(res.data))
+        .finally(() => setLoading(false));
+    }, [])
+
+    const updateField = (key: string , value: string) => {
+        setForm(prev => ({...prev , [key]: value}));
     }
-return <>
-<form action="">
-<div className="grid grid-cols-3 p-5">
-    <div className="flex flex-col gap-2">
-    <label className="font-bold" htmlFor="student-name">Student Name</label> 
-    <input className="rounded-md focus:outline-none focus:border-gray-200 w-80 border border-gray-200 p-3" type="text" name="student-name" id="student-name" placeholder="Enter students full name" />
-    </div>
+    useEffect(() => {
+         inputRef.current?.focus();
+    },[])
 
-    <div className="flex flex-col gap-2">
-    <label className="font-bold" htmlFor="student-id">Student ID</label> 
-    <input className="rounded-md focus:outline-none focus:border-gray-200 w-80 border border-gray-200 p-3" type="text" name="student-id" id="student-id" placeholder="e.g. STU012 " />
-    </div>
+    if (loading) return <LoadingSpinner/>;
 
-    <div className="flex flex-col gap-2">
-    <label className="font-bold" htmlFor="class">Class</label> 
-    <input className="rounded-md focus:outline-none focus:border-gray-200 w-80 border border-gray-200 p-3" type="text" name="class" id="class" placeholder="e.g., 5th Grade" />
-    </div>
+    if (!settings) {
+        return <p className='text-red-600'>Settings not found</p>;
+    }
 
-    <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="section">Section</label>
-        <input className="rounded-md focus:outline-none focus:border-gray-200 w-80 border border-gray-200 p-3" type="text" name="section" id="section" placeholder="e.g., A" />
-    </div>
+    const smsAvailable = !!settings.smsTemplate?.paid || !!settings.smsTemplate?.unpaid;
 
-    <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="parent-name">Parent Name</label>
-        <input className="rounded-md focus:outline-none focus:border-gray-200 w-80 border border-gray-200 p-3" type="text" name="parent-name" id="parent-name" placeholder="Enter parent's full name" />
-    </div>
+  return (
+    <form className="grid grid-cols-3 gap-6 p-5">
+      
+      {/* Student Name */}
+      <Input
+        label="Student Name"
+        value={form.studentName}
+        onChange={(v: string) => updateField("studentName", v)}
+        placeholder="Enter student's full name"
+      />
 
-    <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="parent-phone">Parent Phone Number</label>
-        <input className="rounded-md focus:outline-none focus:border-gray-200 w-80 border border-gray-200 p-3" type="text" name="parent-phone" id="parent-phone" placeholder="e.g., +1234567890" />
-    </div>
+      {/* Student ID */}
+      <Input
+        label="Student ID"
+        value={form.studentId}
+        onChange={(v: string) => updateField("studentId", v)}
+        placeholder="e.g. STU012"
+      />
 
-    <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="parent-email">Parent Email (Optional)</label>
-        <input className="rounded-md focus:outline-none focus:border-gray-200 w-80 border border-gray-200 p-3" type="email" name="parent-email" id="parent-email" placeholder="e.g., parent@example.com" />
-    </div>
+      {/* Class */}
+      <Select
+        label="Class"
+        value={form.className}
+        onChange={(v: string) => updateField("class", v)}
+        options={settings.classes}
+        placeholder="Select class"
+      />
 
-    <div className="flex flex-col gap-2">
-        <label className="font-bold" htmlFor="fees-status">Fees Status</label>
-        <select className="rounded-md focus:outline-none focus:border-gray-200 w-80 border border-gray-200 p-3" name="fees-status" id="fees-status">
-            <option value="">Select Fees Status</option>
-            <option value="paid">Paid</option>
-            <option value="unpaid">Unpaid</option>
-        </select>
-    </div>
+      {/* Section */}
+      <Select
+        label="Section"
+        value={form.section}
+        onChange={(v: string) => updateField("section", v)}
+        options={settings.sections}
+        placeholder="Select section"
+      />
 
-    <div className="flex gap-5 items-center mt-7">
-        <label className="font-bold" htmlFor="send-sms">Notify Parents</label>
-        <input type="checkbox" name="send-sms" id="send-sms" checked={notify} onChange={setNotification} />
-    </div>
-</div>
-</form>
-</>
+      {/* Parent Name */}
+      <Input
+        label="Parent Name"
+        value={form.parentName}
+        placeholder="Enter parents name .."
+        onChange={(v: string) => updateField("parentName", v)}
+      />
+
+      {/* Parent Phone */}
+      <Input
+        label="Parent Phone"
+        value={form.parentPhone}
+        onChange={(v: string) => updateField("parentPhone", v)}
+        placeholder="e.g ., 07050243807"
+      />
+
+      {/* Parent Email */}
+      <Input
+        label="Parent Email (Optional)"
+        value={form.parentEmail}
+        placeholder="Enter parent Email (Optional)"
+        onChange={(v: string) => updateField("parentEmail", v)}
+      />
+
+      {/* Fees Status */}
+      <Select
+        label="Fees Status"
+        value={form.feesStatus}
+        onChange={(v: string) => updateField("feesStatus", v)}
+        options={["PAID", "UNPAID"]}
+        placeholder="Select status"
+      />
+
+      {/* Notify */}
+      <div className="flex items-center gap-3 mt-8">
+        <input
+          type="checkbox"
+          checked={notify}
+          disabled={!smsAvailable || !form.parentPhone}
+          onChange={() => setNotify(!notify)}
+        />
+        <label className="font-bold">
+          Notify Parent via SMS
+          {!smsAvailable && (
+            <span className="text-sm text-gray-400 ml-2">
+              (No SMS template)
+            </span>
+          )}
+        </label>
+      </div>
+    </form>
+  )
 }

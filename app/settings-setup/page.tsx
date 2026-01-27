@@ -6,6 +6,7 @@ import api from "@/lib/axios";
 import PrimusLoader from "@/components/UI/PrimusLoader";
 import Footer from "@/components/UI/Footer";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 export default function SettingsPage() {
 
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function SettingsPage() {
     }
 
     const addSection = () => {
-        if (!sectionInput.trim()) return ;
+        if (!sectionInput.trim()) return;
         setSections((prev) => [...prev , sectionInput.trim()]);
         setSectionInput("");
     }
@@ -71,6 +72,7 @@ const saveSettings = async () => {
         semester,
         smsTemplate,
       });
+      toast.success("Settings updated successfully");
     } else {
       // ✅ CREATE
       await api.post("/api/settings/create", {
@@ -79,12 +81,13 @@ const saveSettings = async () => {
         semester,
         smsTemplate,
       });
+      toast.success("Settings saved successfully");
     }
 
     router.replace("/"); // go to dashboard
   } catch (err) {
     console.error(err);
-    alert("Failed to save settings");
+    toast.error("Failed to save settings");
   } finally {
     setSaving(false);
   }
@@ -117,6 +120,12 @@ const saveSettings = async () => {
             <button
               onClick={addClass}
               className="bg-blue-700 text-white px-4 rounded-lg"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addSection();
+                }
+              }}
             >
               Add
             </button>
@@ -148,6 +157,12 @@ const saveSettings = async () => {
             <button
               onClick={addSection}
               className="hover:opacity bg-blue-700 text-white px-4 rounded-lg"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addClass();
+                }
+              }}
             >
               Add
             </button>

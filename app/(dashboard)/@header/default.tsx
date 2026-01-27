@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import SkeletonInlineText from "@/components/UI/SkelectonInlineText";
 import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Session = {
   _id: string;
@@ -55,9 +56,10 @@ export default function Header() {
 
     try {
       await api.post("/api/session/switch", { sessionId });
+      toast.success("Academic session switched");
         window.location.reload();// refresh dashboard data safely
     } catch (error) {
-      console.error(error);
+       toast.error("Failed to switch session");
     }
   }
 

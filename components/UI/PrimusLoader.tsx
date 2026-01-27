@@ -1,6 +1,6 @@
 export default function PrimusLoader() {
   return (
-    <div className="flex items-center text-center h-screen justify-center">
+    <div className="fixed left-50 top-17 right-0 z-70 flex items-center text-center h-screen justify-center">
           <svg
       width="200"
       height="50"
