@@ -1,0 +1,99 @@
+import AcademicSession from "@/app/models/AcademicSession";
+import Student from "@/app/models/Students";
+import { verifyAuth } from "@/lib/auth";
+import { connectDB } from "@/lib/mongodb";
+import { NextResponse } from "next/server";
+
+// add a new student 
+export async function POST(req: Request) {
+    try {
+        await connectDB();
+
+        const {schoolId} = await verifyAuth();
+        const body = await req.json();
+
+        const activeSession = await AcademicSession.findOne({schoolId , isActive: true});
+
+        if (!activeSession) {
+            return NextResponse.json (
+                {message: "No active academic session"},
+                {status: 400},
+            );
+        }
+
+        const student = await Student.create({
+             schoolId,
+             sessionId: activeSession._id,
+             studentName: body.studentName,
+             studentId: body.studentId,
+             className: body.className,
+             section: body.section,
+             parentName: body.parentName,
+             parentPhone: body.parentPhone,
+             parentEmail: body.parentEmail,
+             feesStatus: body.feesStatus?.toUpperCase() || "UNPAID",
+             smsStatus: body.notify ? "PENDING" : "NOTSENT",
+        });
+
+        return NextResponse.json(student , {status: 201});
+
+    } catch (error) {
+        console.error("Create student error" , error);
+        return NextResponse.json(
+            {message: "Server Error"},
+            {status: 500}
+        )
+    }
+}
+
+// for sorting student and returning students
+
+export async function GET(req: Request) {
+
+    try {
+        await connectDB();
+
+        const {schoolId} = await verifyAuth();
+
+        const {searchParams} = new URL(req.url);
+
+        const query: any = {schoolId};
+
+        if (searchParams.get("q")) {
+            query.$or = [
+                {studentName: {$regex: searchParams.get("q") , $options: "i"}},
+                {studentId: { $regex: searchParams.get("q"), $options: "i" }},
+            ];
+        }
+
+        if (searchParams.get("className")) {
+            query.class = searchParams.get("className");
+        }
+
+        if (searchParams.get("feesStatus")) {
+            query.feesStatus = searchParams.get("feesStatus")?.toUpperCase();
+        }
+
+       if (searchParams.get("smsStatus")) {
+      query.smsStatus = searchParams.get("smsStatus")?.toUpperCase();
+    }
+
+   const page = Number(searchParams.get("page")) || 1;
+  const limit = 20;
+  const skip = (page - 1) * limit;
+
+  const students = await Student.find(query)
+  .sort({ createdAt: -1 })
+  .skip(skip)
+  .limit(limit)
+  .lean();
+
+    return NextResponse.json(students);
+    } catch (error) {
+       console.log("Fetch students error" , error);
+      return NextResponse.json(
+        {message: "Server error"},
+        {status: 500}
+      );
+    }
+}

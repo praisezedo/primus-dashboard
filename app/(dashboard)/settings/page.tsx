@@ -68,6 +68,7 @@ export default function SettingsEditPage() {
 
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
+      toast.success(" ✔ Changes saved");
     } catch (err) {
       toast.error("Failed to change")
     } finally {
@@ -192,12 +193,6 @@ export default function SettingsEditPage() {
 
       {/* Save */}
       <div className="flex items-center justify-end gap-4">
-        {saved && (
-          <span className="text-green-600 font-medium">
-            ✔ Changes saved
-          </span>
-        )}
-
         <button
           disabled={saving}
           onClick={saveChanges}

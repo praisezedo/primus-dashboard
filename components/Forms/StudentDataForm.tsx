@@ -1,139 +1,221 @@
+"use client";
 
+import { useEffect, useState } from "react";
+import api from "@/lib/axios";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import GlobalLoadingSpinner from "../UI/GlobalLoadingSpinner";
 
-import api from '@/lib/axios';
-import { Settings } from '@/types/settings';
-import {useEffect, useRef , useState} from 'react';
-import PrimusLoader from '../UI/PrimusLoader';
-import Input from './Input';
-import Select from './Select';
-import { StudentInput } from '@/types/student';
-import LoadingSpinner from '../UI/LoadingSpinner';
+interface SettingsResponse {
+  classes: string[];
+  sections: string[];
+}
 
 export default function StudentDataForm() {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [loading , setLoading] = useState<boolean>(true);
-    const [notify , setNotify] = useState<boolean>(true);
-    const [settings , setSettings] = useState<Settings | null>(null);
 
-    const [form , setForm] = useState<StudentInput>({
-        studentName: "",
-        studentId: "",
-        className: "",
-        section: "",
-        parentName: "",
-        parentPhone: "",
-        parentEmail: "",
-        feesStatus: "",
-    });
 
-    useEffect(() => {
-        api.get("/api/settings/get")
-        .then(res =>  setSettings(res.data))
-        .finally(() => setLoading(false));
-    }, [])
+  const [classes, setClasses] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving , setSaving] = useState<boolean>(false);
+ const [sections , setSections] = useState<string[]>([]);
 
-    const updateField = (key: string , value: string) => {
-        setForm(prev => ({...prev , [key]: value}));
-    }
-    useEffect(() => {
-         inputRef.current?.focus();
-    },[])
+  const [form, setForm] = useState({
+    studentName: "",
+    studentId: "",
+    className: "",
+    section: "",
+    parentName: "",
+    parentPhone: "",
+    parentEmail: "",
+    feesStatus: "UNPAID",
+    notify: true,
+  });
 
-    if (loading) return <LoadingSpinner/>;
-
-    if (!settings) {
-        return <p className='text-red-600'>Settings not found</p>;
+  // 🔹 fetch settings (classes)
+  useEffect(() => {
+    async function fetchSettings() {
+      const res = await api.get<SettingsResponse>("/api/settings/get");
+      setClasses(res.data?.classes || []);
+      setSections(res.data?.sections || []);
+      setLoading(false)
     }
 
-    const smsAvailable = !!settings.smsTemplate?.paid || !!settings.smsTemplate?.unpaid;
+    fetchSettings();
+  }, []);
+
+  function updateField(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
+    const { name, value, type } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]:
+        type === "checkbox"
+          ? (e.target as HTMLInputElement).checked
+          : value,
+    }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      setSaving(true);
+      await api.post("/api/students", form);
+      toast.success("Stuent successfully saved");
+    } catch (err) {
+       toast.error("Failed to create student")
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loading) {
+    return <GlobalLoadingSpinner/>
+  }
+
 
   return (
-    <form className="grid grid-cols-3 gap-6 p-5">
-      
-      {/* Student Name */}
-      <Input
-        label="Student Name"
-        value={form.studentName}
-        onChange={(v: string) => updateField("studentName", v)}
-        placeholder="Enter student's full name"
-      />
+    <form onSubmit={handleSubmit}>
+      <div className="grid grid-cols-3 p-5 gap-5">
+        {/* Student Name */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Student Name</label>
+          <input
+            name="studentName"
+            value={form.studentName}
+            onChange={updateField}
+            className="focus:outline-none focus:border border p-3 rounded-lg w-80"
+            placeholder="Enter student full name"
+            required
+          />
+        </div>
 
-      {/* Student ID */}
-      <Input
-        label="Student ID"
-        value={form.studentId}
-        onChange={(v: string) => updateField("studentId", v)}
-        placeholder="e.g. STU012"
-      />
+        {/* Student ID */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Student ID</label>
+          <input
+            name="studentId"
+            value={form.studentId}
+            onChange={updateField}
+            className="border focus:outline-none focus:border p-3 rounded-lg w-80"
+            placeholder="e.g., STU001"
+            required
+          />
+        </div>
 
-      {/* Class */}
-      <Select
-        label="Class"
-        value={form.className}
-        onChange={(v: string) => updateField("class", v)}
-        options={settings.classes}
-        placeholder="Select class"
-      />
+        {/* Class */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Class</label>
+          <select
+            name="className"
+            value={form.className}
+            onChange={updateField}
+            className="border focus:outline-none focus:border p-3 rounded-lg w-80"
+            required
+          >
+            <option value="">Select Class</option>
+            {classes.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* Section */}
-      <Select
-        label="Section"
-        value={form.section}
-        onChange={(v: string) => updateField("section", v)}
-        options={settings.sections}
-        placeholder="Select section"
-      />
+        {/* Section */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Section</label>
+          <select
+            name="section"
+            value={form.section}
+            onChange={updateField}
+            className="border focus:outline-none focus:border p-3 rounded-lg w-80"
+            required
+          >
+            <option value="">Select Section</option>
+            {sections.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* Parent Name */}
-      <Input
-        label="Parent Name"
-        value={form.parentName}
-        placeholder="Enter parents name .."
-        onChange={(v: string) => updateField("parentName", v)}
-      />
+        {/* Parent Name */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Parent Name</label>
+          <input
+            name="parentName"
+            value={form.parentName}
+            onChange={updateField}
+            className="border focus:outline-none focus:border p-3 rounded-lg w-80"
+            placeholder="Enter parent Name"
+          />
+        </div>
 
-      {/* Parent Phone */}
-      <Input
-        label="Parent Phone"
-        value={form.parentPhone}
-        onChange={(v: string) => updateField("parentPhone", v)}
-        placeholder="e.g ., 07050243807"
-      />
+        {/* Parent Phone */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Parent Phone</label>
+          <input
+            name="parentPhone"
+            value={form.parentPhone}
+            onChange={updateField}
+            className="border focus:outline-none focus:border p-3 rounded-lg w-80"
+            placeholder="Parent Phone Number  e.g., 07050243807"
+          />
+        </div>
 
-      {/* Parent Email */}
-      <Input
-        label="Parent Email (Optional)"
-        value={form.parentEmail}
-        placeholder="Enter parent Email (Optional)"
-        onChange={(v: string) => updateField("parentEmail", v)}
-      />
+        {/* Parent Email */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Parent Email (Optional)</label>
+          <input
+            type="email"
+            name="parentEmail"
+            value={form.parentEmail}
+            onChange={updateField}
+            className="border focus:outline-none focus:border p-3 rounded-lg w-80"
+            placeholder="Enter parents Email e.g fake@gmail.com"
+          />
+        </div>
 
-      {/* Fees Status */}
-      <Select
-        label="Fees Status"
-        value={form.feesStatus}
-        onChange={(v: string) => updateField("feesStatus", v)}
-        options={["PAID", "UNPAID"]}
-        placeholder="Select status"
-      />
+        {/* Fees Status */}
+        <div className="flex flex-col gap-2">
+          <label className="font-bold">Fees Status</label>
+          <select
+            name="feesStatus"
+            value={form.feesStatus}
+            onChange={updateField}
+            className="border focus:outline-none focus:border p-3 rounded-lg w-80"
+          >
+            <option value="UNPAID">UNPAID</option>
+            <option value="PAID">PAID</option>
+          </select>
+        </div>
 
-      {/* Notify */}
-      <div className="flex items-center gap-3 mt-8">
-        <input
-          type="checkbox"
-          checked={notify}
-          disabled={!smsAvailable || !form.parentPhone}
-          onChange={() => setNotify(!notify)}
-        />
-        <label className="font-bold">
-          Notify Parent via SMS
-          {!smsAvailable && (
-            <span className="text-sm text-gray-400 ml-2">
-              (No SMS template)
-            </span>
-          )}
-        </label>
+        {/* Notify Parent */}
+        <div className="flex items-center gap-3 mt-7">
+          <input
+            type="checkbox"
+            name="notify"
+            checked={form.notify}
+            onChange={updateField}
+          />
+          <label className="font-bold">Notify Parent (SMS)</label>
+        </div>
+      </div>
+
+      {/* Submit handled here */}
+      <div className="flex justify-end p-5">
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-700 hover:opacity-50 text-white px-6 py-2 rounded-md"
+        >
+          {saving ? "Saving..." : "Save Student"}
+        </button>
       </div>
     </form>
-  )
+  );
 }

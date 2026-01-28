@@ -70,7 +70,7 @@ const StudentSchema = new Schema(
       default: "NOTSENT",
     },
 
-    lastSmsFeeStatus: {
+    lastFeeStatus: {
       type: String,
       enum: ["PAID", "UNPAID"],
       default: null,
@@ -84,6 +84,13 @@ StudentSchema.index(
   { schoolId: 1, studentId: 1 },
   { unique: true }
 );
+StudentSchema.index({ schoolId: 1 });
+StudentSchema.index({ schoolId: 1, createdAt: -1 });
+StudentSchema.index({ schoolId: 1, className: 1 });
+StudentSchema.index({ schoolId: 1, feesStatus: 1 });
+StudentSchema.index({ schoolId: 1, smsStatus: 1 });
+StudentSchema.index({ studentName: "text", studentId: "text"});
+
 
 const Student = models.Student || model("Student", StudentSchema);
 export default Student;
