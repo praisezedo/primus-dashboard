@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
+import { toast } from "sonner";
  export default function LoginPage() {
    const router = useRouter();
  const [adminEmail, setAdminEmail] = useState("");
@@ -36,19 +37,26 @@ async function handleLogin(e: React.FormEvent) {
     if (!res.ok) {
         setError(data.message || "Login failed");
         setLoading(false);
+        toast.error(data.message);
         return;
-    } 
+    }  else {
+        toast.success(data.message)
+    }
 
+    // prevent setup process on another login
     const activeSession =  await api.get("api/session/current");
 
     if (activeSession) {
         router.push("/")
     }else {
-       router.push("/academic-session")
+       router.push("/academic-session");
     }
 
+    
+
     }catch (error) {
-        setError(error as string)
+        setError(error as string);
+
     }
 }
      return (

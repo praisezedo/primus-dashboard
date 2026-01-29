@@ -5,6 +5,7 @@ export default function StudentTable({
     students,
     onDelete,
     onRefresh, 
+    deleting,
 }: StudentTableProps) {
     return (
         <section className="relative overflow-x-scroll flex mx-7 p-3 flex-col gap-4 border border-gray-200 shadow-sm rounded-md">
@@ -38,6 +39,7 @@ export default function StudentTable({
                      student={student}
                      onDelete={onDelete}
                      onRefresh={onRefresh}
+                     deleting={deleting}
                     />
                 ))}
 

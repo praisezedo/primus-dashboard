@@ -3,28 +3,32 @@ import { connectDB } from "@/lib/mongodb";
 import Student from "@/app/models/Students";
 import { DashboardOverview } from "@/types/dashboard";
 import Admin from "@/app/models/Admin";
-import { validateSession } from "@/lib/validatesession";
+import { verifyAuth } from "@/lib/auth";
+import AcademicSession from "@/app/models/AcademicSession";
+
 
 export async function GET() {
 
 try {
     await connectDB();
     
-      const {schoolId , sessionId} = await validateSession();
-      
- const totalStudents = await Student.countDocuments({schoolId , sessionId});
+    const { schoolId } = await verifyAuth();
+     
+    const activeSession = await AcademicSession.findOne({schoolId , isActive: true});
 
  const paid = await Student.countDocuments({
     schoolId,
-    sessionId,
+    sessionId: activeSession._id,
     feesStatus: "PAID"
  });
 
  const unpaid = await Student.countDocuments({
     schoolId,
-    sessionId,
+    sessionId: activeSession._id,
     feesStatus: "UNPAID",
  });
+
+ const totalStudents = await Student.countDocuments({schoolId , sessionId: activeSession._id})
 
  const admin = await Admin.findOne({schoolId})
 

@@ -2,7 +2,7 @@
 import Link from "next/link"
 import StudentTable from "@/components/Table/StudentTable"
 import Footer from "@/components/UI/Footer"
-import { useEffect, useState } from "react";
+import { useEffect, useState , createContext } from "react";
 import api from "@/lib/axios";
 import LoadingSpinner from "@/components/UI/LoadingSpinner";
 import GlobalLoadingSpinner from "@/components/UI/GlobalLoadingSpinner";
@@ -26,34 +26,37 @@ async function fetchSettings() {
 }
 
  const debouncSearch = useDebounce(search , 500);
+
 // fetch students
 async function fetchStudents() {
+    setLoading(true);
     const params: any = {};
     if (debouncSearch) params.q = debouncSearch;
     if (className) params.className = className;
     if (feesStatus) params.feesStatus = feesStatus;
     if (smsStatus) params.smsStatus = smsStatus;
-
-    const res = await api.get("/api/students" , {params});
+    const res = await api.get("/api/students", { params });
     setStudents(res.data);
     setLoading(false);
 }
 
+
 // delete student 
 async function deleteStudent(id: string) {
+ 
     try {
     const res = await api.delete(`/api/students/${id}`);
     toast.success(res.data.message);
     fetchStudents();
+   
     } catch {
         toast.error("Could not delete student");
-    }
+    } 
 }
 
 useEffect(() => {
     fetchSettings();
-}, [])
-
+} , [])
 useEffect(() => {
     fetchStudents();
 }, [debouncSearch , className , feesStatus , smsStatus]);
@@ -78,7 +81,8 @@ if (loading) {
   />
 
     <select className="border border-gray-200 shadow-sm rounded-lg p-3" 
-    name="class" id="class"
+    name="className" id="className"
+    value={className}
     onChange={(e) => setClassName(e.target.value)}
     >
         <option value="">All Classes</option>
@@ -90,7 +94,8 @@ if (loading) {
     </select>
 
     <select className="border border-gray-200 shadow-sm rounded-lg p-3" 
-    name="fees-status" id="fees-status"
+    name="feesStatus" id="feesStatus"
+    value={feesStatus}
     onChange={(e) => setFeesStatus(e.target.value)}
     >
         <option value="">Fees Status</option>
@@ -99,7 +104,8 @@ if (loading) {
     </select>
 
     <select className="border border-gray-200 shadow-sm rounded-lg p-3" 
-    name="sms-status" id="sms-status"
+    name="smsStatus" id="smsStatus"
+    value={smsStatus}
     onChange={(e) => setSmsStatus(e.target.value)}
     >
         <option value="">SMS Status</option>
@@ -112,8 +118,9 @@ if (loading) {
      <Link className="hover:opacity-50  bg-blue-700 font-bold p-2 text-white rounded-lg text-center justify-center" href={"/students/add"}>Add Student</Link>
     </div>
     </section> 
+  
+         <StudentTable  students={students} onRefresh={fetchStudents} onDelete={deleteStudent} />
 
-    <StudentTable  students={students} onRefresh={fetchStudents} onDelete={deleteStudent}/>
     <Footer/>
     </>
     }

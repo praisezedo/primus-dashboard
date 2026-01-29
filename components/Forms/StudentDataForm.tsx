@@ -11,15 +11,9 @@ interface SettingsResponse {
   sections: string[];
 }
 
-export default function StudentDataForm() {
 
-
-  const [classes, setClasses] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [saving , setSaving] = useState<boolean>(false);
- const [sections , setSections] = useState<string[]>([]);
-
-  const [form, setForm] = useState({
+const initialFormState = {
+    
     studentName: "",
     studentId: "",
     className: "",
@@ -29,7 +23,17 @@ export default function StudentDataForm() {
     parentEmail: "",
     feesStatus: "UNPAID",
     notify: true,
-  });
+  
+}
+export default function StudentDataForm() {
+
+
+  const [classes, setClasses] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving , setSaving] = useState<boolean>(false);
+ const [sections , setSections] = useState<string[]>([]);
+
+  const [form, setForm] = useState(initialFormState);
 
   // 🔹 fetch settings (classes)
   useEffect(() => {
@@ -43,7 +47,7 @@ export default function StudentDataForm() {
     fetchSettings();
   }, []);
 
-  function updateField(
+  function updateField (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     const { name, value, type } = e.target;
@@ -62,10 +66,11 @@ export default function StudentDataForm() {
 
     try {
       setSaving(true);
-      await api.post("/api/students", form);
+    await api.post("/api/students", form);
       toast.success("Stuent successfully saved");
+       setForm(initialFormState);
     } catch (err) {
-       toast.error("Failed to create student")
+       toast.error("Failed to create student");
     } finally {
       setSaving(false);
     }

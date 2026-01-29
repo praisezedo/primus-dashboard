@@ -1,4 +1,3 @@
-import { InputData } from "@/types/student";
 
 export default function Input({label , value , onChange , placeholder = ""}: any) {
     return (

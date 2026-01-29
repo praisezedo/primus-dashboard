@@ -4,6 +4,7 @@ import { useState } from "react";
 import api from "@/lib/axios";
 import { Student } from "@/types/student";
 
+
 interface EditStudentModalProps {
   open: boolean;
   student: Student;
@@ -17,6 +18,8 @@ export default function EditStudentModal({
   onClose,
   onUpdated,
 }: EditStudentModalProps) {
+ const [saving , setSaving] = useState<boolean>(false);
+
   const [form, setForm] = useState({
     studentName: student.studentName,
     studentId: student.studentId,
@@ -30,15 +33,18 @@ export default function EditStudentModal({
   if (!open) return null;
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
 
+    setSaving(true);
+    e.preventDefault();
     await api.put(`/api/students/${student._id}`, form);
+    setSaving(false);
     onUpdated();
     onClose();
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <tr>
+          <td className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded-lg p-6 w-125 space-y-4"
@@ -118,13 +124,15 @@ export default function EditStudentModal({
           </button>
 
           <button
+            disabled={saving}
             type="submit"
-            className="px-4 py-2 hover:opacity-50 bg-blue-700 text-white rounded"
+            className="px-4 py-2 hover:opacity-50 bg-blue-700 text-white rounded disabled:opacity-50"
           >
-            Save
+           {saving ? "Saving...." : "Save"}
           </button>
         </div>
       </form>
-    </div>
+    </td>
+    </tr>
   );
 }

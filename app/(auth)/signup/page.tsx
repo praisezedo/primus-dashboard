@@ -7,6 +7,7 @@ import PrimusLogo from "@/components/UI/PrimusLogo"
 import { useReducer , useState } from "react";
 import { FormState , FormAction } from "@/types/admin";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 
  const intitalState: FormState = {
@@ -28,12 +29,14 @@ import { useRouter } from "next/navigation";
  }
 export default function SignupPage () {
    const router = useRouter();
-   const[show , setShow] = useState<boolean>(false)
+const[show , setShow] = useState<boolean>(false)
 const [state , dispatch] = useReducer(reducer , intitalState);
+const [loading , setLoading] = useState<boolean>(false);
 
 async function handleSignUp (e: React.FormEvent) {
    e.preventDefault();
-
+   try {
+      setLoading(true);
    const res = await fetch("/api/auth/signup" , {
     method: "POST",
     headers: { "Content-Type": "application/json"},
@@ -42,14 +45,20 @@ async function handleSignUp (e: React.FormEvent) {
 
    const data = await res.json();
 
+   setLoading(false);
    if(!res.ok) {
       if(data.message ===  "Admin already exists" ) {
           router.push('/login')
-      }
-      return;
-   }
+      } 
+    toast.error(data.message);
 
-   
+   }  else {
+       toast.success(data.message);  
+       router.push("/login");
+   }
+   }  catch (err) {
+         console.log('error' , err);
+   }
 }
      return (
         <>
@@ -124,7 +133,7 @@ async function handleSignUp (e: React.FormEvent) {
 </div>
       </div>
 
-<button type="submit" className="hover:bg-blue-500 bg-blue-700 text-white text-lg rounded-lg p-3">Create School Account</button>
+<button disabled={loading} type="submit" className="disabled:opacity-50 hover:bg-blue-500 bg-blue-700 text-white text-lg rounded-lg p-3">{loading ? "Signing Up....": "Create School Account"}</button>
           </form>
 <span className="flex gap-1">
     <p>Already have an account?</p>

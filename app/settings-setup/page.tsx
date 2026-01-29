@@ -123,7 +123,7 @@ const saveSettings = async () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  addSection();
+                  addClass();
                 }
               }}
             >
@@ -160,7 +160,7 @@ const saveSettings = async () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  addClass();
+                  addSection();
                 }
               }}
             >

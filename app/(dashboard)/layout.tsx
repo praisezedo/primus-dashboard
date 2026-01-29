@@ -64,10 +64,8 @@ if (!activeSessionData && !isSetupRoute) {
 if (activeSessionData && (!settings || !settings.settingsCompleted) && !isSetupRoute) {
   redirect("/settings-setup");
 }
-} else {
-  redirect("/")
-}
 
+} 
   return (
       <main
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -21,8 +21,8 @@ export async function POST(req: Request) {
             );
         }
 
-        const student = await Student.create({
-             schoolId,
+        const StudentState = {
+            schoolId,
              sessionId: activeSession._id,
              studentName: body.studentName,
              studentId: body.studentId,
@@ -33,10 +33,19 @@ export async function POST(req: Request) {
              parentEmail: body.parentEmail,
              feesStatus: body.feesStatus?.toUpperCase() || "UNPAID",
              smsStatus: body.notify ? "PENDING" : "NOTSENT",
-        });
+        }
+        const existingStudent = await Student.findOne(StudentState);
+
+        if (StudentState === existingStudent) {
+              return NextResponse.json({
+                message: "Student already exist"
+              } , {status: 400});
+        }
+
+        const student = await Student.create(StudentState);
 
         return NextResponse.json(student , {status: 201});
-
+      
     } catch (error) {
         console.error("Create student error" , error);
         return NextResponse.json(
@@ -67,7 +76,7 @@ export async function GET(req: Request) {
         }
 
         if (searchParams.get("className")) {
-            query.class = searchParams.get("className");
+            query.className = searchParams.get("className");
         }
 
         if (searchParams.get("feesStatus")) {
