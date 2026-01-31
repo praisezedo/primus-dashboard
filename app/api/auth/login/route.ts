@@ -18,7 +18,7 @@ export async function POST(req: Request) {
          //validate admin
         if (!adminEmail || !adminPassword) {
             return NextResponse.json({
-                message: "Email and password are rquired"
+                message: "Email and password are required"
             }, {status: 400}
         );
         }
@@ -61,11 +61,13 @@ export async function POST(req: Request) {
     (await cookies()).set("primus_token" , token , {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
     })
 
+    console.log("Cookies:", (await cookies()).getAll());
+    
        return NextResponse.json({
         message: "Login Successful",
         token,
@@ -75,6 +77,7 @@ export async function POST(req: Request) {
              adminEmail: admin.adminEmail,
              schoolName: admin.schoolName,
              schoolId: admin.schoolId,
+             
         },
        },{status: 200}
     );

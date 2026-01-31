@@ -183,7 +183,7 @@ const saveSettings = async () => {
 
         {/* Semester */}
         <div>
-          <label className=" font-medium">Semester</label>
+          <label className=" font-medium">Semester (Optional)</label>
           <select
             className="focus:outline-none focus:border border rounded-lg p-2 w-full mt-2"
             value={semester}

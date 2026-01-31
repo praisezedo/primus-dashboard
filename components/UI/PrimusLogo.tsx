@@ -17,14 +17,14 @@ export default function PrimusLogo () {
         <line x1="0" y1="18" x2="40" y2="18" stroke="white" strokeWidth="2" />
         <line x1="0" y1="31" x2="40" y2="31" stroke="white" strokeWidth="2" />
         <text
-          x="50"
-          y="38"
+          x="55"
+          y="35"
           fontFamily="Lucida Console, Courier New, monospace"
-          fontSize="40"
+          fontSize="30"
           fontWeight="bold"
           fill="#1F2937"
         >
-          Primus
+          PayLert
         </text>
       </svg>
     </div>

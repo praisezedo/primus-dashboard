@@ -62,14 +62,14 @@ export default function PrimusLoader() {
 
       {/* Text */}
       <text
-        x="50"
-        y="38"
+          x="55"
+          y="35"
         fontFamily="Lucida Console, Courier New, monospace"
-        fontSize="40"
+        fontSize="30"
         fontWeight="bold"
         fill="#1F2937"
       >
-        Primus
+        PayLert
         <animate
           attributeName="opacity"
           values="0;1"

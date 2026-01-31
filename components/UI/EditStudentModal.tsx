@@ -3,6 +3,7 @@
 import { useState } from "react";
 import api from "@/lib/axios";
 import { Student } from "@/types/student";
+import { toast } from "sonner";
 
 
 interface EditStudentModalProps {
@@ -33,11 +34,11 @@ export default function EditStudentModal({
   if (!open) return null;
 
   async function handleSubmit(e: React.FormEvent) {
-
     setSaving(true);
     e.preventDefault();
     await api.put(`/api/students/${student._id}`, form);
     setSaving(false);
+    toast.success("Student Updated Successfully");
     onUpdated();
     onClose();
   }

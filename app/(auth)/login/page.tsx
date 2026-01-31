@@ -14,7 +14,7 @@ import { toast } from "sonner";
  const [adminPassword, setAdminPassword] = useState("");
  const [error, setError] = useState("");
  const [loading, setLoading] = useState(false);
- const [show , setShow] = useState<boolean>(false)
+ const [show , setShow] = useState<boolean>(false);
 
 async function handleLogin(e: React.FormEvent) {
 
@@ -23,40 +23,28 @@ async function handleLogin(e: React.FormEvent) {
      setError("");
 
      try {
-      const res = await fetch("/api/auth/login" , {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            adminEmail,
-            adminPassword
-        })
-     });
+    const res = await api.post("/api/auth/login" , {
+          adminEmail: adminEmail , adminPassword: adminPassword  
+    })
 
-    const data = await res.json();
+    const data = await res.data.message;
 
-    if (!res.ok) {
+    if (res.status !== 200) {
         setError(data.message || "Login failed");
         setLoading(false);
         toast.error(data.message);
         return;
     }  else {
-        toast.success(data.message)
+        toast.success("Login Successful");
     }
-
     // prevent setup process on another login
     const activeSession =  await api.get("api/session/current");
-
+     
     if (activeSession) {
         router.push("/")
-    }else {
-       router.push("/academic-session");
     }
-
-    
-
-    }catch (error) {
-        setError(error as string);
-
+    }catch (error: any) {
+        setError(error.response?.data?.message || "Something went wrong");
     }
 }
      return (
