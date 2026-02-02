@@ -64,9 +64,13 @@ export async function GET(req: Request) {
 
         const {schoolId} = await verifyAuth();
 
+        const activeSession = await AcademicSession.findOne({schoolId , isActive: true});
+
+        const sessionId = activeSession._id;
+
         const {searchParams} = new URL(req.url);
 
-        const query: any = {schoolId};
+        const query: any = {schoolId , sessionId};
 
         if (searchParams.get("q")) {
             query.$or = [

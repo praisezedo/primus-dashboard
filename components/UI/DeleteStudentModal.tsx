@@ -6,7 +6,7 @@ interface DeleteStudentModalProps {
   studentName: string;
   onClose: () => void;
   onConfirm: () => void;
-  deleting: boolean;
+
 }
 
 export default function DeleteStudentModal({
@@ -14,7 +14,7 @@ export default function DeleteStudentModal({
   studentName,
   onClose,
   onConfirm,
-  deleting,
+
 }: DeleteStudentModalProps) {
 
 
@@ -43,7 +43,7 @@ export default function DeleteStudentModal({
             onClick={onConfirm}
             className="hover:opacity-50 px-4 py-2 rounded bg-red-600 text-white"
           >
-           {deleting ? "Deleting..." : "Delete"}
+            Delete
           </button>
         </div>
       </div>

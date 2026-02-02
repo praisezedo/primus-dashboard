@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState  } from "react";
 import api from "@/lib/axios";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import GlobalLoadingSpinner from "../UI/GlobalLoadingSpinner";
+import { useRouter } from "next/navigation";
 
 interface SettingsResponse {
   classes: string[];
@@ -27,6 +27,7 @@ const initialFormState = {
 }
 export default function StudentDataForm() {
 
+const router = useRouter();
 
   const [classes, setClasses] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -73,6 +74,7 @@ export default function StudentDataForm() {
        toast.error("Failed to create student");
     } finally {
       setSaving(false);
+      window.location.reload();
     }
   }
 
@@ -168,7 +170,7 @@ export default function StudentDataForm() {
             value={form.parentPhone}
             onChange={updateField}
             className="border focus:outline-none focus:border p-3 rounded-lg w-80"
-            placeholder="Parent Phone Number  e.g., 07050243807"
+            placeholder="Parent Phone  e.g., 07050243807"
           />
         </div>
 

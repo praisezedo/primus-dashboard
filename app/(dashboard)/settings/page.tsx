@@ -152,7 +152,7 @@ export default function SettingsEditPage() {
 
         {/* Semester */}
         <div>
-          <label className="font-medium">Semester (Optional)</label>
+          <label className="font-medium">Semester or Term  (Optional)</label>
           <select
             className="border rounded-lg p-2 w-full mt-2"
             value={semester}

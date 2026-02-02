@@ -12,12 +12,12 @@ export default function StudentRow({
     student,
     onDelete,
     onRefresh,
-    deleting ,
+   
 }: {
     student: Student,
     onDelete: (id: string) => void,
     onRefresh: () => void,
-    deleting: boolean,
+ 
 }) {
     const [showDelete , setShowDelete] = useState<boolean>(false);
     const [showEdit , setShowEdit] = useState<boolean>(false);
@@ -66,6 +66,7 @@ export default function StudentRow({
             onDelete(student._id);
             setShowDelete(false);
           }}
+          
         />
 
         <EditStudentModal

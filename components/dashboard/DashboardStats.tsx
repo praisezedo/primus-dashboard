@@ -9,7 +9,6 @@ import SkeletonInlineText from "../UI/SkelectonInlineText";
 import api from "@/lib/axios";
 import SentSMS from "./SentSMS";
 import NotSentSMS from "./NotSentSMS";
-import BulkUploadReview from "./BulkUploadReview";
 
 export default function DashboardStats  () {
 
@@ -55,7 +54,7 @@ useEffect(() => {
             <UnpaidStatsCard loadingState={isLoading} unpaidStudents={dashboardOverview.unpaid}/>
             <SentSMS/>
             <NotSentSMS/>
-            <BulkUploadReview/>
+
         </div>
         
       </section>

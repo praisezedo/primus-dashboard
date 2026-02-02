@@ -1,23 +1,27 @@
-import mongoose from "mongoose";
+import {Schema , model , models} from "mongoose";
 
-const BulkUploadSchema = new mongoose.Schema (
+const BulkUploadLogSchema = new Schema(
     {
-        schoolId: {
+        schoolId: {type: String , required: true},
+        sessionId: {type: String , required: true},
+
+        status: {
             type: String,
-            require: true,
+            enum: ["SUCCESS" , "FAILED"],
+            required: true,
         },
-    sessionId: {
-     type: String,
-     required: true,
-     },
-        uploadedBy: String,
         totalRows: Number,
-          status: {
-            type: String,
-            enum: ["success", "failed"]
+        erorRows: Number,
+        errorMessage: String,
+
+        uploadedAt: {
+            type: Date,
+            default: Date.now,
         },
     },
     {timestamps: true}
-)
+);
 
-export default mongoose.models.BulkUpload ||   mongoose.model("BulkUpload", BulkUploadSchema);
+const BulkUploadLog = models.BulkUploadLog || model("BulkUploadLog" , BulkUploadLogSchema);
+
+export default BulkUploadLog;

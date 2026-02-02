@@ -33,6 +33,5 @@ export interface StudentTableProps  {
     students: Student[];
     onDelete: (id: string) => void;
     onRefresh: () => void;
-   
 }
 
