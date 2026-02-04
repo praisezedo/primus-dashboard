@@ -99,7 +99,7 @@ export default function SettingsEditPage() {
             />
             <button
               onClick={addClass}
-              className="bg-blue-700 text-white px-4 rounded-lg"
+              className="bg-blue-700  hover:opacity-50 text-white px-4 rounded-lg"
             >
               Add
             </button>
@@ -131,7 +131,7 @@ export default function SettingsEditPage() {
             />
             <button
               onClick={addSection}
-              className="bg-blue-700 text-white px-4 rounded-lg"
+              className="bg-blue-700 hover:opacity-50 text-white px-4 rounded-lg"
             >
               Add
             </button>
@@ -144,7 +144,7 @@ export default function SettingsEditPage() {
                 className="bg-green-100 text-green-800 px-3 py-1 rounded-full flex items-center gap-2"
               >
                 {s}
-                <button onClick={() => removeItem(i, setSections)}>✕</button>
+                <button  onClick={() => removeItem(i, setSections)}>✕</button>
               </span>
             ))}
           </div>
@@ -169,7 +169,9 @@ export default function SettingsEditPage() {
       {/* SMS */}
       <section className="bg-white p-6 rounded-lg shadow space-y-6">
         <h2 className="text-xl font-semibold">SMS Templates</h2>
+        <div className="flex flex-col gap-3">
 
+        <label className="font-bold" htmlFor="paid">Paid Message</label>
         <textarea
           className="border rounded-lg p-3 w-full"
           rows={4}
@@ -179,8 +181,10 @@ export default function SettingsEditPage() {
             setSmsTemplate({ ...smsTemplate, paid: e.target.value })
           }
         />
-
-        <textarea
+        </div>
+         < div className="flex flex-col gap-3">
+          <label  className="font-bold"  htmlFor="unpaid">Unpaid Message</label>
+          <textarea
           className="border rounded-lg p-3 w-full"
           rows={4}
           placeholder="Unpaid fees message"
@@ -189,6 +193,7 @@ export default function SettingsEditPage() {
             setSmsTemplate({ ...smsTemplate, unpaid: e.target.value })
           }
         />
+         </div>
       </section>
 
       {/* Save */}

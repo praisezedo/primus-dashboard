@@ -13,17 +13,19 @@ export default  function AddStudentPage() {
   const [students , setStudents] = useState<DashboardOverview>();
   const [loading , setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-     async function getTotalStudent() {
+
+  const  fetchStudentsOverview = async () => {
       try {
       const res = await api.get("/api/dashboard/overview");
       setStudents(res.data);
     } finally {
       setLoading(false);
     }
-     }
-    getTotalStudent();
+  }
+  useEffect(() => {
+     fetchStudentsOverview();
   } , [])
+  
   return (
     <>
       <section className="p-7 flex flex-col gap-7">

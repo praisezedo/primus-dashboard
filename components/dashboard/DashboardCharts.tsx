@@ -78,7 +78,7 @@ export default function DashboardCharts() {
       {/* Students by Class */}
       <div className="bg-white p-5 rounded-lg shadow w-full overflow-scroll">
         <h2 className="font-bold mb-3">Student by Class</h2>
-<ResponsiveContainer width="100%" height={300}>
+<ResponsiveContainer width={Math.max(data.studentByClass.length * 150, 600)} height={300}>
   <BarChart
     data={data.studentByClass}
     barGap={8}

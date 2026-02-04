@@ -33,6 +33,7 @@ const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const [saving , setSaving] = useState<boolean>(false);
  const [sections , setSections] = useState<string[]>([]);
+  const [message , setMessage] = useState<string>('');
 
   const [form, setForm] = useState(initialFormState);
 
@@ -44,7 +45,7 @@ const router = useRouter();
       setSections(res.data?.sections || []);
       setLoading(false)
     }
-
+  
     fetchSettings();
   }, []);
 
@@ -67,14 +68,15 @@ const router = useRouter();
 
     try {
       setSaving(true);
-    await api.post("/api/students", form);
-      toast.success("Stuent successfully saved");
-       setForm(initialFormState);
+      const res = await api.post("/api/students", form);
+       setMessage(res.data.message);
+      toast.success("Student successfully saved");
+      setForm(initialFormState);
+      router.refresh();
     } catch (err) {
-       toast.error("Failed to create student");
+       toast.error(message || "Failed to save student");
     } finally {
       setSaving(false);
-      window.location.reload();
     }
   }
 

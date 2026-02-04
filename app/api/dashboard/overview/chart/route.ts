@@ -15,6 +15,8 @@ export async function GET() {
     isActive: true,
   });
 
+  console.log("Active Session:" , activeSession);
+  
   if (!activeSession) {
     return NextResponse.json(
       { message: "No active session" },

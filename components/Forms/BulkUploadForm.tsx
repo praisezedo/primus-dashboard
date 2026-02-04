@@ -6,8 +6,10 @@ import { useRef, useState } from "react";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function BulkUploadForm() {
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -49,7 +51,6 @@ export default function BulkUploadForm() {
 
   const handleUpload = async () => {
     if (!file) return;
-
     const formData = new FormData();
     formData.append("file", file);
     formData.append("notify", notify ? "true" : "false");
@@ -68,7 +69,6 @@ export default function BulkUploadForm() {
       setInsertedCount(response.data.inserted || 0);
       toast.success("Upload successful");
       setFile(null);
-      
       setNotify(false);
       setErrorMessage("");
     } catch (error: any) {
@@ -77,6 +77,7 @@ export default function BulkUploadForm() {
       toast.error(errorMsg);
     } finally {
       setUploading(false);
+      router.refresh();
     }
   }
   return (
@@ -129,7 +130,7 @@ export default function BulkUploadForm() {
               </div>}
         </div>
       </div>
-          {insertedCount > 0 &&  <Link href="/students" className="mt-3 text-sm text-blue-700 font-semibold hover:underline">View new students</Link>} 
+          {insertedCount > 0 &&  <Link href="/students" className="flex text-center justify-center mt-3 text-sm text-blue-700 font-semibold hover:underline">View new students</Link>} 
  {uploading && (
       <div className="mx-5 mt-4">
         <div className="h-2 w-full bg-gray-200 rounded">

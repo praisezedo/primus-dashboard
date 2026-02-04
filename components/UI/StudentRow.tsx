@@ -9,11 +9,12 @@ import EditStudentModal from "./EditStudentModal";
 
 
 export default function StudentRow({
+    serial,
     student,
     onDelete,
     onRefresh,
-   
 }: {
+   serial: number,
     student: Student,
     onDelete: (id: string) => void,
     onRefresh: () => void,
@@ -25,7 +26,8 @@ export default function StudentRow({
     return (
        <>
         <tr className="border-b">
-        <td className="p-4  w-40">{student.studentName}</td>
+        <td className="p-4  w-10">{serial}</td>
+        <td className="p-4 w-40">{student.studentName}</td>
         <td className="p-4 w-40">{student.studentId}</td>
         <td className="p-4 w-40">{student.className}</td>
         <td className="p-4 w-40">{student.section || "-"}</td>

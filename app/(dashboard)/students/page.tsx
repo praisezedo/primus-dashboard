@@ -35,8 +35,13 @@ async function fetchStudents() {
     if (className) params.className = className;
     if (feesStatus) params.feesStatus = feesStatus;
     if (smsStatus) params.smsStatus = smsStatus;
-    const res = await api.get("/api/students", { params });
-    setStudents(res.data);
+        const res = await api.get("/api/students", { params });
+        const data = res.data;
+        if (data.students) {
+            setStudents(data.students);
+        } else {
+            setStudents(data);
+        }
     setLoading(false);
 }
 
@@ -45,18 +50,23 @@ async function fetchStudents() {
 async function deleteStudent(id: string) {
  
     try {
-    const res = await api.delete(`/api/students/${id}`);
+     const res = await api.delete(`/api/students/${id}`);
     toast.success(res.data.message);
     fetchStudents();
    
-    } catch {
-        toast.error("Could not delete student");
+    } catch (error: any) {
+        toast.error(error.response?.data?.message || "Could not delete student");
     } 
 }
 
 useEffect(() => {
     fetchSettings();
 } , [])
+
+useEffect(() => {
+    fetchStudents();
+} , []);
+
 useEffect(() => {
     fetchStudents();
 }, [debouncSearch , className , feesStatus , smsStatus]);
@@ -118,8 +128,8 @@ if (loading) {
      <Link className="hover:opacity-50  bg-blue-700 font-bold p-2 text-white rounded-lg text-center justify-center" href={"/students/add"}>Add Student</Link>
     </div>
     </section> 
-  
-         <StudentTable  students={students} onRefresh={fetchStudents} onDelete={deleteStudent} />
+
+         <StudentTable  students={students}  onRefresh={fetchStudents} onDelete={deleteStudent} />
 
     <Footer/>
     </>

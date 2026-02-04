@@ -5,9 +5,13 @@ import {parse} from "csv-parse/sync"
 import AcademicSession from "@/app/models/AcademicSession";
 import Student from "@/app/models/Students";
 import mongoose from "mongoose";
+import Setting from "@/app/models/Settings";
+import BulkUploadLog from "@/app/models/BulkUpload";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
+
+let errorRow: number = 0;
 
 export async function POST(req: Request) {
 
@@ -39,6 +43,9 @@ export async function POST(req: Request) {
      }
 
      const activeSession = await AcademicSession.findOne({schoolId , isActive: true})
+     const settings = await Setting.findOne({schoolId});
+
+
 
      if(!activeSession) {
         return NextResponse.json({
@@ -46,13 +53,23 @@ export async function POST(req: Request) {
         } , {status: 400});
      }
 
+     if (!settings) {
+          return NextResponse.json({
+             message: "School settings not configured",
+          } , {status: 400});
+     }
+
+     const allowedClasses = settings.classes || [];
+     const allowedSections = settings.sections || [];
+
+
      const seenStudentIds = new Set();
      const studentsToInsert: any[] = [];
-
-for (let index = 0; index < records.length; index++) {
+try   {
+    for (let index = 0; index < records.length; index++) {
     const row: any = records[index];
     const rowNumber = index + 2;
-    
+        errorRow = rowNumber;
     const studentId = row["STUDENT ID"]?.trim();
     const feesStatus = row["FEES STATUS"]?.toUpperCase();
 
@@ -67,8 +84,20 @@ for (let index = 0; index < records.length; index++) {
             message: `Row ${rowNumber}: Duplicate STUDENT ID in CSV`
         }, {status: 400});   
     }
-
     seenStudentIds.add(studentId);
+
+    if (row["CLASS"] && !allowedClasses.includes(row["CLASS"])) {
+        return NextResponse.json({
+            message: `Row ${rowNumber}: CLASS must be one of: ${allowedClasses.join(", ")}`,
+        }, {status: 400});
+    }
+
+    if (row["SECTION"] && !allowedSections.includes(row["SECTION"])) {
+          return NextResponse.json({
+            message: `Row ${rowNumber}: SECTION must be one of: ${allowedSections.join(", ")}`,
+          }, {status: 400});
+    }
+    
 
     if(!["PAID", "UNPAID"].includes(feesStatus)) {
         return NextResponse.json({
@@ -104,6 +133,7 @@ for (let index = 0; index < records.length; index++) {
     }
 
     if (!row["CLASS"]) {
+
         return NextResponse.json({
             message: `Row ${rowNumber}: CLASS is required`
         }, {status: 400});
@@ -111,7 +141,7 @@ for (let index = 0; index < records.length; index++) {
 
     studentsToInsert.push({
         schoolId,
-        sessionId: activeSession._id.toString(),
+        sessionId: activeSession._id,
         studentName: row["STUDENT NAME"],
         studentId,
         className: row["CLASS"],
@@ -139,21 +169,39 @@ for (let index = 0; index < records.length; index++) {
 
    const session = await mongoose.startSession();
 
-   try {
+
     await session.withTransaction(async () => {
         await Student.insertMany(studentsToInsert , {session});
     });
-
+    
+    await BulkUploadLog.create({
+         schoolId,
+         sessionId: activeSession._id,
+         status: "SUCCESS",
+         totalRows: records.length,
+         insertedRows: studentsToInsert.length,
+         notifyParents: notify,
+    })
     return NextResponse.json({
         message: "Bulk upload successful",
         inserted: studentsToInsert.length,
     });
-   }  catch (err: any) {
-    return NextResponse.json(
-        {message: err.message || "Bulk upload failed"},
-        {status: 400}
-    );
-   } finally {
-    session.endSession();
-   }
+   }  catch (error: any)  {
+
+    await BulkUploadLog.create({
+        schoolId,
+        sessionId: activeSession._id,
+        status: "FAILED",
+        totalRows: records.length,
+        insertedRows: 0,
+        errorRow,
+        errorMessage: error.message,
+        notifyParents: notify,
+    });
+
+ return NextResponse.json(
+        {message: error.message || "Bulk upload failed"},
+    {status: 400}
+    )
+}  
 }

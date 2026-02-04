@@ -65,11 +65,11 @@ export default function PrimusLoader() {
           x="55"
           y="35"
         fontFamily="Lucida Console, Courier New, monospace"
-        fontSize="30"
+        fontSize="25"
         fontWeight="bold"
         fill="#1F2937"
       >
-        PayLert
+        TableLert
         <animate
           attributeName="opacity"
           values="0;1"

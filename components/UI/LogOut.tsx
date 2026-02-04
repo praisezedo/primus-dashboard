@@ -39,7 +39,7 @@ export default function LogOut({open , onClose}: Props) {
                 <div className="flex justify-end gap-3">
                        <button
                         onClick={onClose}
-                        className="px-4 py-2 rounded-lg border"
+                        className="px-4 py-2  hover:opacity-50 rounded-lg border"
                         disabled={loading}
                        >
                         Cancel
@@ -48,7 +48,7 @@ export default function LogOut({open , onClose}: Props) {
                        <button
                         onClick={handleLogout}
                         disabled={loading}
-                        className="px-4 py-2 rounded-lg bg-red-600 text-white disabled:opacity-50"
+                        className="px-4 py-2 hover:opacity-50 rounded-lg bg-red-600 text-white disabled:opacity-50"
                        >
                         {loading ? "Logging out..." : "Logout"}
                        </button>

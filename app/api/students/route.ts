@@ -93,15 +93,16 @@ export async function GET(req: Request) {
 
    const page = Number(searchParams.get("page")) || 1;
   const limit = 20;
-  const skip = (page - 1) * limit;
+  
+    const skip = (page - 1) * limit;
 
-  const students = await Student.find(query)
-  .sort({ createdAt: -1 })
-  .skip(skip)
-  .limit(limit)
-  .lean();
+    const students = await Student.find(query)
+    .sort({ createdAt: -1 })
+    .lean();
 
-    return NextResponse.json(students);
+    const total = await Student.countDocuments(query);
+
+        return NextResponse.json({ students, total, page, limit });
     } catch (error) {
        console.log("Fetch students error" , error);
       return NextResponse.json(
