@@ -7,6 +7,17 @@ import PrimusLoader from "@/components/UI/PrimusLoader";
 import Footer from "@/components/UI/Footer";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
+const SMS_PLACEHOLDER = [
+  {key: "{{parentName}}", label: "Parent Name" },
+  {key: "{{studentName}}", label: "Student Name" },
+  {key: "{{studentId}}", label: "Student ID" },
+  {key: "{{className}}" , label: "Class" },
+  {key: "{{section}}" , label: "Section"},
+  {key: "{{feesStatus}}", label: "Fees Status"},
+  {key: "{{semester}}" ,label: "Semester"},
+];
+
 export default function SettingsPage() {
 
   const router = useRouter();
@@ -40,6 +51,12 @@ export default function SettingsPage() {
             setLoading(false)
         }) 
     },[])
+
+    const insertPlaceholder = (field: "paid" | "unpaid", placeholder: string) => {
+      setSmsTemplate((prev) => ({
+        ...prev, [field]: prev[field] + " " + placeholder
+      }));
+    }
 
     const addClass = () => {
         if (!classInput.trim()) return;
@@ -116,6 +133,7 @@ const saveSettings = async () => {
               placeholder="e.g. JSS 1"
               value={classInput}
               onChange={(e) => setClassInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && addClass() && e.preventDefault()}
             />
             <button
               onClick={addClass}
@@ -153,6 +171,7 @@ const saveSettings = async () => {
               placeholder="e.g.  A or Science B"
               value={sectionInput}
               onChange={(e) => setSectionInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && addSection() && e.preventDefault()}
             />
             <button
               onClick={addSection}
@@ -201,6 +220,24 @@ const saveSettings = async () => {
       <section className="bg-white p-6 rounded-lg shadow space-y-6">
         <h2 className="text-xl font-semibold">SMS Templates</h2>
 
+       {/* Helper */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm">
+          <p className="font-medium mb-2">Available Placeholders</p>
+          <div className="flex flex-wrap gap-2">
+            {SMS_PLACEHOLDER.map((p) => (
+              <span
+               key={p.key}
+               className="bg-blue-100 text-blue-800 px-2 py-1 rounded"
+              >
+                {p.key} - {p.label}
+              </span>
+            ))}
+          </div>
+          <p className="mt-2 text-gray-600">
+            These will be replaced automatically when sending SMS.
+          </p>
+          </div> 
+
         <div>
           <label className="font-medium">Paid Fees Message</label>
           <textarea
@@ -212,6 +249,19 @@ const saveSettings = async () => {
               setSmsTemplate({ ...smsTemplate, paid: e.target.value })
             }
           />
+
+      <div className="flex flex-wrap gap-2">
+             {SMS_PLACEHOLDER.map((p) => (
+              <button
+                key={p.key}
+                type="button"
+                onClick={() => insertPlaceholder("paid" , p.key)}
+                className="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
+              >
+                {p.label}
+              </button>
+             ))}
+        </div>
         </div>
 
         <div>
@@ -225,6 +275,19 @@ const saveSettings = async () => {
               setSmsTemplate({ ...smsTemplate, unpaid: e.target.value })
             }
           />
+
+ <div className="flex flex-wrap gap-2">
+             {SMS_PLACEHOLDER.map((p) => (
+              <button
+                key={p.key}
+                type="button"
+                onClick={() => insertPlaceholder("unpaid", p.key)}
+                className="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
+              >
+                {p.label}
+              </button>
+             ))}
+        </div>
         </div>
       </section>
 

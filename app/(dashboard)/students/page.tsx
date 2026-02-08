@@ -25,7 +25,7 @@ async function fetchSettings() {
     setClasses(res.data.classes || []);
 }
 
- const debouncSearch = useDebounce(search , 500);
+ const debouncSearch = useDebounce(search , 1100);
 
 // fetch students
 async function fetchStudents() {

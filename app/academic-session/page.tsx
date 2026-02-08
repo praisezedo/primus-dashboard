@@ -44,7 +44,7 @@ export default function AcademicSessionSignUp() {
         />
         <button
           disabled={loading}
-          className="bg-blue-700 text-white p-3 rounded-lg"
+          className="bg-blue-700 hover:opacity-50 text-white p-3 rounded-lg"
         >
           {loading ? "Creating..." : "Start Session"}
         </button>
