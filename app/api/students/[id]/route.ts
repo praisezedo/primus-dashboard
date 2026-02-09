@@ -3,10 +3,18 @@ import { connectDB } from "@/lib/mongodb";
 import { verifyAuth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import AcademicSession from "@/app/models/AcademicSession";
+import {rateLimit} from "@/lib/ratelimit";
 
 // for geting a particular student
-export async function GET(_: Request , {params}: {params: Promise<{id: string}>}) {
-
+export async function GET(req: Request , {params}: {params: Promise<{id: string}>}) {
+    
+   const ip = req.headers.get("x-forwarded-for") || "unknown";
+  
+   if (!rateLimit(ip , 5 , 60_000)) {
+      return NextResponse.json({
+          message: "Too many requests. Please try again later."
+      }, {status: 429})
+   }
     await connectDB();
 
      const { id } = await params;

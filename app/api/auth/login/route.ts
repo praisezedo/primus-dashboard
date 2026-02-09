@@ -5,8 +5,16 @@ import Admin from "@/app/models/Admin";
 import { AdminType } from "@/types/admin";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { rateLimit } from "@/lib/ratelimit";
 
 export async function POST(req: Request) {
+ const ip = req.headers.get("x-forwarded-for") || "unknown";
+
+ if (!rateLimit(ip , 5 , 60_000)) {
+    return NextResponse.json({
+        message: "Too many requests. Please try again later."
+    }, {status: 429})
+ }
 
     try {
 

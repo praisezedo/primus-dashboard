@@ -7,6 +7,7 @@ import Student from "@/app/models/Students";
 import mongoose from "mongoose";
 import Setting from "@/app/models/Settings";
 import BulkUploadLog from "@/app/models/BulkUpload";
+import { rateLimit } from "@/lib/ratelimit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
@@ -14,6 +15,14 @@ const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
 let errorRow: number = 0;
 
 export async function POST(req: Request) {
+
+     const ip = req.headers.get("x-forwarded-for") || "unknown";
+    
+     if (!rateLimit(ip , 5 , 60_000)) {
+        return NextResponse.json({
+            message: "Too many requests. Please try again later."
+        }, {status: 429})
+     }
 
      await connectDB();
 

@@ -4,10 +4,20 @@ import { connectDB } from "@/lib/mongodb";
 import Admin from "@/app/models/Admin";
 import { v4 as uuidv4 } from "uuid";
 import { sendWelcomeEmail } from "@/lib/email";
+import { rateLimit } from "@/lib/ratelimit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: Request) {
+
+   const ip = req.headers.get("x-forwarded-for") || "unknown";
+  
+   if (!rateLimit(ip , 5 , 60_000)) {
+      return NextResponse.json({
+          message: "Too many requests. Please try again later."
+      }, {status: 429})
+   }
+   
   try {
     await connectDB();
 

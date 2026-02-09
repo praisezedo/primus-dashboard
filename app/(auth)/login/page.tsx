@@ -45,6 +45,8 @@ async function handleLogin(e: React.FormEvent) {
     }
     }catch (error: any) {
         setError(error.response?.data?.message || "Something went wrong");
+    } finally {
+        setLoading(false);
     }
 }
      return (
