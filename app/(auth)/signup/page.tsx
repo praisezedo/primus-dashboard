@@ -5,7 +5,7 @@ import { faLock , faLockOpen } from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import PrimusLogo from "@/components/UI/PrimusLogo"
 import { useReducer , useState } from "react";
-import { FormState , FormAction } from "@/types/admin";
+import { FormState , FormAction } from "@/components/types/admin";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 

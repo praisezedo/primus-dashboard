@@ -66,10 +66,18 @@ const StudentSchema = new Schema(
 
     smsStatus: {
       type: String,
-      enum: ["SENT", "NOTSENT", "PENDING"],
+      enum: ["SENT", "FAILED", "PENDING"],
       default: "NOTSENT",
     },
+    
+    smsAttempts: {
+     type: Number,
+     default: 0,
+    },
 
+   lastSmsAttemptAt: {
+    type: Date,
+    },
     lastFeeStatus: {
       type: String,
       enum: ["PAID", "UNPAID"],

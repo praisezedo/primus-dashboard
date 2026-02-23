@@ -1,5 +1,5 @@
 "use client";
-import { Props } from "@/types/logout";
+import { Props } from "@/components/types/logout";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import api from "@/lib/axios";

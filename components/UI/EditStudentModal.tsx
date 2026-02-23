@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import api from "@/lib/axios";
-import { Student } from "@/types/student";
+import { Student } from "@/components/types/student";
 import { toast } from "sonner";
 
 

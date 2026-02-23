@@ -1,4 +1,4 @@
-import { SkeletonInlineTextProps } from "@/types/skelectoninlinetextprops";
+import { SkeletonInlineTextProps } from "@/components/types/skelectoninlinetextprops";
 export default function SkeletonInlineText({
   length,
   className,

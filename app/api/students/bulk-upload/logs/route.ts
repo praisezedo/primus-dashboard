@@ -16,6 +16,7 @@ export async function GET() {
         }, { status: 400});
        }
         const sessionId = activeSession._id;
+        
        const logs = await BulkUploadLog.find({schoolId , sessionId})
        .sort({ createdAt: -1 })
        .limit(10)

@@ -3,7 +3,7 @@
 import PaidStatsCard from "./PaidStatsCard";
 import TotalStatsCard from "./TotalStatsCard";
 import UnpaidStatsCard from "./UnpaidStatsCard";
-import { DashboardOverview } from "@/types/dashboard";
+import { DashboardOverview } from "@/components/types/dashboard";
 import { useState , useEffect} from "react";
 import SkeletonInlineText from "../UI/SkelectonInlineText";
 import api from "@/lib/axios";

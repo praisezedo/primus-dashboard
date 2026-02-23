@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import Setting from "@/app/models/Settings";
 import BulkUploadLog from "@/app/models/BulkUpload";
 import { rateLimit } from "@/lib/ratelimit";
+import { renderSmsTemplate } from "@/lib/sms/renderTemplate";
+import { sendBulkSMSInBatches } from "@/lib/sms/queueSms";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
@@ -15,7 +17,9 @@ const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
 let errorRow: number = 0;
 
 export async function POST(req: Request) {
-
+       let activeSession: any = null;
+       let schoolId: string | null = null;
+       
      const ip = req.headers.get("x-forwarded-for") || "unknown";
     
      if (!rateLimit(ip , 5 , 60_000)) {
@@ -26,7 +30,9 @@ export async function POST(req: Request) {
 
      await connectDB();
 
-     const {schoolId} = await verifyAuth();
+     const auth = await verifyAuth();
+
+     schoolId = auth.schoolId;
 
     const  formData  = await req.formData();
 
@@ -34,7 +40,7 @@ export async function POST(req: Request) {
     
     const file = formData.get("file") as File;
      if (!file) {
-        return NextResponse.json({message: "CSV file required"} , {status: 400});
+        return NextResponse.json({message: "CSV file required"} , {status: 400}); 
      }
      const csvText = await file.text();
      let records;
@@ -51,7 +57,7 @@ export async function POST(req: Request) {
         );
      }
 
-     const activeSession = await AcademicSession.findOne({schoolId , isActive: true})
+     activeSession = await AcademicSession.findOne({schoolId , isActive: true})
      const settings = await Setting.findOne({schoolId});
 
 
@@ -159,7 +165,7 @@ try   {
         parentPhone: row["PARENT PHONE"],
         parentEmail: row["PARENT EMAIL"],
         feesStatus,
-        smsStatus: notify ? "PENDING" : "NOTSENT",
+        smsStatus: notify ? "PENDING" : "FAILED",
     });
 };
 
@@ -178,11 +184,39 @@ try   {
 
    const session = await mongoose.startSession();
 
+    let insertedStudents: any[] = [];
 
     await session.withTransaction(async () => {
-        await Student.insertMany(studentsToInsert , {session});
+       insertedStudents = await Student.insertMany(studentsToInsert, { session });
     });
     
+    if (notify) {
+        const messagetoSend: {phone: string; message: string , studentId: string }[] = [];
+          for (const student of insertedStudents) {
+            const template = student.feesStatus === "PAID"
+                             ? settings.smsTemplate.paid
+                             : settings.smsTemplate.unpaid;
+
+            const message = renderSmsTemplate(template , {
+                      parentName: student.parentName,
+                      studentName: student.studentName,
+                       studentId: student.studentId,
+                      className: student.className,
+                       section: student.section,
+                     feesStatus: student.feesStatus,
+                     semester: settings.semester,
+            });
+            
+            messagetoSend.push({
+                phone: student.parentPhone,
+                message,
+                studentId: student._id,
+            });
+          }
+
+          //send safely in batches
+          await sendBulkSMSInBatches(messagetoSend , 20 );
+    }
     await BulkUploadLog.create({
          schoolId,
          sessionId: activeSession._id,
@@ -190,14 +224,22 @@ try   {
          totalRows: records.length,
          insertedRows: studentsToInsert.length,
          notifyParents: notify,
-    })
+    }) 
+ 
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/sms/retry`, {
+        method: "POST",
+   });
+
     return NextResponse.json({
         message: "Bulk upload successful",
         inserted: studentsToInsert.length,
     });
-   }  catch (error: any)  {
 
-    await BulkUploadLog.create({
+   } 
+    catch (error: any)  {
+
+   if (schoolId && activeSession) {
+        await BulkUploadLog.create({
         schoolId,
         sessionId: activeSession._id,
         status: "FAILED",
@@ -207,10 +249,13 @@ try   {
         errorMessage: error.message,
         notifyParents: notify,
     });
+   }
 
  return NextResponse.json(
         {message: error.message || "Bulk upload failed"},
     {status: 400}
     )
 }  
+
+
 }

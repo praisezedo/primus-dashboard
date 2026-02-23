@@ -1,4 +1,4 @@
-import { Student, StudentTableProps } from "@/types/student";
+import { Student, StudentTableProps } from "@/components/types/student";
 import { useState } from "react";
 import FeesStatusToggle from "./FeesStatusToggle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

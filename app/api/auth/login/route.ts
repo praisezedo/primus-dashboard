@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import {connectDB} from '@/lib/mongodb'
 import Admin from "@/app/models/Admin";
-import { AdminType } from "@/types/admin";
+import { AdminType } from "@/components/types/admin";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { rateLimit } from "@/lib/ratelimit";

@@ -71,6 +71,7 @@ export default function BulkUploadForm() {
       setFile(null);
       setNotify(false);
       setErrorMessage("");
+      window.location.reload();
     } catch (error: any) {
       const errorMsg = error.response?.data?.message || "Upload failed";
       setMessage(errorMsg);
@@ -153,7 +154,7 @@ export default function BulkUploadForm() {
 
 <button
   onClick={handleUpload}
-  disabled={!file}
+  disabled={!file || uploading}
   className="mx-5 mt-4 w-275 rounded-lg hover:opacity-50 bg-blue-700 py-3 text-white disabled:opacity-50"
 >
   Upload Data

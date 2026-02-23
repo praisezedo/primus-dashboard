@@ -2,7 +2,7 @@
 
 import GlobalLoadingSpinner from "@/components/UI/GlobalLoadingSpinner";
 import api from "@/lib/axios";
-import { SmsTemplate } from "@/types/settings";
+import { SmsTemplate } from "@/components/types/settings";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -200,7 +200,7 @@ export default function SettingsEditPage() {
             ))}
           </div>
           <p className="mt-2 text-gray-600">
-            These will be replaced automatically when sending SMS.
+            These will be replaced automatically when sending SMS. you can click it down below to implement.
           </p>
           </div> 
 

@@ -1,7 +1,7 @@
 "use client";
 
 import api from "@/lib/axios";
-import { BulkUploadLogs } from "@/types/bulkuploadlog";
+import { BulkUploadLogs } from "@/components/types/bulkuploadlog";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../UI/LoadingSpinner";
 

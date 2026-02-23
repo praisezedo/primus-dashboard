@@ -1,7 +1,7 @@
 import {  NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Student from "@/app/models/Students";
-import { DashboardOverview } from "@/types/dashboard";
+import { DashboardOverview } from "@/components/types/dashboard";
 import Admin from "@/app/models/Admin";
 import { verifyAuth } from "@/lib/auth";
 import AcademicSession from "@/app/models/AcademicSession";

@@ -1,6 +1,6 @@
 "use client";
 
-import { SmsTemplate } from "@/types/settings";
+import { SmsTemplate } from "@/components/types/settings";
 import { useEffect, useState } from "react"
 import api from "@/lib/axios";
 import PrimusLoader from "@/components/UI/PrimusLoader";
@@ -234,7 +234,7 @@ const saveSettings = async () => {
             ))}
           </div>
           <p className="mt-2 text-gray-600">
-            These will be replaced automatically when sending SMS.
+            These will be replaced automatically when sending SMS. you can click it down below to implement.
           </p>
           </div> 
 

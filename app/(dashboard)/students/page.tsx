@@ -4,7 +4,6 @@ import StudentTable from "@/components/Table/StudentTable"
 import Footer from "@/components/UI/Footer"
 import { useEffect, useState , createContext } from "react";
 import api from "@/lib/axios";
-import LoadingSpinner from "@/components/UI/LoadingSpinner";
 import GlobalLoadingSpinner from "@/components/UI/GlobalLoadingSpinner";
 import { useDebounce } from "@/utils/useDebounce";
 import { toast } from "sonner";
@@ -18,11 +17,13 @@ export default function StudentsPage() {
      const [feesStatus, setFeesStatus] = useState<string>("");
      const [smsStatus, setSmsStatus] = useState<string>("");
      const [loading , setLoading] = useState<boolean>(true);
-
+     const [sections , setSections] = useState<string[]>([]);
+     const [section , setSection] = useState<string>("");
 // fetching settings
 async function fetchSettings() {
     const res = await api.get("/api/settings/get");
     setClasses(res.data.classes || []);
+    setSections(res.data.sections || []);
 }
 
  const debouncSearch = useDebounce(search , 1100);
@@ -33,6 +34,7 @@ async function fetchStudents() {
     const params: any = {};
     if (debouncSearch) params.q = debouncSearch;
     if (className) params.className = className;
+    if (section) params.section = section;
     if (feesStatus) params.feesStatus = feesStatus;
     if (smsStatus) params.smsStatus = smsStatus;
         const res = await api.get("/api/students", { params });
@@ -69,7 +71,7 @@ useEffect(() => {
 
 useEffect(() => {
     fetchStudents();
-}, [debouncSearch , className , feesStatus , smsStatus]);
+}, [debouncSearch , className , feesStatus , smsStatus , section]);
 
 if (loading) {
     return <GlobalLoadingSpinner/>
@@ -103,6 +105,19 @@ if (loading) {
        }
     </select>
 
+     <select className="border border-gray-200 shadow-sm rounded-lg p-3"
+      name="section" id="section"
+      value={section}
+      onChange={(e) => setSection(e.target.value)}
+      >
+        <option value="">All Sections</option>
+        {
+            sections.map((s) => (
+                <option key={s} value={s}>{s}</option>
+            ))
+        }
+      </select>
+     
     <select className="border border-gray-200 shadow-sm rounded-lg p-3" 
     name="feesStatus" id="feesStatus"
     value={feesStatus}

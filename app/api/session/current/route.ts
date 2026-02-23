@@ -3,7 +3,7 @@ import { verifyAuth } from "@/lib/auth";
 import AcademicSession from "@/app/models/AcademicSession";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import { Session } from "@/types/session";
+import { Session } from "@/components/types/session";
 
 export async function GET() {
 

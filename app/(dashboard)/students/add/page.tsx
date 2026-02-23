@@ -5,7 +5,7 @@ import StudentDataForm from "@/components/Forms/StudentDataForm";
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import SkeletonInlineText from "@/components/UI/SkelectonInlineText";
-import { DashboardOverview } from "@/types/dashboard";
+import { DashboardOverview } from "@/components/types/dashboard";
 
 
 

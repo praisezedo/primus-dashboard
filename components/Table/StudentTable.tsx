@@ -1,4 +1,4 @@
-import { StudentTableProps } from "@/types/student";
+import { StudentTableProps } from "@/components/types/student";
 import StudentRow from "../UI/StudentRow";
 
 export default function StudentTable({
