@@ -19,6 +19,8 @@ export default function StudentsPage() {
      const [loading , setLoading] = useState<boolean>(true);
      const [sections , setSections] = useState<string[]>([]);
      const [section , setSection] = useState<string>("");
+     const [deleting , setDeleting] = useState<boolean>(false);
+
 // fetching settings
 async function fetchSettings() {
     const res = await api.get("/api/settings/get");
@@ -52,13 +54,17 @@ async function fetchStudents() {
 async function deleteStudent(id: string) {
  
     try {
+        setDeleting(true)
      const res = await api.delete(`/api/students/${id}`);
     toast.success(res.data.message);
+    setDeleting(false);
     fetchStudents();
-   
+    
     } catch (error: any) {
         toast.error(error.response?.data?.message || "Could not delete student");
-    } 
+    } finally {
+        setDeleting(false);
+    }
 }
 
 useEffect(() => {
@@ -144,7 +150,7 @@ if (loading) {
     </div>
     </section> 
 
-         <StudentTable  students={students}  onRefresh={fetchStudents} onDelete={deleteStudent} />
+         <StudentTable  students={students}  onRefresh={fetchStudents} onDelete={deleteStudent} deleting={deleting} />
 
     <Footer/>
     </>

@@ -8,7 +8,7 @@ export  type Student = {
   parentPhone?: string;
   parentEmail?: string;
   feesStatus: "PAID"| "UNPAID"
-  smsStatus?: "SENT" | "NOTSENT" | "PENDING";
+  smsStatus?: "SENT" | "FAILED" | "PENDING";
 }
 
 export type StudentInput = {
@@ -34,5 +34,6 @@ export interface StudentTableProps  {
     onDelete: (id: string) => void;
     onRefresh: () => void;
     total?: number;
+    deleting: boolean;
 }
 

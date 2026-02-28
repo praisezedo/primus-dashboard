@@ -29,6 +29,13 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+ 
+    if (adminPassword.length < 8) {
+      return NextResponse.json(
+        {message: "Password must be at least 8 characters"},
+        {status: 400}
+      );
+    }
 
     //  Email format validation
     if (!EMAIL_REGEX.test(adminEmail)) {

@@ -1,4 +1,4 @@
-import { Student, StudentTableProps } from "@/components/types/student";
+import { Student} from "@/components/types/student";
 import { useState } from "react";
 import FeesStatusToggle from "./FeesStatusToggle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,15 +13,20 @@ export default function StudentRow({
     student,
     onDelete,
     onRefresh,
+    deleting,
 }: {
    serial: number,
     student: Student,
     onDelete: (id: string) => void,
     onRefresh: () => void,
- 
-}) {
+    deleting: boolean
+})
+
+
+{
     const [showDelete , setShowDelete] = useState<boolean>(false);
     const [showEdit , setShowEdit] = useState<boolean>(false);
+
 
     return (
        <>
@@ -42,9 +47,19 @@ export default function StudentRow({
               onUpdated={onRefresh}
             />
         </td>
+        <td className={`p-4 w-20 `}> 
+          <p className={`font-bold text-sm p-2 rounded-full ${
+          student.smsStatus === "PENDING" ? "text-yellow-600 bg-yellow-100" :
+          student.smsStatus === "FAILED" ? "text-red-600 bg-red-100" :
+          student.smsStatus === "SENT" ? "text-green-600 bg-green-100" :
+          "text-gray-600"
+          }`}>
+          {student.smsStatus || "PENDING"}
+          </p>
+        </td>
 
-         <td className="p-4  w-40">{student.smsStatus || "NOTSENT"}</td>
-          
+
+
          <td className="p-4 w-40 items-center text-center flex justify-center gap-4">
             <FontAwesomeIcon 
              icon={faEdit}
@@ -66,9 +81,9 @@ export default function StudentRow({
           onClose={() => setShowDelete(false)}
           onConfirm={() => {
             onDelete(student._id);
-            setShowDelete(false);
+          setShowDelete(deleting);
           }}
-          
+          deleting={deleting}
         />
 
         <EditStudentModal

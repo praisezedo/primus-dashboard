@@ -27,7 +27,7 @@ async function handleLogin(e: React.FormEvent) {
           adminEmail: adminEmail , adminPassword: adminPassword  
     })
 
-    const data = await res.data.message;
+    const data = await res.data;
 
     if (res.status !== 200) {
         setError(data.message || "Login failed");

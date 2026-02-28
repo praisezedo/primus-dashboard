@@ -4,7 +4,7 @@
  * @schema Student
  * @description Represents a student record linked to a school, session, and their parent contact information.
  * Includes tracking for fees payment status and SMS notification delivery status.
- * 
+
  * @property {string} schoolId - The unique identifier of the school. Required and indexed for fast lookups.
  * @property {string} sessionId - The academic session identifier. Required.
  * @property {string} studentName - Full name of the student. Required.
@@ -58,12 +58,6 @@ const StudentSchema = new Schema(
     parentPhone: { type: String, trim: true },
     parentEmail: String,
 
-    feesStatus: {
-      type: String,
-      enum: ["PAID", "UNPAID"],
-      default: "UNPAID",
-    },
-
     smsStatus: {
       type: String,
       enum: ["SENT", "FAILED", "PENDING"],
@@ -78,11 +72,7 @@ const StudentSchema = new Schema(
    lastSmsAttemptAt: {
     type: Date,
     },
-    lastFeeStatus: {
-      type: String,
-      enum: ["PAID", "UNPAID"],
-      default: null,
-    },
+   
   },
   { timestamps: true }
 );

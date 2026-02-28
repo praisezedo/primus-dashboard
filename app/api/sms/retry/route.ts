@@ -4,6 +4,7 @@ import Student from "@/app/models/Students";
 import { verifyAuth } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import { sendSMS } from "@/lib/sms";
+import { renderSmsTemplate } from "@/lib/sms/renderTemplate";
 import { NextResponse } from "next/server";
 
 export async function POST() {
@@ -25,9 +26,23 @@ export async function POST() {
 
   for (const student of failedStudents) {
 
-    const message: string = student.feesStatus === "PAID" 
-                  ?settings.smsTemplate.paid
-                  : settings.smsTemplate.unpaid
+
+
+ const message: string = renderSmsTemplate(
+  student.feesStatus === "PAID" 
+    ? settings.smsTemplate.paid
+    : settings.smsTemplate.unpaid,
+  {
+    parentName: student.parentName,
+    studentName: student.studentName,
+    studentId: student.studentId,
+    className: student.className,
+    section: student.section,
+    feesStatus: student.feesStatus,
+    semester: settings.semester,
+  }
+);
+
       try {
         await sendSMS(student.parentPhone, message);
         student.smsStatus = "SENT";
@@ -35,7 +50,7 @@ export async function POST() {
         await student.save();
       } catch {
         student.smsAttempts += 1;
-        student.lasSmsAttemptAt = new Date();
+        student.lastSmsAttemptAt = new Date();
         await student.save();
       }
   }

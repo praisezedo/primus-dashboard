@@ -1,5 +1,4 @@
 import axios from "axios";
-import { channel } from "diagnostics_channel";
 
 const BASE_URL = process.env.TERMII_BASE_URL;
 const API_KEY = process.env.TERMII_API_KEY;
