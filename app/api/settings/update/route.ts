@@ -19,8 +19,10 @@ export async function PUT(req: Request) {
     const {schoolId} = await verifyAuth();
 
     const body = await req.json();
+
+    const { classes, sections, semester, smsTemplate } = body;
     
-  const updated = await Setting.findOneAndUpdate({schoolId},body,{new: true});
+  const updated = await Setting.findOneAndUpdate({schoolId},{ classes, sections, semester, smsTemplate },{new: true});
 
   return NextResponse.json(updated);
 }

@@ -10,6 +10,8 @@ import BulkUploadLog from "@/app/models/BulkUpload";
 import { rateLimit } from "@/lib/ratelimit";
 import { renderSmsTemplate } from "@/lib/sms/renderTemplate";
 import { sendBulkSMSInBatches } from "@/lib/sms/queueSms";
+import FeesType from "@/app/models/FeesType";
+import ClassFeeConfig from "@/app/models/ClassFeeConfig";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
@@ -86,7 +88,7 @@ try   {
     const rowNumber = index + 2;
         errorRow = rowNumber;
     const studentId = row["STUDENT ID"]?.trim();
-    const feesStatus = row["FEES STATUS"]?.toUpperCase();
+
 
     if(!studentId) {
         return NextResponse.json({
@@ -112,13 +114,7 @@ try   {
             message: `Row ${rowNumber}: SECTION must be one of: ${allowedSections.join(", ")}`,
           }, {status: 400});
     }
-    
-
-    if(!["PAID", "UNPAID"].includes(feesStatus)) {
-        return NextResponse.json({
-            message: `Row ${rowNumber}: FEES STATUS must be PAID or UNPAID`
-        }, {status: 400});   
-    }  
+  
 
     if (row["PARENT EMAIL"] && !EMAIL_REGEX.test(row["PARENT EMAIL"])) {
         return NextResponse.json({
@@ -164,7 +160,6 @@ try   {
         parentName: row["PARENT NAME"],
         parentPhone: row["PARENT PHONE"],
         parentEmail: row["PARENT EMAIL"],
-        feesStatus,
         smsStatus: notify ? "PENDING" : "FAILED",
     });
 };
@@ -187,36 +182,39 @@ try   {
     let insertedStudents: any[] = [];
 
     await session.withTransaction(async () => {
-       insertedStudents = await Student.insertMany(studentsToInsert, { session });
+       insertedStudents = await Student.insertMany(studentsToInsert , { session });
+
+      const feeTypes = await FeesType.find({ schoolId }).session(session);
+
+      for (const student of insertedStudents) {
+
+        for (const feeType of feeTypes) {
+
+            const config = await ClassFeeConfig.findOne({
+                schoolId,
+                sessionId: activeSession._id,
+                className: student.className,
+                feeTypeId: feeType._id,
+            }).session(session);
+
+            if (!config) continue;
+
+            await Student.create([{
+                schoolId,
+                sessionId: activeSession._id,
+                studentId: student._id,
+                className: student.className,
+                feeTypeId: feeType._id,
+                totalAmount: config.amount,
+                amountPaid: 0,
+                balance: config.amount,
+            }], { session });
+
+        }
+      }
+
     });
     
-    if (notify) {
-        const messagetoSend: {phone: string; message: string , studentId: string }[] = [];
-          for (const student of insertedStudents) {
-            const template = student.feesStatus === "PAID"
-                             ? settings.smsTemplate.paid
-                             : settings.smsTemplate.unpaid;
-
-            const message = renderSmsTemplate(template , {
-                      parentName: student.parentName,
-                      studentName: student.studentName,
-                       studentId: student.studentId,
-                      className: student.className,
-                       section: student.section,
-                     feesStatus: student.feesStatus,
-                     semester: settings.semester,
-            });
-            
-            messagetoSend.push({
-                phone: student.parentPhone,
-                message,
-                studentId: student._id,
-            });
-          }
-
-          //send safely in batches
-          await sendBulkSMSInBatches(messagetoSend , 20 );
-    }
     await BulkUploadLog.create({
          schoolId,
          sessionId: activeSession._id,

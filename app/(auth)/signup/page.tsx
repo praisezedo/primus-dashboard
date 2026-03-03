@@ -62,7 +62,7 @@ async function handleSignUp (e: React.FormEvent) {
 }
      return (
         <>
-<div className="gap-7 rounded-lg border border-gray-300  shadow-lg p-7 flex flex-col items-center justify-center">
+<div className="gap-7 rounded-lg border border-gray-300  shadow-lg py-7 px-7  flex flex-col items-center  justify-center">
    <div className="gap-5 flex justify-center text-center flex-col">
   <h1><PrimusLogo/></h1>
   <h1 className="py-1 font-bold text-3xl">Sign Up</h1>
@@ -132,6 +132,21 @@ async function handleSignUp (e: React.FormEvent) {
       </span>
 </div>
       </div>
+
+ {/* IMPORTANT WARNING */}
+<div className="bg-red-50 border w-170 border-red-200 rounded-xl p-4 flex gap-3 items-start text-sm text-red-700">
+  <span className="text-lg">⚠️</span>
+  <div className="space-y-1">
+    <p className="font-semibold">Important Notice</p>
+    <p>
+      Please make sure you remember your admin email and password.
+      In Primus v1, there is currently no password recovery option.
+    </p>
+    <p>
+      We strongly recommend writing it down or storing it safely.
+    </p>
+  </div>
+</div>
 
 <button disabled={loading} type="submit" className="disabled:opacity-50 hover:bg-blue-500 bg-blue-700 text-white text-lg rounded-lg p-3">{loading ? "Signing Up....": "Create School Account"}</button>
           </form>

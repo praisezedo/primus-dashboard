@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link"
 import StudentTable from "@/components/Table/StudentTable"
-import Footer from "@/components/UI/Footer"
-import { useEffect, useState , createContext } from "react";
+import Footer from "@/components/UI/Footer";
+import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import GlobalLoadingSpinner from "@/components/UI/GlobalLoadingSpinner";
 import { useDebounce } from "@/utils/useDebounce";

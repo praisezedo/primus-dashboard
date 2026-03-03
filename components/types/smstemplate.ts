@@ -1,6 +1,7 @@
 export type SmsTemplate = {
     paid: string;
     unpaid: string;
+    partial: string;
 }
 
 export interface StudentSMSData {
@@ -28,3 +29,4 @@ export interface TemplateData {
   feesStatus?: string;
   semester?: string;
 }
+

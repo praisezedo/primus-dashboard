@@ -11,6 +11,7 @@ const SettingSchema = new Schema({
   smsTemplate: {
     paid: { type: String, default: "" },
     unpaid: { type: String, default: "" },
+    partial: { type: String, default: "" },
   },
   
   settingsCompleted: {

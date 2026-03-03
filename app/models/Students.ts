@@ -14,9 +14,7 @@
  * @property {string} [parentName] - Name of the student's parent or guardian.
  * @property {string} [parentPhone] - Contact phone number of the parent.
  * @property {string} [parentEmail] - Email address of the parent.
- * @property {"PAID" | "UNPAID"} [feesStatus="UNPAID"] - Current fees payment status of the student.
  * @property {"SENT" | "NOTSENT" | "PENDING"} [smsStatus=null] - Status of the most recent SMS notification.
- * @property {"PAID" | "UNPAID" | "PENDING"} [lastSmsStatus=null] - Status information from the last SMS sent.
  * @property {Date} createdAt - Timestamp of record creation. Auto-generated.
  * @property {Date} updatedAt - Timestamp of last record update. Auto-generated.
  * 
@@ -85,7 +83,7 @@ StudentSchema.index(
 StudentSchema.index({ schoolId: 1 });
 StudentSchema.index({ schoolId: 1, createdAt: -1 });
 StudentSchema.index({ schoolId: 1, className: 1 });
-StudentSchema.index({ schoolId: 1, feesStatus: 1 });
+StudentSchema.index({ schoolId: 1 });
 StudentSchema.index({ schoolId: 1, smsStatus: 1 });
 StudentSchema.index({ studentName: "text", studentId: "text"});
 

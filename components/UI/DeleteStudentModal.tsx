@@ -6,7 +6,7 @@ interface DeleteStudentModalProps {
   studentName: string;
   onClose: () => void;
   onConfirm: () => void;
-  deleting: boolean
+  deleting: boolean;
 }
 
 export default function DeleteStudentModal({

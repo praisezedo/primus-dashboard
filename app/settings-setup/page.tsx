@@ -1,309 +1,227 @@
 "use client";
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { toast } from 'sonner';
+import api from '@/lib/axios';
 
-import { SmsTemplate } from "@/components/types/settings";
-import { useEffect, useState } from "react"
-import api from "@/lib/axios";
-import PrimusLoader from "@/components/UI/PrimusLoader";
-import Footer from "@/components/UI/Footer";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+export default function SetupPage() {
+    const router = useRouter();
+const [classes, setClasses] = useState<string[]>([]);
+  const [sections, setSections] = useState<string[]>([]);
+  const [semester, setSemester] = useState("");
 
-const SMS_PLACEHOLDER = [
-  {key: "{{parentName}}", label: "Parent Name" },
-  {key: "{{studentName}}", label: "Student Name" },
-  {key: "{{studentId}}", label: "Student ID" },
-  {key: "{{className}}" , label: "Class" },
-  {key: "{{section}}" , label: "Section"},
-  {key: "{{feesStatus}}", label: "Fees Status"},
-  {key: "{{semester}}" ,label: "Semester"},
-];
+    const [classInput, setClassInput] = useState("");
+  const [sectionInput, setSectionInput] = useState("");
 
-export default function SettingsPage() {
-
-  const router = useRouter();
-    // academic structure 
-    const [classes , setClasses] = useState<string[]>([]);
-    const [sections , setSections] = useState<string[]>([]);
-    const [semester , setSemester] = useState<string>("");
-
-    // inputs
-    const [classInput , setClassInput] = useState<string>("");
-    const [sectionInput , setSectionInput] = useState<string>("");
-
-    //sms
-    const [smsTemplate , setSmsTemplate] = useState<SmsTemplate>({paid: "" , unpaid: ""})
-
-    const [loading , setLoading] = useState<boolean>(false);
-    const [saving , setSaving] = useState<boolean>(false);
-
-    // fetch existing settings
-
-    useEffect(() => {
-        setLoading(true);
-        api.get("/api/settings/get")
-        .then((res) => {
-            if(!res.data) return;
-            setClasses(res.data.classes || []);
-            setSections(res.data.sections || []);
-            setSemester(res.data.semester || "");
-            setSmsTemplate(res.data.smsTemplate || {paid: "" , unpaid: ""});
-        }).finally(() => {
-            setLoading(false)
-        }) 
-    },[])
-
-    const insertPlaceholder = (field: "paid" | "unpaid", placeholder: string) => {
-      setSmsTemplate((prev) => ({
-        ...prev, [field]: prev[field] + " " + placeholder
-      }));
-    }
+    const [loading, setLoading] = useState(false);
 
     const addClass = () => {
-        if (!classInput.trim()) return;
-        setClasses((prev) => [...prev , classInput.trim()]);
-        setClassInput("");
+      if (!classInput.trim()) return;
+         setClasses((prev) => [...prev, classInput.trim()]);
+         setClassInput("");
     }
 
-    const addSection = () => {
-        if (!sectionInput.trim()) return;
-        setSections((prev) => [...prev , sectionInput.trim()]);
-        setSectionInput("");
+  const addSection = () => {
+    if (!sectionInput.trim()) return;
+    setSections((prev) => [...prev, sectionInput.trim()]);
+    setSectionInput("");
+  };
+
+  const deleteItem = (index: number, type: "class" | "section"): void => {
+     if (type === "class") {
+        setClasses((prev) => prev.filter((_, i:number) => i !== index));
+     } 
+     else if (type === "section") {
+        setSections((prev) => prev.filter((_, i:number) => i !== index));
+     } else {
+        return;
+     }
+  }
+
+  const handleSave = async () => {
+    if (!classes.length) {
+      toast.error("Please add at least one class");
+      return;
     }
 
-    const removeItem = (index: number , setter: React.Dispatch<React.SetStateAction<string[]>>) => {
-             setter((prev) => prev.filter((_ , i) => i !== index));
+ if (!semester) {
+      toast.error("Please select a semester");
+      return;
     }
 
-const saveSettings = async () => {
-  if (saving) return;
-  setSaving(true);
+    setLoading(true);
 
-  try {
-    const existing = await api.get("/api/settings/get");
-
-    if (existing.data?.settingsCompleted) {
-      // ✅ UPDATE
-      await api.put("/api/settings/update", {
-        classes,
-        sections,
-        semester,
-        smsTemplate,
-      });
-      toast.success("Settings updated successfully");
-    } else {
-      // ✅ CREATE
+    try {
       await api.post("/api/settings/create", {
         classes,
         sections,
         semester,
-        smsTemplate,
+        smsTemplate: {
+          paid: "",
+          partial: "",
+          unpaid: "",
+        },
       });
-      toast.success("Settings saved successfully");
+      toast.success("Setup completed successfully");
+      router.push("/");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    router.replace("/"); // go to dashboard
-  } catch (err) {
-    console.error(err);
-    toast.error("Failed to save settings");
-  } finally {
-    setSaving(false);
-  }
-};
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
 
+      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-lg p-10 space-y-10">
 
-    if (loading) {
-        return  <PrimusLoader/>;
-    }
+        {/* HEADER */}
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold text-blue-700">
+            Welcome 👋
+          </h1>
+          <p className="text-gray-500">
+            Let’s set up your school structure. This only takes 2 minutes.
+          </p>
+        </div>
+         {/* INFO BANNER */}
+<div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3 items-start text-sm text-blue-700">
+  <span className="text-lg">ℹ️</span>
+  <div>
+    <p className="font-semibold">Don’t worry</p>
+    <p>
+      You can edit classes, sections, semester and configure fees later
+      from the Settings page in your dashboard.
+    </p>
+  </div>
+</div>
+        {/* STEP 1 - CLASSES */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Step 1: Add Your Classes
+          </h2>
+          <p className="text-sm text-gray-500">
+            Example: JSS1, JSS2, SS1, Grade 1, Grade 2
+          </p>
 
-   return (
-       <>
-           <div className="p-6 max-w-4xl mx-auto space-y-10">
-      <h1 className="text-2xl font-bold">School Settings</h1>
-
-      {/* Academic Structure */}
-      <section className="bg-white p-6 rounded-lg shadow space-y-6">
-        <h2 className="text-xl font-semibold">Academic Structure</h2>
-
-        {/* Classes */}
-        <div>
-          <label className="font-medium">Classes</label>
-          <div className="flex gap-2 mt-2">
+          <div className="flex gap-2">
             <input
-              className="focus:outline-none focus:border border rounded-lg p-2 w-full"
-              placeholder="e.g. JSS 1"
               value={classInput}
               onChange={(e) => setClassInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addClass() && e.preventDefault()}
-            />
-            <button
-              onClick={addClass}
-              className="bg-blue-700 text-white px-4 rounded-lg"
-              onKeyDown={(e) => {
+              onKeyDown={(e: React.KeyboardEvent) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
                   addClass();
                 }
               }}
+              placeholder="Enter class name"
+              className="flex-1 border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none"
+            />
+            <button
+              onClick={addClass}
+              className="bg-blue-700 text-white px-5 rounded-lg hover:bg-blue-800 transition"
             >
               Add
             </button>
           </div>
 
-          <div className="flex flex-wrap gap-2 mt-3">
+          <div className="flex flex-wrap gap-2">
             {classes.map((c, i) => (
               <span
                 key={i}
-                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-2"
+                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
               >
-                {c}
-                <button onClick={() => removeItem(i, setClasses)}>✕</button>
+                {c}  
+                <button
+                  onClick={() => deleteItem(i, "class")}
+                  className="ml-1 text-blue-600 hover:text-blue-900"
+                >
+                  ✕
+                </button>
               </span>
             ))}
           </div>
         </div>
 
-        {/* Sections */}
-        <div>
-          <label className="font-medium">Sections</label>
-          <div className="flex gap-2 mt-2">
+        {/* STEP 2 - SECTIONS */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Step 2: Add Sections (Optional)
+          </h2>
+          <p className="text-sm text-gray-500">
+            Example: A, B, C (Leave empty if not applicable)
+          </p>
+
+          <div className="flex gap-2">
             <input
-              className="focus:outline-none focus:border border rounded-lg p-2 w-full"
-              placeholder="e.g.  A or Science B"
               value={sectionInput}
               onChange={(e) => setSectionInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addSection() && e.preventDefault()}
-            />
-            <button
-              onClick={addSection}
-              className="hover:opacity bg-blue-700 text-white px-4 rounded-lg"
-              onKeyDown={(e) => {
+              onKeyDown={(e: React.KeyboardEvent) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
                   addSection();
                 }
               }}
+              placeholder="Enter section"
+              className="flex-1 border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none"
+            />
+            <button
+              onClick={addSection}
+              className="bg-blue-700 text-white px-5 rounded-lg hover:bg-blue-800 transition"
             >
               Add
             </button>
           </div>
 
-          <div className="flex flex-wrap gap-2 mt-3">
+          <div className="flex flex-wrap gap-2">
             {sections.map((s, i) => (
               <span
                 key={i}
-                className="bg-green-100 text-green-800 px-3 py-1 rounded-full flex items-center gap-2"
+                className="bg-blue-50 border text-blue-700 px-3 py-1 rounded-full text-sm"
               >
                 {s}
-                <button onClick={() => removeItem(i, setSections)}>✕</button>
+                <button
+                  onClick={() => deleteItem(i, "section")}
+                  className="ml-1 text-blue-600 hover:text-blue-900"
+                >
+                  ✕
+                </button>
               </span>
             ))}
           </div>
         </div>
 
-        {/* Semester */}
-        <div>
-          <label className=" font-medium">Semester or Term (Optional)</label>
+        {/* STEP 3 - SEMESTER */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            Step 3: Current Semester / Term
+          </h2>
+
           <select
-            className="focus:outline-none focus:border border rounded-lg p-2 w-full mt-2"
             value={semester}
             onChange={(e) => setSemester(e.target.value)}
+            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none"
           >
-            <option value="">Select semester</option>
-            <option value="1st Semester">1st Semester</option>
-            <option value="2nd Semester">2nd Semester</option>
-            <option value="3rd Semester">3rd Semester</option>
+            <option value="">Select Semester</option>
+            <option value="First Term">First Term</option>
+            <option value="Second Term">Second Term</option>
+            <option value="Third Term">Third Term</option>
           </select>
         </div>
-      </section>
 
-      {/* SMS Settings */}
-      <section className="bg-white p-6 rounded-lg shadow space-y-6">
-        <h2 className="text-xl font-semibold">SMS Templates</h2>
-
-       {/* Helper */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm">
-          <p className="font-medium mb-2">Available Placeholders</p>
-          <div className="flex flex-wrap gap-2">
-            {SMS_PLACEHOLDER.map((p) => (
-              <span
-               key={p.key}
-               className="bg-blue-100 text-blue-800 px-2 py-1 rounded"
-              >
-                {p.key} - {p.label}
-              </span>
-            ))}
-          </div>
-          <p className="mt-2 text-gray-600">
-            These will be replaced automatically when sending SMS. you can click it down below to implement.
-          </p>
-          </div> 
-
-        <div>
-          <label className="font-medium">Paid Fees Message</label>
-          <textarea
-            placeholder="Enter SMS Message for paid students.."
-            className="focus:outline-none focus:border border rounded-lg p-3 w-full mt-2"
-            rows={4}
-            value={smsTemplate.paid}
-            onChange={(e) =>
-              setSmsTemplate({ ...smsTemplate, paid: e.target.value })
-            }
-          />
-
-      <div className="flex flex-wrap gap-2">
-             {SMS_PLACEHOLDER.map((p) => (
-              <button
-                key={p.key}
-                type="button"
-                onClick={() => insertPlaceholder("paid" , p.key)}
-                className="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
-              >
-                {p.label}
-              </button>
-             ))}
-        </div>
+        {/* SAVE BUTTON */}
+        <div className="pt-6 border-t">
+          <button
+            onClick={handleSave}
+            disabled={loading}
+            className="w-full bg-blue-700 text-white py-3 rounded-xl text-lg font-semibold hover:bg-blue-800 transition disabled:opacity-50"
+          >
+            {loading ? "Saving..." : "Complete Setup"}
+          </button>
         </div>
 
-        <div>
-          <label className="font-medium">Unpaid Fees Message</label>
-          <textarea
-            placeholder="Enter SMS Message for unpaid students.."
-            className="focus:outline-none focus:border border rounded-lg p-3 w-full mt-2"
-            rows={4}
-            value={smsTemplate.unpaid}
-            onChange={(e) =>
-              setSmsTemplate({ ...smsTemplate, unpaid: e.target.value })
-            }
-          />
-
- <div className="flex flex-wrap gap-2">
-             {SMS_PLACEHOLDER.map((p) => (
-              <button
-                key={p.key}
-                type="button"
-                onClick={() => insertPlaceholder("unpaid", p.key)}
-                className="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
-              >
-                {p.label}
-              </button>
-             ))}
-        </div>
-        </div>
-      </section>
-
-      {/* Save */}
-      <div className="flex justify-end">
-        <button
-          disabled={saving}
-          onClick={saveSettings}
-          className="bg-blue-700 hover:opacity-50 text-white px-6 py-3 rounded-lg disabled:opacity-50"
-        >
-          {saving ? "Saving..." : "Save Settings"}
-        </button>
       </div>
     </div>
-
-    <Footer/>
-       </>
   );
 }
