@@ -147,7 +147,8 @@ export default function ClassFeeConfigSection({
                               ₦
                             </span>
                             <input
-                              type="text"
+                              type="number"
+                              min={0}
                               className="w-28 border border-gray-200 rounded-lg pl-6 pr-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
                               placeholder="0"
                               value={grid[key] ?? ""}

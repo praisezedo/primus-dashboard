@@ -8,10 +8,9 @@ import mongoose from "mongoose";
 import Setting from "@/app/models/Settings";
 import BulkUploadLog from "@/app/models/BulkUpload";
 import { rateLimit } from "@/lib/ratelimit";
-import { renderSmsTemplate } from "@/lib/sms/renderTemplate";
-import { sendBulkSMSInBatches } from "@/lib/sms/queueSms";
 import FeesType from "@/app/models/FeesType";
 import ClassFeeConfig from "@/app/models/ClassFeeConfig";
+import StudentFee from "@/app/models/StudentFee";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
@@ -35,7 +34,36 @@ export async function POST(req: Request) {
      const auth = await verifyAuth();
 
      schoolId = auth.schoolId;
+        
+     activeSession = await AcademicSession.findOne({schoolId , isActive: true})
+     const settings = await Setting.findOne({schoolId});
 
+
+
+     if(!activeSession) {
+        return NextResponse.json({
+            message: "No active session",
+        } , {status: 400});
+     }
+
+     const feeTypes = await FeesType.find({schoolId , sessionId: activeSession._id });
+
+      if (feeTypes.length === 0) {
+        return NextResponse.json({
+            message: "Please configure fee type in settings before uploading students. "
+        }, {status: 400});
+      }
+
+    const classConfigs = await ClassFeeConfig.find({
+    schoolId,
+    sessionId: activeSession._id,
+    });
+
+    if (classConfigs.length === 0) {
+    return NextResponse.json({
+        message: "Please configure Class Fee Settings before uploading students."
+    }, { status: 400 });
+    }
     const  formData  = await req.formData();
 
     const notify = String(formData.get("notify")) === "true";
@@ -59,16 +87,6 @@ export async function POST(req: Request) {
         );
      }
 
-     activeSession = await AcademicSession.findOne({schoolId , isActive: true})
-     const settings = await Setting.findOne({schoolId});
-
-
-
-     if(!activeSession) {
-        return NextResponse.json({
-            message: "No active session",
-        } , {status: 400});
-     }
 
      if (!settings) {
           return NextResponse.json({
@@ -186,28 +204,35 @@ try   {
 
       const feeTypes = await FeesType.find({ schoolId }).session(session);
 
+ const classConfigs = await ClassFeeConfig.find({
+    schoolId,
+    sessionId: activeSession._id,
+     }).session(session);
+
+     const configMap = new Map<string , number>();
+     
+     for (const config of classConfigs) {
+        const key = `${config.className}_${config.feeTypeId}`;
+        configMap.set(key , config.amount);
+     }
+
       for (const student of insertedStudents) {
 
         for (const feeType of feeTypes) {
 
-            const config = await ClassFeeConfig.findOne({
-                schoolId,
-                sessionId: activeSession._id,
-                className: student.className,
-                feeTypeId: feeType._id,
-            }).session(session);
+            const key = `${student.className}_${feeType._id}`;
+            const amount = configMap.get(key) || 0;
+            if (!amount) continue;
 
-            if (!config) continue;
-
-            await Student.create([{
-                schoolId,
-                sessionId: activeSession._id,
-                studentId: student._id,
-                className: student.className,
-                feeTypeId: feeType._id,
-                totalAmount: config.amount,
-                amountPaid: 0,
-                balance: config.amount,
+            await StudentFee.create([{
+                  schoolId,
+                  sessionId: activeSession._id,
+                   studentId: student._id,
+                   className: student.className,
+                     feeTypeId: feeType._id,
+                   totalAmount: amount,
+                    amountPaid: 0,
+                   balance: amount,
             }], { session });
 
         }
@@ -223,10 +248,6 @@ try   {
          insertedRows: studentsToInsert.length,
          notifyParents: notify,
     }) 
- 
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/sms/retry`, {
-        method: "POST",
-   });
 
     return NextResponse.json({
         message: "Bulk upload successful",

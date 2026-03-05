@@ -1,6 +1,7 @@
 "use client";
 import BulkUploadForm from "@/components/Forms/BulkUploadForm";
 import BulkUploadReview from "@/components/Table/BulkUploadReview";
+import BulkUploadBanner from "@/components/UI/BulkUploadBanner";
 import BulkUploadDirection from "@/components/UI/BulkUploadDirection";
 import Footer from "@/components/UI/Footer";
 import SkeletonInlineText from "@/components/UI/SkelectonInlineText";
@@ -32,6 +33,7 @@ export default function BulkUploadPage() {
             {loading ? <SkeletonInlineText length={10}/> : (<p className="font-bold text-gray-600">total student: {totalStudent}</p>)}
             </div>
         <BulkUploadDirection/>
+       <BulkUploadBanner/>
         <BulkUploadForm/>
         <BulkUploadReview/>
          </section>

@@ -18,7 +18,6 @@ export default function BulkUploadDirection() {
             <li><strong>PARENT NAME:</strong>(Text) Full name of the primary parent/gaurdian.</li>
             <li><strong>PARENT PHONE:</strong>(Numeric) Contact number of the parent (Nigerian), without spaces or special characters . e.g., 08012345678</li>
             <li><strong>PARENT EMAIL:</strong> (Optional Text) Email address of the parent.</li>
-            <li><strong>FEES STATUS:</strong> (Text) Must be either 'PAID' or 'UNPAID'.</li>
         </ul>
         <p><em className="text-red-500">Important:</em> Do not include any extra columns or special characters in the column headers. Ensure data typess match the specifications (e.g., numeric for phone.). also make sure all data are properly formatted and are consistent with school records.</p>
       </section>

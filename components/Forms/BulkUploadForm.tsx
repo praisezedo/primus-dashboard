@@ -19,6 +19,7 @@ export default function BulkUploadForm() {
   const [notify , setNotify] = useState<boolean>(true);
   const [message , setMessage] = useState<string>('');
   const [insertedCount , setInsertedCount] = useState<number>(0);
+  const [messageColor , setMessageColor] = useState<string>("green-700");
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -67,13 +68,15 @@ export default function BulkUploadForm() {
       });
       setMessage(response.data.message);
       setInsertedCount(response.data.inserted || 0);
+      setMessageColor(response.data.inserted > 0 ? "green-700" : "red-700");
       toast.success("Upload successful");
       setFile(null);
       setNotify(false);
       setErrorMessage("");
-      window.location.reload();
+    
     } catch (error: any) {
       const errorMsg = error.response?.data?.message || "Upload failed";
+      setMessageColor("red-700");
       setMessage(errorMsg);
       toast.error(errorMsg);
     } finally {
@@ -123,7 +126,7 @@ export default function BulkUploadForm() {
           }
             <div>
              { 
-             message && <p className="mt-3 text-sm text-blue-700 font-semibold">{message}</p>
+             message && <p className={`mt-3 text-sm text-${messageColor} font-semibold`}>{message}</p>
              }
             </div>
             { insertedCount > 0 &&  <div>

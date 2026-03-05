@@ -29,7 +29,9 @@ export default function GlobalError({
             onClick={() => {
               reset();
               router.refresh();
+              window.location.reload();
             }}
+
             className="mt-4 rounded hover:opacity-50 bg-blue-700 px-4 py-2 text-white"
           >
             Try again

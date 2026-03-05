@@ -85,8 +85,6 @@ StudentSchema.index({ schoolId: 1, createdAt: -1 });
 StudentSchema.index({ schoolId: 1, className: 1 });
 StudentSchema.index({ schoolId: 1 });
 StudentSchema.index({ schoolId: 1, smsStatus: 1 });
-StudentSchema.index({ studentName: "text", studentId: "text"});
-
 
 const Student = models.Student || model("Student", StudentSchema);
 export default Student;
