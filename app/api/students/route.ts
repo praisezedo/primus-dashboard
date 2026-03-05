@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         return NextResponse.json({
             message: "Too many requests. Please try again later."
         }, {status: 429})
-     }
+     }  
      
     try {
         await connectDB();

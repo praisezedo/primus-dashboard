@@ -222,7 +222,8 @@ try   {
 
             const key = `${student.className}_${feeType._id}`;
             const amount = configMap.get(key) || 0;
-            if (!amount) continue;
+            
+            if (!amount || amount <= 0) continue;
 
             await StudentFee.create([{
                   schoolId,

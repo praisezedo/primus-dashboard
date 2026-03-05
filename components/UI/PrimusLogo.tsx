@@ -24,7 +24,7 @@ export default function PrimusLogo () {
           fontWeight="bold"
           fill="#1F2937"
         >
-          TableLert
+          Primus
         </text>
       </svg>
     </div>

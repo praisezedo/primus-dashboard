@@ -69,7 +69,7 @@ export default function PrimusLoader() {
         fontWeight="bold"
         fill="#1F2937"
       >
-        TableLert
+        Primus
         <animate
           attributeName="opacity"
           values="0;1"

@@ -3,8 +3,18 @@ import { verifyAuth } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import AcademicSession from "@/app/models/AcademicSession";
+import { rateLimit } from "@/lib/ratelimit";
 
 export async function POST(req: Request) {
+
+ const ip = req.headers.get("x-forwarded-for") || "unknown";
+      
+       if (!rateLimit(ip , 5 , 60_000)) {
+          return NextResponse.json({
+              message: "Too many requests. Please try again later."
+          }, {status: 429})
+       }  
+
     try {
         await connectDB();
         const {schoolId} = await verifyAuth();
@@ -64,7 +74,7 @@ export async function GET(_req: Request) {
     const configs = await ClassFeeConfig.find({
       schoolId,
       sessionId: activeSession._id,
-    }).populate("feeTypeId", "name isActive");
+    });
 
     return NextResponse.json(configs);
   } catch (error: any) {

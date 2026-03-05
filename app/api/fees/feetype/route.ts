@@ -3,16 +3,24 @@ import { connectDB } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
 import AcademicSession from "@/app/models/AcademicSession";
+import { rateLimit }  from "@/lib/ratelimit";
 
 export async function POST(req: Request) {
+
+      const ip = req.headers.get("x-forwarded-for") || "unknown";
+     
+      if (!rateLimit(ip , 5 , 60_000)) {
+         return NextResponse.json({
+             message: "Too many requests. Please try again later."
+         }, {status: 429})
+      }  
 
     try {
         await connectDB();
 
-        // school + session drive all fee type documents
         const { schoolId } = await verifyAuth();
 
-        // make sure there is an active academic session
+
         const activeSession = await AcademicSession.findOne({ schoolId, isActive: true });
         if (!activeSession) {
             return NextResponse.json({ message: "No active session" }, { status: 400 });
@@ -50,7 +58,7 @@ export async function POST(req: Request) {
     }
 }
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
     try {
         await connectDB();
         const { schoolId } = await verifyAuth();
@@ -70,6 +78,15 @@ export async function GET(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+
+         const ip = req.headers.get("x-forwarded-for") || "unknown";
+        
+         if (!rateLimit(ip , 5 , 60_000)) {
+            return NextResponse.json({
+                message: "Too many requests. Please try again later."
+            }, {status: 429})
+         }  
+
   await connectDB();
   const { schoolId } = await verifyAuth();
   const { id } = await req.json();

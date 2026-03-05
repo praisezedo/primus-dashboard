@@ -11,9 +11,7 @@ interface SettingsResponse {
   sections: string[];
 }
 
-
 const initialFormState = {
-    
     studentName: "",
     studentId: "",
     className: "",
@@ -21,10 +19,9 @@ const initialFormState = {
     parentName: "",
     parentPhone: "",
     parentEmail: "",
-    feesStatus: "UNPAID",
     notify: true,
-  
 }
+
 export default function StudentDataForm() {
 
 const router = useRouter();
@@ -187,20 +184,6 @@ const router = useRouter();
             className="border focus:outline-none focus:border p-3 rounded-lg w-80"
             placeholder="Enter parents Email e.g fake@gmail.com"
           />
-        </div>
-
-        {/* Fees Status */}
-        <div className="flex flex-col gap-2">
-          <label className="font-bold">Fees Status</label>
-          <select
-            name="feesStatus"
-            value={form.feesStatus}
-            onChange={updateField}
-            className="border focus:outline-none focus:border p-3 rounded-lg w-80"
-          >
-            <option value="UNPAID">UNPAID</option>
-            <option value="PAID">PAID</option>
-          </select>
         </div>
 
         {/* Notify Parent */}

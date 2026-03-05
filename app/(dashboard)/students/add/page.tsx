@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import SkeletonInlineText from "@/components/UI/SkelectonInlineText";
 import { DashboardOverview } from "@/components/types/dashboard";
+import BulkUploadBanner from "@/components/UI/BulkUploadBanner";
 
 
 
@@ -30,7 +31,7 @@ export default  function AddStudentPage() {
     <>
       <section className="p-7 flex flex-col gap-7">
         <h1 className="text-3xl font-bold">Add Student</h1>
-
+         <BulkUploadBanner/>
         <div className="shadow-sm rounded-md flex flex-col gap-3 border border-gray-200">
           <div className="border-b border-gray-200 py-3  px-5 flex justify-between">
            <h1 className="text-xl font-bold">Student & Parents Details</h1> 
