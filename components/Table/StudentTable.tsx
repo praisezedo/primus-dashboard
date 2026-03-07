@@ -27,7 +27,6 @@ export default function StudentTable({
             <th className="p-4 w-40">Parent Name</th>
             <th className="p-4 w-40">Parent Phone</th>
             <th className="p-4 w-40">Parent Email</th>
-            <th className="p-4 w-40">Fees Status</th>
             <th className="p-4 w-40">SMS Status</th>
             <th className="p-4 w-40 font-bold">Actions</th>
                 </tr>
@@ -42,6 +41,7 @@ export default function StudentTable({
                      onDelete={onDelete}
                      onRefresh={onRefresh}
                      deleting={deleting}
+                     
                     />
                 ))}
 

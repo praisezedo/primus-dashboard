@@ -1,12 +1,11 @@
 import { Student} from "@/components/types/student";
 import { useState } from "react";
-import FeesStatusToggle from "./FeesStatusToggle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import DeleteStudentModal from "./DeleteStudentModal";
 import EditStudentModal from "./EditStudentModal";
-
+import StudentFeesModal from "./StudentFeesModal";
 
 export default function StudentRow({
     serial,
@@ -26,13 +25,14 @@ export default function StudentRow({
 {
     const [showDelete , setShowDelete] = useState<boolean>(false);
     const [showEdit , setShowEdit] = useState<boolean>(false);
+    const [showFees , setShowFees] = useState<boolean>(false);
 
 
     return (
        <>
         <tr className="border-b">
         <td className="p-4  w-10">{serial}</td>
-        <td className="p-4 w-40">{student.studentName}</td>
+        <td className="p-4 w-50">{student.studentName}</td>
         <td className="p-4 w-40">{student.studentId}</td>
         <td className="p-4 w-40">{student.className}</td>
         <td className="p-4 w-40">{student.section || "-"}</td>
@@ -40,13 +40,6 @@ export default function StudentRow({
         <td className="p-4 w-40">{student.parentPhone || "-"}</td>
         <td className="p-4 w-40">{student.parentEmail || "-"}</td>
 
-        <td className="p-4 w-40">
-            <FeesStatusToggle
-              studentId={student._id}
-              currentStatus={student.feesStatus}
-              onUpdated={onRefresh}
-            />
-        </td>
         <td className={`p-4 w-20 `}> 
           <p className={`font-bold text-sm p-2 rounded-full ${
           student.smsStatus === "PENDING" ? "text-yellow-600 bg-yellow-100" :
@@ -60,18 +53,26 @@ export default function StudentRow({
 
 
 
-         <td className="p-4 w-40 items-center text-center flex justify-center gap-4">
-            <FontAwesomeIcon 
-             icon={faEdit}
-             onClick = {() => setShowEdit(true)}
-             className="cursor-pointer hover:opacity-50 text-blue-700 bg-blue-100 p-2 rounded-full"
-            />
+         <td className="p-4 w-70 grid grid-cols-3 items-center justify-center gap-2 align-middle">
+          <FontAwesomeIcon 
+           icon={faEdit}
+           onClick = {() => setShowEdit(true)}
+           className="cursor-pointer hover:opacity-50 text-blue-700 bg-blue-100 p-2 rounded-full"
+          />
 
-            <FontAwesomeIcon
-             icon={faTrash}
-             onClick = {() => setShowDelete(true)}
-             className="cursor-pointer hover:opacity-50 text-red-600 bg-red-100 p-2 rounded-full"
-            />
+          <FontAwesomeIcon
+           icon={faTrash}
+           onClick = {() => setShowDelete(true)}
+           className="cursor-pointer hover:opacity-50 text-red-600 bg-red-100 p-2 rounded-full"
+          />
+          
+          <button
+          onClick={() => setShowFees(true)}
+          className="bg-purple-100 hover:opacity-50 text-purple-700 px-2 py-1 rounded text-sm"
+          >
+          View Fees
+          </button>
+
          </td>
         </tr>
 
@@ -91,6 +92,14 @@ export default function StudentRow({
           student={student}
           onClose={() => setShowEdit(false)}
           onUpdated={onRefresh}
+        />
+
+        <StudentFeesModal
+         open={showFees}
+         studentId={student._id}
+         studentName={student.studentName}
+         studentClass={student.className}
+         onClose={() => setShowFees(false)}
         />
        </>
     )

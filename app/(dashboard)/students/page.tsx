@@ -14,7 +14,6 @@ export default function StudentsPage() {
      const [classes , setClasses] = useState<string[]>([]);
      const [search , setSearch] = useState<string>("");
      const [className , setClassName] = useState<string>("");
-     const [feesStatus, setFeesStatus] = useState<string>("");
      const [smsStatus, setSmsStatus] = useState<string>("");
      const [loading , setLoading] = useState<boolean>(true);
      const [sections , setSections] = useState<string[]>([]);
@@ -37,7 +36,6 @@ async function fetchStudents() {
     if (debouncSearch) params.q = debouncSearch;
     if (className) params.className = className;
     if (section) params.section = section;
-    if (feesStatus) params.feesStatus = feesStatus;
     if (smsStatus) params.smsStatus = smsStatus;
         const res = await api.get("/api/students", { params });
         const data = res.data;
@@ -77,7 +75,7 @@ useEffect(() => {
 
 useEffect(() => {
     fetchStudents();
-}, [debouncSearch , className , feesStatus , smsStatus , section]);
+}, [debouncSearch , className , smsStatus , section]);
 
 if (loading) {
     return <GlobalLoadingSpinner/>
@@ -123,16 +121,6 @@ if (loading) {
             ))
         }
       </select>
-     
-    <select className="border border-gray-200 shadow-sm rounded-lg p-3" 
-    name="feesStatus" id="feesStatus"
-    value={feesStatus}
-    onChange={(e) => setFeesStatus(e.target.value)}
-    >
-        <option value="">Fees Status</option>
-            <option value="PAID">PAID</option>
-            <option value="UNPAID">UNPAID</option>
-    </select>
 
     <select className="border border-gray-200 shadow-sm rounded-lg p-3" 
     name="smsStatus" id="smsStatus"

@@ -37,3 +37,21 @@ export interface StudentTableProps  {
     deleting: boolean;
 }
 
+export  interface StudentFeeProps {
+  open: boolean;
+  studentId: string;
+  studentName: string;
+  studentClass: string;
+  onClose: () => void;
+}
+
+export  type UpdateStudentBody  = {
+    studentName?: string;
+    studentId?: string;
+    className?: string;
+    section?: string;
+    parentName?: string;
+    parentPhone?: string;
+    parentEmail?: string;
+}
+
