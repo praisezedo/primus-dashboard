@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { StudentFeeProps } from "../types/student";
 import api from "@/lib/axios";
@@ -15,11 +16,29 @@ export default function StudentFeesModal({
    const [fees , setFees] = useState<any[]>([]);
    const [loading , setLoading] = useState<boolean>(false);
    const [paymentInputs , setPaymentInputs] = useState<{[key: string]: number}>({});
-   async function fetchFees() {
+   const [paymentHistory , setPaymentHistory] = useState<{[key: string]: any[]}>({});
+
+async function fetchHistory (feeId: string) {
+
+  const res = await api.get(`/api/fees/history/${feeId}`);
+
+  setPaymentHistory(prev => ({
+    ...prev,
+    [feeId]: res.data
+  }));
+}   
+
+async function fetchFees() {
     setLoading(true);
     const res = await api.get(`/api/students/${studentId}/fees`);
     setFees(res.data);
+
+        res.data.forEach((fee: any) => {
+      fetchHistory(fee._id);
+    })
+
     setLoading(false);
+
    }
 
 async function handlePay(fee: any) {
@@ -77,78 +96,111 @@ async function handlePay(fee: any) {
       <th className="p-3">Total</th>
       <th className="p-3">Paid</th>
       <th className="p-3">Balance</th>
-      <th className="p-3">Status</th>
+      <th className="p-3">Status</th>``
       <th className="p-3">Action</th>
     </tr>
   </thead>
 
   <tbody className="text-sm">
-    {fees.map((f) => (
-      <tr key={f._id} className="border-t hover:bg-gray-50">
+{fees.map((f) => (
+  <>
+    <tr key={f._id} className="border-t hover:bg-gray-50">
 
-        <td className="p-3 font-medium">
-          {f.feeTypeId?.name}
+      <td className="p-3 font-medium">
+        {f.feeTypeId?.name}
+      </td>
+
+      <td className="text-center">
+        ₦{f.totalAmount.toLocaleString()}
+      </td>
+
+      <td className="text-center text-green-600 font-medium">
+        ₦{f.amountPaid.toLocaleString()}
+      </td>
+
+      <td className="text-center text-red-500 font-medium">
+        ₦{f.balance.toLocaleString()}
+      </td>
+
+      <td className="text-center">
+        <span
+          className={`px-2 py-1 text-xs rounded-full
+          ${
+            f.status === "PAID"
+              ? "bg-green-100 text-green-700"
+              : f.status === "PARTIAL"
+              ? "bg-yellow-100 text-yellow-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {f.status}
+        </span>
+      </td>
+
+      <td className="text-center">
+        {f.balance > 0 && (
+          <div className="flex items-center gap-2 justify-center">
+
+            <input
+              type="number"
+              placeholder="Amount"
+              className="border rounded px-2 py-1 w-24 text-sm"
+              value={paymentInputs[f._id] || ""}
+              onChange={(e) =>
+                setPaymentInputs({
+                  ...paymentInputs,
+                  [f._id]: Number(e.target.value)
+                })
+              }
+            />
+
+            <button
+              onClick={() => handlePay(f)}
+              className="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600"
+            >
+              Pay
+            </button>
+
+          </div>
+        )}
+      </td>
+
+    </tr>
+
+    {paymentHistory[f._id]?.length > 0 && (
+      <tr key={`${f._id}-history`}>
+        <td colSpan={6} className="bg-gray-50 p-3">
+
+          <div className="text-xs space-y-1">
+
+            <p className="font-semibold text-gray-600">
+              Payment History
+            </p>
+
+            {paymentHistory[f._id].map((p:any)=>(
+              <div
+                key={p._id}
+                className="flex justify-between border-b py-1"
+              >
+
+                <span>
+                  ₦{p.amount.toLocaleString()}
+                </span>
+
+                <span>
+                  {new Date(p.createdAt).toLocaleDateString()}
+                </span>
+
+              </div>
+            ))}
+
+          </div>
+
         </td>
-
-        <td className="text-center">
-          ₦{f.totalAmount.toLocaleString()}
-        </td>
-
-        <td className="text-center text-green-600 font-medium">
-          ₦{f.amountPaid.toLocaleString()}
-        </td>
-
-        <td className="text-center text-red-500 font-medium">
-          ₦{f.balance.toLocaleString()}
-        </td>
-
-        <td className="text-center">
-          <span
-            className={`px-2 py-1 text-xs rounded-full
-              ${
-                f.status === "PAID"
-                  ? "bg-green-100 text-green-700"
-                  : f.status === "PARTIAL"
-                  ? "bg-yellow-100 text-yellow-700"
-                  : "bg-red-100 text-red-700"
-              }`}
-          >
-            {f.status}
-          </span>
-        </td>
-
-<td className="text-center">
-
-  {f.balance > 0 && (
-    <div className="flex items-center gap-2 justify-center">
-
-      <input
-        type="number"
-        placeholder="Amount"
-        className="border rounded px-2 py-1 w-24 text-sm"
-        value={paymentInputs[f._id] || ""}
-        onChange={(e) =>
-          setPaymentInputs({
-            ...paymentInputs,
-            [f._id]: Number(e.target.value)
-          })
-        }
-      />
-
-      <button
-        onClick={() => handlePay(f)}
-        className="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600"
-      >
-        Pay
-      </button>
-
-    </div>
-  )}
-
-</td>
-
       </tr>
-    ))}
+    )}
+  </>
+))}
   </tbody>
 </table>
         )}

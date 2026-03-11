@@ -55,3 +55,12 @@ export  type UpdateStudentBody  = {
     parentEmail?: string;
 }
 
+export interface StudentDebt  {
+  studentName: string
+  className: string
+  section: string
+  balance: number
+  totalPaid: number
+  totalAmount: number
+}
+

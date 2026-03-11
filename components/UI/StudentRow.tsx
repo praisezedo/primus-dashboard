@@ -1,3 +1,4 @@
+"use client";
 import { Student} from "@/components/types/student";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

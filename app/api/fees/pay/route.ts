@@ -2,6 +2,9 @@ import { connectDB } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import StudentFee from "@/app/models/StudentFee";
 import { rateLimit } from "@/lib/ratelimit";
+import { verifyAuth } from "@/lib/auth";
+import AcademicSession from "@/app/models/AcademicSession";
+import Payment from "@/app/models/Payment";
 
 export async function POST(req: Request) {
 
@@ -15,6 +18,8 @@ export async function POST(req: Request) {
 
     try {
         await connectDB();
+
+        const { schoolId } =  await verifyAuth();
 
         const {feeId , amount} = await req.json();
 
@@ -30,11 +35,33 @@ export async function POST(req: Request) {
       );
   }
 
+  const activeSession = await AcademicSession.findOne({
+    schoolId,
+    isActive: true
+  });
+
+    if (!activeSession) {
+   return NextResponse.json(
+    { message: "No active session" },
+    { status: 404 }
+   );
+  }
+
+   const sessionId = activeSession._id.toString();
+
+  await Payment.create({
+   schoolId,
+   sessionId,
+   studentId: fee.studentId,
+   feeId: fee._id,
+   amount
+  });
+
   fee.amountPaid += amount;
 
    await fee.save();
 
-   return NextResponse.json({ message: "Payment successful" });
+   return NextResponse.json({ message: "Payment recorded successful" });
 
  } catch (error: any) {
     console.error(error);

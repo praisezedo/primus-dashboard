@@ -75,7 +75,7 @@ export default function BulkUploadForm() {
       setErrorMessage("");
     
     } catch (error: any) {
-      const errorMsg = error.response?.data?.message || "Upload failed";
+      const errorMsg = error.response?.data?.message || "Upload failed , please try again";
       setMessageColor("red-700");
       setMessage(errorMsg);
       toast.error(errorMsg);

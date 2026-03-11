@@ -1,81 +1,93 @@
-import { connectDB } from "@/lib/mongodb";
-
-import { verifyAuth } from "@/lib/auth";
-import { NextResponse } from "next/server";
-import Student from "@/app/models/Students";
 import AcademicSession from "@/app/models/AcademicSession";
+import { connectDB } from "@/lib/mongodb";
+import { verifyAuth } from "@/lib/auth";
+import StudentFee from "@/app/models/StudentFee";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  await connectDB();
+  try {
+    await connectDB();
 
-  const { schoolId } = await verifyAuth();
+    const { schoolId } = await verifyAuth();
 
-  const activeSession = await AcademicSession.findOne({
-    schoolId,
-    isActive: true,
-  });
+    const activeSession = await AcademicSession.findOne({
+      schoolId,
+      isActive: true,
+    });
 
-  console.log("Active Session:" , activeSession);
-  
-  if (!activeSession) {
+    if (!activeSession) {
+      return NextResponse.json(
+        { message: "No active academic session found" },
+        { status: 404 }
+      );
+    }
+
+    const sessionId = activeSession._id.toString();
+
+    // Get fee totals efficiently
+    const feeTotalsAgg = await StudentFee.aggregate([
+      {
+        $match: { schoolId, sessionId }
+      },
+      {
+        $group: {
+          _id: null,
+          totalPaid: { $sum: "$amountPaid" },
+          totalBalance: { $sum: "$balance" },
+          totalExpected: { $sum: "$totalAmount" }
+        }
+      }
+    ]);
+
+    const feeTotals = feeTotalsAgg[0] || {
+      totalPaid: 0,
+      totalBalance: 0,
+      totalExpected: 0
+    };
+
+    // Get fees by class (using className field directly from StudentFee)
+    const classFeesAgg = await StudentFee.aggregate([
+      {
+        $match: {
+          schoolId,
+          sessionId,
+          className: { $ne: null } // Only include records with className
+        }
+      },
+      {
+        $group: {
+          _id: "$className",
+          paid: { $sum: "$amountPaid" },
+          balance: { $sum: "$balance" },
+          expected: { $sum: "$totalAmount" },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { _id: 1 } // Sort by className
+      }
+    ]);
+
+    const classFees = classFeesAgg.map(c => ({
+      className: c._id,
+      paid: c.paid,
+      balance: c.balance,
+      expected: c.expected,
+      studentCount: c.count
+    }));
+
+ console.log("feeTotalsAgg", feeTotalsAgg);
+console.log("classFeesAgg", classFeesAgg);
+    return NextResponse.json({
+      feeTotals,
+      classFees
+    });
+
+  } catch (error: any) {
+    console.error("Chart data error:", error);
     return NextResponse.json(
-      { message: "No active session" },
-      { status: 400 }
+      { message: "Error fetching chart data", error: error.message },
+      { status: 500 }
     );
   }
-
-  const sessionId = activeSession._id.toString();
-
-  const totalStudents = await Student.countDocuments({
-    schoolId,
-    sessionId
-  });
-
-  const feesAgg = await Student.aggregate([
-    { $match: { schoolId, sessionId } },
-    { $group: { _id: "$feesStatus", count: { $sum: 1 } } },
-  ]);
-
-const classFeesAgg = await Student.aggregate([
-  { $match: { schoolId, sessionId } },
-  {
-    $group: {
-      _id: {
-        className: "$className",
-        feesStatus: "$feesStatus",
-      },
-      count: { $sum: 1 },
-    },
-  },
-]);
-
-// Transform aggregation result → grouped format
-const classMap: Record<string, any> = {};
-
-classFeesAgg.forEach(item => {
-  const className = item._id.className || "Unknown";
-  const status = item._id.feesStatus;
-
-  if (!classMap[className]) {
-    classMap[className] = {
-      className,
-      PAID: 0,
-      UNPAID: 0,
-    };
-  }
-
-  classMap[className][status] = item.count;
-});
-
-const studentsByClassGrouped = Object.values(classMap);
-
-return NextResponse.json({
-  totalStudents,
-  fees: {
-    PAID: feesAgg.find(f => f._id === "PAID")?.count || 0,
-    UNPAID: feesAgg.find(f => f._id === "UNPAID")?.count || 0,
-  },
-  studentByClass: studentsByClassGrouped,
-});
-
 }

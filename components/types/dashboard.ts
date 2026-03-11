@@ -1,6 +1,8 @@
 export type DashboardOverview = {
-    totalStudents: number;
-    paid: number;
-    unpaid: number;
-    adminName: string;
+  totalStudents: number
+  totalExpected: number
+  totalPaid: number
+  totalBalance: number
+  studentsWithDebt: number
+  adminName: string
 }

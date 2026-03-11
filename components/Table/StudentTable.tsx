@@ -1,3 +1,4 @@
+"use client";
 import { StudentTableProps } from "@/components/types/student";
 import StudentRow from "../UI/StudentRow";
 

@@ -7,6 +7,7 @@ import {rateLimit} from "@/lib/ratelimit";
 import StudentFee from "@/app/models/StudentFee";
 import FeesType from "@/app/models/FeesType";
 import ClassFeeConfig from "@/app/models/ClassFeeConfig";
+import Payment from "@/app/models/Payment";
 
 // for geting a particular student
 export async function GET(req: Request , {params}: {params: Promise<{id: string}>}) {
@@ -69,11 +70,14 @@ export async function DELETE(_:Request , {params}: {params: Promise<{id: string}
     await connectDB();
 
     const {schoolId} = await verifyAuth();
+    
     const activeSession = await AcademicSession.findOne({schoolId , isActive: true});
     
     await StudentFee.deleteMany({studentId: id , schoolId , sessionId: activeSession?._id });
-    
-    await Student.deleteOne({_id: id , schoolId , sessionId: activeSession?._id });
+
+     await Payment.deleteMany({studentId: id , schoolId , sessionId: activeSession?._id });
+
+    await Payment.deleteMany({studentId: id , schoolId , sessionId: activeSession?._id });
     
     return NextResponse.json({message: "Student deleted"});
 

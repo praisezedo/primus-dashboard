@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import api from '@/lib/axios';
+import PrimusLogo from '@/components/UI/PrimusLogo';
 
 export default function SetupPage() {
     const router = useRouter();
@@ -78,8 +79,9 @@ const [classes, setClasses] = useState<string[]>([]);
 
         {/* HEADER */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-blue-700">
-            Welcome 👋
+          <PrimusLogo />
+          <h1 className="text-3xl font-bold text-blue-700 my-4">
+            Welcome to Primus 
           </h1>
           <p className="text-gray-500">
             Let’s set up your school structure. This only takes 2 minutes.
