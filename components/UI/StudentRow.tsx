@@ -54,24 +54,24 @@ export default function StudentRow({
 
 
 
-         <td className="p-4 w-70 grid grid-cols-3 items-center justify-center gap-2 align-middle">
+         <td className="p-4 w-70 flex gap-4 items-center justify-center  align-middle">
           <FontAwesomeIcon 
            icon={faEdit}
            onClick = {() => setShowEdit(true)}
-           className="cursor-pointer hover:opacity-50 text-blue-700 bg-blue-100 p-2 rounded-full"
+           className="cursor-pointer hover:opacity-50 text-black border p-2 rounded-full"
           />
 
           <FontAwesomeIcon
            icon={faTrash}
            onClick = {() => setShowDelete(true)}
-           className="cursor-pointer hover:opacity-50 text-red-600 bg-red-100 p-2 rounded-full"
+           className="cursor-pointer hover:opacity-50 text-black border  p-2 rounded-full"
           />
           
           <button
           onClick={() => setShowFees(true)}
-          className="bg-purple-100 hover:opacity-50 text-purple-700 px-2 py-1 rounded text-sm"
+          className="border hover:opacity-50 text-black px-2 py-1 rounded text-sm"
           >
-          View Fees
+          Fees
           </button>
 
          </td>

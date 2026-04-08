@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { FeeType } from "../types/feetype";
 import { ClassFeeConfig } from "../types/classconfig";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog, faClipboard, faLightbulb, faSchool } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   classes: string[];
@@ -63,7 +65,7 @@ export default function ClassFeeConfigSection({
       <div className="bg-white rounded-2xl border border-blue-100 shadow-sm overflow-hidden">
         <div className="border-b border-blue-50 px-6 py-4 bg-linear-to-r from-blue-700 to-blue-600">
           <div className="flex items-center gap-2">
-            <span className="text-lg">💰</span>
+            <FontAwesomeIcon icon={faCog} className="text-white text-lg" />
             <div>
               <h3 className="text-white font-semibold text-sm">Class Fee Configuration</h3>
               <p className="text-blue-200 text-xs">Set fee amounts per class per fee type</p>
@@ -71,7 +73,7 @@ export default function ClassFeeConfigSection({
           </div>
         </div>
         <div className="p-10 text-center text-gray-400">
-          <div className="text-4xl mb-3">📋</div>
+          <div className="text-4xl mb-3"><FontAwesomeIcon icon={faClipboard} className="text-gray-400" /></div>
           <p className="text-sm font-medium">Setup required</p>
           <p className="text-xs mt-1">
             {classes.length === 0
@@ -88,7 +90,7 @@ export default function ClassFeeConfigSection({
       {/* Header */}
       <div className="border-b border-blue-50 px-6 py-4 bg-linear-to-r from-blue-700 to-blue-600">
         <div className="flex items-center gap-2">
-          <span className="text-lg">💰</span>
+          <FontAwesomeIcon icon={faCog} className="text-white text-lg" />
           <div>
             <h3 className="text-white font-semibold text-sm">Class Fee Configuration</h3>
             <p className="text-blue-200 text-xs">
@@ -101,7 +103,7 @@ export default function ClassFeeConfigSection({
       <div className="p-6">
         {/* Info */}
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-5 text-xs text-blue-700 flex gap-2 items-start">
-          <span className="text-base">💡</span>
+          <FontAwesomeIcon icon={faLightbulb} className="text-base text-blue-700 mt-1" />
           <p>
             Enter the amount for each class and fee type combination, then click{" "}
             <strong>Save</strong> on that cell. Different classes can have different amounts for
@@ -132,7 +134,7 @@ export default function ClassFeeConfigSection({
                 <tr key={cls} className="hover:bg-blue-50/30 transition-colors">
                   <td className="px-4 py-3">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs font-semibold">
-                      🏫 {cls}
+                      <FontAwesomeIcon icon={faSchool} className="w-3.5 h-3.5" /> {cls}
                     </span>
                   </td>
                   {feeTypes.map((ft) => {

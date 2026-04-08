@@ -89,11 +89,11 @@ Embrace the challenges , for they are opportunities in disguise.
 
 {/* DASHBOARD CARDS */}
 
-<section className="flex flex-col gap-7 mx-3">
+<section className="flex flex-col gap-7 mx-3 relative">
 
 <h1 className="font-bold text-4xl">Dashboard Overview</h1>
 
-<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6">
+<div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6">
 
 <TotalStatsCard
 loadingState={isLoading}

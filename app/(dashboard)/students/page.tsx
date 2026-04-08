@@ -4,9 +4,10 @@ import StudentTable from "@/components/Table/StudentTable"
 import Footer from "@/components/UI/Footer";
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
-import GlobalLoadingSpinner from "@/components/UI/GlobalLoadingSpinner";
+import LoadingSpinner from "@/components/UI/LoadingSpinner";
 import { useDebounce } from "@/utils/useDebounce";
 import { toast } from "sonner";
+import PrimusLoader from "@/components/UI/PrimusLoader";
 
 export default function StudentsPage() {
 
@@ -78,7 +79,7 @@ useEffect(() => {
 }, [debouncSearch , className , smsStatus , section]);
 
 if (loading) {
-    return <GlobalLoadingSpinner/>
+    return <PrimusLoader/>;
 } 
     return <>
     <section className="p-7 flex flex-col gap-10">
@@ -129,7 +130,7 @@ if (loading) {
     >
         <option value="">SMS Status</option>
             <option value="SENT">SENT</option>
-            <option value="NOTSENT">NOT SENT</option>
+            <option value="FAILED">FAILED</option>
             <option value="PENDING">PENDING</option>
     </select>
 </div>

@@ -30,7 +30,7 @@ export default function BulkUploadPage() {
          <section className="my-10 mx-5">
             <div className="flex justify-between px-5">
                <h1 className="font-bold text-3xl">Bulk Upload Students Page.</h1>
-            {loading ? <SkeletonInlineText length={10}/> : (<p className="font-bold text-gray-600">total student: {totalStudent}</p>)}
+            {loading ? <SkeletonInlineText length={10}/> : (<p className="font-bold text-gray-600">total students: {totalStudent}</p>)}
             </div>
         <BulkUploadDirection/>
        <BulkUploadBanner/>

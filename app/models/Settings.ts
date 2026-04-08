@@ -3,6 +3,8 @@ import { Schema, models, model } from "mongoose";
 const SettingSchema = new Schema({
   schoolId: { type: String, required: true, unique: true },
 
+  schoolName: { type: String, default: "" },
+
   classes: { type: [String], default: [] },
   sections: { type: [String], default: [] },
 

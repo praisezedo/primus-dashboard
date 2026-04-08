@@ -77,7 +77,7 @@ export async function DELETE(_:Request , {params}: {params: Promise<{id: string}
 
      await Payment.deleteMany({studentId: id , schoolId , sessionId: activeSession?._id });
 
-    await Payment.deleteMany({studentId: id , schoolId , sessionId: activeSession?._id });
+    await Student.findOneAndDelete({schoolId , _id: id , sessionId: activeSession?._id });
     
     return NextResponse.json({message: "Student deleted"});
 

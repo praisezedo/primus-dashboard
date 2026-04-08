@@ -5,35 +5,29 @@ const API_KEY = process.env.TERMII_API_KEY;
 const SENDER_ID = process.env.TERMII_SENDER_ID;
 
 if (!BASE_URL || !API_KEY || !SENDER_ID) {
-    throw new Error("Termii environment varialble are missing");
+    throw new Error("Termii environment variables are missing");
 }
 
-export async function  sendViaTermii(to:string , message: string)  {
- try {
-    const response = await axios.post(
-        `${BASE_URL}/api/sms/send`,
-        {
-            to,
-            from: SENDER_ID,
-            sms: message,
-            type: 'plain',
-            channel: "generic",
-            api_key: API_KEY,
-        },
-        {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }
-    );
+export async function sendViaTermii(phone: string, message: string) {
 
-    return response.data;
- }  catch (error: any) {
-    console.error(
-        "Termii SMS Error:",
-        error.response?.data || error.message
-    );
+  const res = await fetch("https://api.ng.termii.com/api/sms/send", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      api_key: process.env.TERMII_API_KEY,
+      to: phone,
+      from: process.env.TERMII_SENDER_ID,
+      sms: message,
+      type: "plain",
+      channel: "generic"
+    })
+  });
 
-    throw new Error("SMS sending failed");
- }
+  if (!res.ok) {
+    throw new Error("SMS failed");
+  }
+
+  return res.json();
 }

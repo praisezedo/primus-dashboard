@@ -2,17 +2,18 @@
 
 import { SmsTemplate } from "../types/smstemplate";
 import { SaveBar } from "./AcademicStructureSection";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faExclamationTriangle, faTimes, faClipboard } from "@fortawesome/free-solid-svg-icons";
+
 
 const SMS_PLACEHOLDER = [
-  { key: "{{parentName}}",  label: "Parent Name" },
-  { key: "{{studentName}}", label: "Student Name" },
-  { key: "{{studentId}}",   label: "Student ID" },
-  { key: "{{className}}",   label: "Class" },
-  { key: "{{section}}",     label: "Section" },
-  { key: "{{feesStatus}}",  label: "Fees Status" },
-  { key: "{{semester}}",    label: "Semester" },
-  { key: "{{amountPaid}}",  label: "Amount Paid" },
-  { key: "{{balance}}",     label: "Balance" },
+ { key: "{{parentName}}", label: "Parent Name" },
+ { key: "{{studentName}}", label: "Student Name" },
+ { key: "{{studentId}}", label: "Student ID" },
+ { key: "{{className}}", label: "Class" },
+ { key: "{{section}}", label: "Section" },
+ { key: "{{semester}}", label: "Semester" },
+ { key: "{{feesSummary}}", label: "Fees Summary" },
 ];
 
 interface Props {
@@ -26,29 +27,38 @@ const TEMPLATE_FIELDS: {
   field: keyof SmsTemplate;
   label: string;
   color: string;
-  icon: string;
+  icon: any;
   placeholder: string;
 }[] = [
   {
     field: "paid",
     label: "Paid",
     color: "emerald",
-    icon: "✅",
-    placeholder: "Dear {{parentName}}, {{studentName}} ({{studentId}}) has fully paid their {{semester}} fees for {{className}}. Thank you!",
+    icon: faCheck,
+   placeholder: `Dear {{parentName}}, 
+   {{studentName}} ({{studentId}}) has completed payment for {{semester}}.
+   {{feesSummary}}
+   Thank you.`,
   },
   {
     field: "partial",
     label: "Partial Payment",
     color: "amber",
-    icon: "⚠️",
-    placeholder: "Dear {{parentName}}, {{studentName}} has made a partial payment. Amount paid: {{amountPaid}}. Outstanding balance: {{balance}}. Please clear the balance.",
+    icon: faExclamationTriangle,
+    placeholder: `Dear {{parentName}},
+  {{studentName}} has partially paid their fees.
+  {{feesSummary}}
+   Please clear the remaining balance.`,
   },
   {
     field: "unpaid",
     label: "Unpaid",
     color: "red",
-    icon: "❌",
-    placeholder: "Dear {{parentName}}, {{studentName}} ({{studentId}}) has not paid their {{semester}} fees for {{className}}. Please pay as soon as possible.",
+    icon: faTimes,
+   placeholder: `Dear {{parentName}},
+   {{studentName}} has outstanding school fees.
+   {{feesSummary}}
+   Kindly make payment as soon as possible.`,
   },
 ];
 
@@ -77,7 +87,7 @@ export default function SmsTemplatesSection({
       <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-5">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-sm shrink-0">
-            📋
+            <FontAwesomeIcon icon={faClipboard} className="text-blue-600" />
           </div>
           <div className="flex-1">
             <p className="text-sm font-semibold text-gray-800 mb-2">Available Placeholders</p>
@@ -107,7 +117,7 @@ export default function SmsTemplatesSection({
         >
           <div className={`px-6 py-4 bg-linear-to-r ${colorMap[color]}`}>
             <div className="flex items-center gap-2">
-              <span>{icon}</span>
+              <FontAwesomeIcon icon={icon} className="text-white text-lg" />
               <div>
                 <h3 className="text-white font-semibold text-sm">{label} Message Template</h3>
                 <p className="text-white/70 text-xs">

@@ -10,7 +10,7 @@ studentsWithDebt,
 
 return (
 
-<div className="px-5 w-90 h-50 mb-10 rounded-lg border border-gray-200 shadow-sm flex flex-col justify-center gap-3">
+<div className="px-5 w-90 h-50 mb-10 rounded-lg border relative border-gray-200 shadow-sm flex flex-col justify-center gap-3">
 
 {loadingState ? <LoadingSpinner/> :
 

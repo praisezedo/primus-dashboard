@@ -3,8 +3,8 @@
 import { useEffect, useState  } from "react";
 import api from "@/lib/axios";
 import { toast } from "sonner";
-import GlobalLoadingSpinner from "../UI/GlobalLoadingSpinner";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 interface SettingsResponse {
   classes: string[];
@@ -78,7 +78,8 @@ const router = useRouter();
   }
 
   if (loading) {
-    return <GlobalLoadingSpinner/>
+
+    return <LoadingSpinner/>;
   }
 
 

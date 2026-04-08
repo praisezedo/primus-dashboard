@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSchool, faFolder, faCalendar } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   classes: string[];
@@ -43,7 +45,7 @@ export default function AcademicStructureSection({
     <div className="space-y-5">
 
       {/* ── Classes card ── */}
-      <Card title="Classes" description="Add the class levels available in your school" icon="🏫">
+      <Card title="Classes" description="Add the class levels available in your school" icon={faSchool}>
         <div className="flex gap-2">
           <input
             className="input flex-1  px-2"
@@ -62,7 +64,7 @@ export default function AcademicStructureSection({
       </Card>
 
       {/* ── Sections card ── */}
-      <Card title="Sections" description="Define the sections or streams in your school" icon="🗂️">
+      <Card title="Sections" description="Define the sections or streams in your school" icon={faFolder}>
         <div className="flex gap-2">
           <input
             className="input flex-1"
@@ -81,7 +83,7 @@ export default function AcademicStructureSection({
       </Card>
 
       {/* ── Semester card ── */}
-      <Card title="Current Semester / Term" description="Set the active academic period" icon="📅">
+      <Card title="Current Semester / Term" description="Set the active academic period" icon={faCalendar}>
         <select
           className="input"
           value={semester}
@@ -104,13 +106,13 @@ export default function AcademicStructureSection({
 function Card({
   title, description, icon, children,
 }: {
-  title: string; description: string; icon: string; children: React.ReactNode;
+  title: string; description: string; icon: any; children: React.ReactNode;
 }) {
   return (
     <div className="bg-white rounded-2xl border border-blue-100 shadow-sm overflow-hidden">
       <div className="border-b border-blue-50 px-6 py-4 bg-linear-to-r from-blue-700 to-blue-600">
         <div className="flex items-center gap-2">
-          <span className="text-lg">{icon}</span>
+          <FontAwesomeIcon icon={icon} className="text-white text-lg" />
           <div>
             <h3 className="text-white font-semibold text-sm">{title}</h3>
             <p className="text-blue-200 text-xs">{description}</p>

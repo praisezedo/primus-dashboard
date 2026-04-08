@@ -8,6 +8,8 @@ import Setting from "@/app/models/Settings";
 import FeesType from "@/app/models/FeesType";
 import ClassFeeConfig from "@/app/models/ClassFeeConfig";
 import StudentFee from "@/app/models/StudentFee";
+import { sendSMS } from "@/lib/sms";
+import { buildStudentSms } from "@/lib/sms/buildStudentSms";
 
 // add a new student 
 export async function POST(req: Request) {
@@ -85,7 +87,36 @@ export async function POST(req: Request) {
                     balance: config.amount
                 })
           }
+                if(body.notify){
 
+            try{
+
+                const message = await buildStudentSms(student,schoolId);
+
+                await sendSMS(student.parentPhone,message);
+
+                await Student.updateOne(
+                {_id:student._id},
+                {
+                    smsStatus:"SENT",
+                    smsAttempts:0
+                }
+                );
+
+            }catch{
+
+                await Student.updateOne(
+                {_id:student._id},
+                {
+                    smsStatus:"FAILED",
+                    $inc:{smsAttempts:1},
+                    lastSmsAttemptAt:new Date()
+                }
+                );
+
+            }
+
+            }
         return NextResponse.json(student , {status: 201});
       
     } catch (error) {

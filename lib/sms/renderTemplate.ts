@@ -1,15 +1,16 @@
-import { TemplateData } from "@/components/types/smstemplate";
+export function renderSmsTemplate(template:string,data:any){
 
-export function renderSmsTemplate(template: string, data: TemplateData) {
-    let message = template;
+  let message = template;
 
-    Object.entries(data).forEach(([key , value]) => {
-        const placeholder = `{{${key}}`;
-        message = message.replaceAll(
-            placeholder,
-            value || ""
-        );
-    });
+  for(const [key,value] of Object.entries(data)){
 
-    return message;
+    message = message.replaceAll(
+      `{{${key}}}`,
+      value?.toString() || ""
+    );
+
+  }
+
+  return message;
+
 }

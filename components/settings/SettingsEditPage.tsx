@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import api from "@/lib/axios";
-import GlobalLoadingSpinner from "@/components/UI/GlobalLoadingSpinner";
+import LoadingSpinner from "../UI/LoadingSpinner";
 import { SmsTemplate } from "../types/smstemplate";
 
 // ─── Sub-components ─────────────────────────────────────────────────────────
@@ -14,12 +14,17 @@ import SmsTemplatesSection from "./SmsTemplatesSection";
 import { FeeType } from "../types/feetype";
 import { ClassFeeConfig } from "../types/classconfig";
 
+//icon components
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSchool, faTags, faCog, faSms } from "@fortawesome/free-solid-svg-icons";
+
+
 // ─── Tab definitions ─────────────────────────────────────────────────────────
 const TABS = [
-  { id: "academic",  label: "Academic",     icon: "🏫" },
-  { id: "feetypes",  label: "Fee Types",    icon: "🏷️" },
-  { id: "feeconfig", label: "Fee Config",   icon: "💰" },
-  { id: "sms",       label: "SMS Templates",icon: "💬" },
+  { id: "academic",  label: "Academic",     icon: faSchool },
+  { id: "feetypes",  label: "Fee Types",    icon: faTags },
+  { id: "feeconfig", label: "Fee Config",   icon: faCog },
+  { id: "sms",       label: "SMS Templates",icon: faSms },
 ];
 
 export default function SettingsEditPage() {
@@ -157,7 +162,7 @@ export default function SettingsEditPage() {
     }
   };
 
-  if (loading) return <GlobalLoadingSpinner />;
+  if (loading) return <LoadingSpinner/>;
 
   return (
     <div className="min-h-screen bg-linear-to-r from-slate-50 via-blue-50/30 to-white">
@@ -167,7 +172,7 @@ export default function SettingsEditPage() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-1">
             <div className="w-10 h-10 rounded-xl bg-blue-700 flex items-center justify-center shadow-lg shadow-blue-200">
-              <span className="text-white text-lg">⚙️</span>
+              <FontAwesomeIcon icon={faCog} className="text-white text-lg" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900 tracking-tight">School Settings</h1>
@@ -188,7 +193,7 @@ export default function SettingsEditPage() {
                   : "text-gray-500 hover:text-blue-700 hover:bg-blue-50"
               }`}
             >
-              <span>{tab.icon}</span>
+              <FontAwesomeIcon icon={tab.icon} className="w-4 h-4" />
               {tab.label}
             </button>
           ))}

@@ -1,12 +1,9 @@
-export function normalizePhone(phone: string) {
-    const cleaned = phone.trim().replace(/\s+/g, "");
+export function normalizePhone(phone:string){
 
-    if (cleaned.startsWith("0")) {
-        return "234" + cleaned.slice(1);
-    }
+  if(phone.startsWith("0")){
+    return "234" + phone.slice(1);
+  }
 
-    if (cleaned.startsWith("+")) {
-        return cleaned.slice(1);
-    }
-    return cleaned;
+  return phone;
+
 }

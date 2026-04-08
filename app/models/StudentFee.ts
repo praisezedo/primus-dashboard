@@ -28,7 +28,7 @@ const StudentFeeSchema = new Schema<IStudentFee> (
       index: true,
     },
 
-    studentId: {
+     studentId: {
       type: Schema.Types.ObjectId,
       ref: "Student",
       required: true,

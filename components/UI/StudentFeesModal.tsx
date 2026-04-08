@@ -17,6 +17,7 @@ export default function StudentFeesModal({
    const [loading , setLoading] = useState<boolean>(false);
    const [paymentInputs , setPaymentInputs] = useState<{[key: string]: number}>({});
    const [paymentHistory , setPaymentHistory] = useState<{[key: string]: any[]}>({});
+   const [paymentLoading , setPaymentLoading] = useState<boolean>(false);
 
 async function fetchHistory (feeId: string) {
 
@@ -51,7 +52,7 @@ async function handlePay(fee: any) {
   }
 
   try {
-
+    setPaymentLoading(true);
     await api.post(`/api/fees/pay`, {
       feeId: fee._id,
       amount,
@@ -68,6 +69,8 @@ async function handlePay(fee: any) {
 
   } catch (error) {
     toast.error("Payment failed");
+  } finally {
+    setPaymentLoading(false);
   }
 }
 
@@ -80,7 +83,7 @@ async function handlePay(fee: any) {
 
      return (
     <div className={`fixed inset-0 bg-black/40 flex items-center justify-center z-50`}>
-      <div className="bg-white rounded-lg p-6 w-175 space-y-4">
+      <div className="bg-white relative rounded-lg p-6 w-175 space-y-4">
 
         <h2 className="text-lg font-bold">
           {studentName} Fees Record
@@ -96,7 +99,7 @@ async function handlePay(fee: any) {
       <th className="p-3">Total</th>
       <th className="p-3">Paid</th>
       <th className="p-3">Balance</th>
-      <th className="p-3">Status</th>``
+      <th className="p-3">Status</th>
       <th className="p-3">Action</th>
     </tr>
   </thead>
@@ -155,10 +158,11 @@ async function handlePay(fee: any) {
             />
 
             <button
+              disabled={paymentLoading}
               onClick={() => handlePay(f)}
-              className="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600"
+              className="bg-blue-500 disabled:opacity-50 text-white px-3 py-1 rounded text-xs hover:bg-blue-600"
             >
-              Pay
+             Pay
             </button>
 
           </div>

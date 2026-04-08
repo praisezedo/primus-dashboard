@@ -1,46 +1,9 @@
-import { sendSMS } from "./index";
-import Student from "@/app/models/Students";
+import SmsQueue from "@/app/models/SmsQueue";
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+export async function queueSms(messages:any[]){
 
-export async function sendBulkSMSInBatches(
-  messages: {
-    phone: string;
-    message: string;
-    studentId: string;
-  }[],
-  batchSize = 20
-) {
-  for (let i = 0; i < messages.length; i += batchSize) {
-    const batch = messages.slice(i, i + batchSize);
+  if(messages.length===0) return;
 
-    await Promise.all(
-      batch.map(async (item) => {
-        try {
-          await sendSMS(item.phone, item.message);
+  await SmsQueue.insertMany(messages);
 
-          await Student.updateOne(
-            { _id: item.studentId },
-            {
-              smsStatus: "SENT",
-              smsAttempts: 0,
-            }
-          );
-        } catch {
-          await Student.updateOne(
-            { _id: item.studentId },
-            {
-              smsStatus: "FAILED",
-              $inc: { smsAttempts: 1 },
-              lastSmsAttemptAt: new Date(),
-            }
-          );
-        }
-      })
-    );
-
-    await delay(1000);
-  }
 }

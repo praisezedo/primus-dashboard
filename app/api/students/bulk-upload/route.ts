@@ -11,6 +11,8 @@ import { rateLimit } from "@/lib/ratelimit";
 import FeesType from "@/app/models/FeesType";
 import ClassFeeConfig from "@/app/models/ClassFeeConfig";
 import StudentFee from "@/app/models/StudentFee";
+import { queueSms } from "@/lib/sms/queueSms";
+import { buildStudentSms } from "@/lib/sms/buildStudentSms";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
@@ -136,7 +138,7 @@ try   {
 
     if (row["PARENT EMAIL"] && !EMAIL_REGEX.test(row["PARENT EMAIL"])) {
         return NextResponse.json({
-            message: `Row ${rowNumber}: Invalid email format`
+            message: `Row ${rowNumber}: Invalid email format`,
         }, {status: 400});
     }
 
@@ -215,6 +217,8 @@ try   {
         const key = `${config.className}_${config.feeTypeId}`;
         configMap.set(key , config.amount);
      }
+     
+const messages=[];
 
       for (const student of insertedStudents) {
 
@@ -239,6 +243,23 @@ try   {
         }
       }
 
+
+for(const student of insertedStudents){
+
+  if(!notify) continue;
+
+  const message = await buildStudentSms(student,schoolId);
+
+  messages.push({
+    schoolId,
+    studentId:student._id,
+    phone:student.parentPhone,
+    message
+  });
+
+}
+
+await queueSms(messages);
     });
     
     await BulkUploadLog.create({

@@ -1,6 +1,8 @@
 "use client";
 
 import { FeeType } from "../types/feetype";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTags } from "@fortawesome/free-solid-svg-icons";
 
 
 
@@ -22,7 +24,7 @@ export default function FeeTypesSection({
         {/* Header */}
         <div className="border-b border-blue-50 px-6 py-4 bg-linear-to-r from-blue-700 to-blue-600">
           <div className="flex items-center gap-2">
-            <span className="text-lg">🏷️</span>
+            <FontAwesomeIcon icon={faTags} className="text-white text-lg" />
             <div>
               <h3 className="text-white font-semibold text-sm">Fee Types</h3>
               <p className="text-blue-200 text-xs">
