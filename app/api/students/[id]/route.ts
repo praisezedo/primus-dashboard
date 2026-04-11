@@ -44,19 +44,23 @@ export async function PUT(req: Request , {params}: {params: Promise<{id: string}
     const body = await req.json();
 
     const activeSession = await AcademicSession.findOne({schoolId , isActive: true});
+    if (!activeSession) {
+        return NextResponse.json({ message: "Active academic session not found" }, { status: 404 });
+    }
+    const sessionId = activeSession._id.toString();
     
     // Get the old student data to check if className changed
-    const oldStudent = await Student.findOne({_id: id , schoolId , sessionId: activeSession?._id });
+    const oldStudent = await Student.findOne({_id: id , schoolId , sessionId });
 
     if (!oldStudent) {
         return NextResponse.json({ message: "Student not found" }, { status: 404 });
     }
     
-    const student = await Student.findOneAndUpdate({_id: id , schoolId , sessionId: activeSession?._id } , body , {new: true , runValidators: true });
+    const student = await Student.findOneAndUpdate({_id: id , schoolId , sessionId } , body , {new: true , runValidators: true });
 
     // Update student fees if className has changed
     if (body.className && body.className !== oldStudent.className ) {
-        await updateStudentFees(id, body.className , schoolId, activeSession?._id);
+        await updateStudentFees(id, body.className , schoolId, sessionId);
     }
 
     return NextResponse.json(student);
@@ -72,12 +76,16 @@ export async function DELETE(_:Request , {params}: {params: Promise<{id: string}
     const {schoolId} = await verifyAuth();
     
     const activeSession = await AcademicSession.findOne({schoolId , isActive: true});
+    if (!activeSession) {
+        return NextResponse.json({ message: "Active academic session not found" }, { status: 404 });
+    }
+    const sessionId = activeSession._id.toString();
     
-    await StudentFee.deleteMany({studentId: id , schoolId , sessionId: activeSession?._id });
+    await StudentFee.deleteMany({studentId: id , schoolId , sessionId });
 
-     await Payment.deleteMany({studentId: id , schoolId , sessionId: activeSession?._id });
+     await Payment.deleteMany({studentId: id , schoolId , sessionId });
 
-    await Student.findOneAndDelete({schoolId , _id: id , sessionId: activeSession?._id });
+    await Student.findOneAndDelete({schoolId , _id: id , sessionId });
     
     return NextResponse.json({message: "Student deleted"});
 

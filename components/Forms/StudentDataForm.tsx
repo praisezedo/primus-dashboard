@@ -19,7 +19,7 @@ const initialFormState = {
     parentName: "",
     parentPhone: "",
     parentEmail: "",
-    notify: true,
+    notify: false,
 }
 
 export default function StudentDataForm() {
@@ -70,9 +70,10 @@ const router = useRouter();
       toast.success("Student successfully saved");
       setForm(initialFormState);
       router.refresh();
-    } catch (err) {
-       toast.error(message || "Failed to save student");
-    } finally {
+    } 
+catch (err: any) {
+  toast.error(err?.response?.data?.message || "Failed to save student");
+}finally {
       setSaving(false);
     }
   }
@@ -203,8 +204,8 @@ const router = useRouter();
       <div className="flex justify-end p-5">
         <button
           type="submit"
-          disabled={loading}
-          className="bg-blue-700 hover:opacity-50 text-white px-6 py-2 rounded-md"
+          disabled={loading || saving}
+          className="bg-blue-700 hover:opacity-50 text-white px-6 py-2 rounded-md disabled:opacity-50"
         >
           {saving ? "Saving..." : "Save Student"}
         </button>

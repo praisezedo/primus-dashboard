@@ -1,3 +1,4 @@
+import Admin from "@/app/models/Admin";
 import Setting from "@/app/models/Settings";
 import { renderSmsTemplate } from "./renderTemplate";
 import { generateFeesSummary } from "./generateFeesSummary";
@@ -5,10 +6,8 @@ import { getStudentFeesStatus } from "./getStudentFeesStatus";
 
 export async function buildStudentSms(student:any,schoolId:string){
 
-  const settings = await Setting
-  .findOne({schoolId})
-  .lean();
-
+const admin = await Admin.findOne({schoolId}).lean();
+const settings = await Setting.findOne({schoolId}).lean();
   const summary = await generateFeesSummary(student._id);
 
   const status = await getStudentFeesStatus(student._id);
@@ -32,6 +31,6 @@ export async function buildStudentSms(student:any,schoolId:string){
     }
   );
 
-  return `${settings.schoolName}\n\n${message}`;
+  return `${admin.schoolName}\n\n${message}`;
 
 }

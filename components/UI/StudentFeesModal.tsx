@@ -17,7 +17,7 @@ export default function StudentFeesModal({
    const [loading , setLoading] = useState<boolean>(false);
    const [paymentInputs , setPaymentInputs] = useState<{[key: string]: number}>({});
    const [paymentHistory , setPaymentHistory] = useState<{[key: string]: any[]}>({});
-   const [paymentLoading , setPaymentLoading] = useState<boolean>(false);
+   const [paymentLoadingByFee , setPaymentLoadingByFee] = useState<Record<string, boolean>>({});
 
 async function fetchHistory (feeId: string) {
 
@@ -51,8 +51,26 @@ async function handlePay(fee: any) {
     return;
   }
 
+  // Store original fees for potential revert
+  const originalFees = [...fees];
+
+  // Optimistic update
+  const optimisticFees = fees.map(f => {
+    if (f._id === fee._id) {
+      const newPaid = f.amountPaid + amount;
+      return {
+        ...f,
+        amountPaid: newPaid,
+        balance: f.totalAmount - newPaid,
+        status: newPaid >= f.totalAmount ? "PAID" : newPaid > 0 ? "PARTIAL" : "UNPAID"
+      };
+    }
+    return f;
+  });
+  setFees(optimisticFees);
+
   try {
-    setPaymentLoading(true);
+    setPaymentLoadingByFee((prev) => ({ ...prev, [fee._id]: true }));
     await api.post(`/api/fees/pay`, {
       feeId: fee._id,
       amount,
@@ -60,17 +78,19 @@ async function handlePay(fee: any) {
 
     toast.success("Payment recorded");
 
-    setPaymentInputs(prev => ({
+    setPaymentInputs((prev) => ({
       ...prev,
-      [fee._id]: 0
+      [fee._id]: 0,
     }));
 
+    // Fetch latest data to confirm
     fetchFees();
-
   } catch (error) {
+    // Revert optimistic update on error
+    setFees(originalFees);
     toast.error("Payment failed");
   } finally {
-    setPaymentLoading(false);
+    setPaymentLoadingByFee((prev) => ({ ...prev, [fee._id]: false }));
   }
 }
 
@@ -158,11 +178,11 @@ async function handlePay(fee: any) {
             />
 
             <button
-              disabled={paymentLoading}
+              disabled={paymentLoadingByFee[f._id]}
               onClick={() => handlePay(f)}
               className="bg-blue-500 disabled:opacity-50 text-white px-3 py-1 rounded text-xs hover:bg-blue-600"
             >
-             Pay
+             {paymentLoadingByFee[f._id] ? "Processing..." : "Pay"}
             </button>
 
           </div>

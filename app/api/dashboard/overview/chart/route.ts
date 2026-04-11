@@ -76,8 +76,7 @@ export async function GET() {
       studentCount: c.count
     }));
 
- console.log("feeTotalsAgg", feeTotalsAgg);
-console.log("classFeesAgg", classFeesAgg);
+
     return NextResponse.json({
       feeTotals,
       classFees

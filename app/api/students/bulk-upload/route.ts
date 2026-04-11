@@ -11,8 +11,8 @@ import { rateLimit } from "@/lib/ratelimit";
 import FeesType from "@/app/models/FeesType";
 import ClassFeeConfig from "@/app/models/ClassFeeConfig";
 import StudentFee from "@/app/models/StudentFee";
-import { queueSms } from "@/lib/sms/queueSms";
 import { buildStudentSms } from "@/lib/sms/buildStudentSms";
+import { sendSMS } from "@/lib/sms";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NIGERIA_PHONE_REGEX = /^0[789][01]\d{8}$/;
@@ -181,6 +181,7 @@ try   {
         parentPhone: row["PARENT PHONE"],
         parentEmail: row["PARENT EMAIL"],
         smsStatus: notify ? "PENDING" : "FAILED",
+        smsAttempts: 0
     });
 };
 
@@ -217,51 +218,60 @@ try   {
         const key = `${config.className}_${config.feeTypeId}`;
         configMap.set(key , config.amount);
      }
-     
-const messages=[];
 
+      const studentFeesToInsert: any[] = [];
       for (const student of insertedStudents) {
-
         for (const feeType of feeTypes) {
+          const key = `${student.className}_${feeType._id}`;
+          const amount = configMap.get(key) || 0;
+          if (!amount || amount <= 0) continue;
 
-            const key = `${student.className}_${feeType._id}`;
-            const amount = configMap.get(key) || 0;
-            
-            if (!amount || amount <= 0) continue;
-
-            await StudentFee.create([{
-                  schoolId,
-                  sessionId: activeSession._id,
-                   studentId: student._id,
-                   className: student.className,
-                     feeTypeId: feeType._id,
-                   totalAmount: amount,
-                    amountPaid: 0,
-                   balance: amount,
-            }], { session });
-
+          studentFeesToInsert.push({
+            schoolId,
+            sessionId: activeSession._id,
+            studentId: student._id,
+            className: student.className,
+            feeTypeId: feeType._id,
+            totalAmount: amount,
+            amountPaid: 0,
+            balance: amount,
+          });
         }
       }
 
+      if (studentFeesToInsert.length) {
+        await StudentFee.insertMany(studentFeesToInsert, { session });
+      }
 
-for(const student of insertedStudents){
-
-  if(!notify) continue;
-
-  const message = await buildStudentSms(student,schoolId);
-
-  messages.push({
-    schoolId,
-    studentId:student._id,
-    phone:student.parentPhone,
-    message
-  });
-
-}
-
-await queueSms(messages);
     });
-    
+    if (notify) {
+      for (const student of insertedStudents) {
+        try {
+          const message = await buildStudentSms(student, schoolId);
+          await sendSMS(student.parentPhone, message);
+
+          await Student.updateOne(
+            {_id: student._id},
+            {
+              smsStatus: "SENT",
+              smsAttempts: 0
+            }
+          );
+          console.log(`[BULK UPLOAD SMS] ✓ Notification sent to ${student.parentPhone}`);
+        } catch (error: any) {
+          await Student.updateOne(
+            {_id: student._id},
+            {
+              smsStatus: "FAILED",
+              $inc: { smsAttempts: 1 },
+              lastSmsAttemptAt: new Date()
+            }
+          );
+          console.error(`[BULK UPLOAD SMS] ✗ Failed to notify parent of ${student.studentName}:`, error?.message, {phone: student.parentPhone, studentId: student._id});
+        }
+      }
+    }
+  
     await BulkUploadLog.create({
          schoolId,
          sessionId: activeSession._id,

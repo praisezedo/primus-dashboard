@@ -1,9 +1,18 @@
-export function normalizePhone(phone:string){
+export function normalizePhone(phone: string) {
+  const cleaned = phone.trim().replace(/\s+/g, "");
 
-  if(phone.startsWith("0")){
-    return "234" + phone.slice(1);
+  if (cleaned.startsWith("0")) {
+    return "+234" + cleaned.slice(1);
   }
 
-  return phone;
+  if (cleaned.startsWith("+")) {
+    return cleaned;
+  }
 
+  // If it already starts with country code, add + prefix
+  if (cleaned.startsWith("234")) {
+    return "+" + cleaned;
+  }
+
+  return "+" + cleaned;
 }

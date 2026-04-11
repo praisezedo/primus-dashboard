@@ -4,7 +4,7 @@ import StudentTable from "@/components/Table/StudentTable"
 import Footer from "@/components/UI/Footer";
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
-import LoadingSpinner from "@/components/UI/LoadingSpinner";
+import ConfirmModal from "@/components/UI/ConfirmModal";
 import { useDebounce } from "@/utils/useDebounce";
 import { toast } from "sonner";
 import PrimusLoader from "@/components/UI/PrimusLoader";
@@ -20,6 +20,10 @@ export default function StudentsPage() {
      const [sections , setSections] = useState<string[]>([]);
      const [section , setSection] = useState<string>("");
      const [deleting , setDeleting] = useState<boolean>(false);
+     const [smsMenuOpen, setSmsMenuOpen] = useState<boolean>(false);
+     const [groupConfirmOpen, setGroupConfirmOpen] = useState<boolean>(false);
+     const [selectedGroup, setSelectedGroup] = useState<"PAID" | "UNPAID" | "PARTIAL" | "">("");
+     const [groupSending, setGroupSending] = useState<boolean>(false);
 
 // fetching settings
 async function fetchSettings() {
@@ -51,18 +55,58 @@ async function fetchStudents() {
 
 // delete student 
 async function deleteStudent(id: string) {
+    const studentToDelete = students.find(s => s._id === id);
+    if (!studentToDelete) return;
+
+    // Optimistic update: remove from list immediately
+    setStudents(prev => prev.filter(s => s._id !== id));
  
     try {
         setDeleting(true)
      const res = await api.delete(`/api/students/${id}`);
     toast.success(res.data.message);
-    setDeleting(false);
-    fetchStudents();
     
     } catch (error: any) {
+        // Revert optimistic update on error
+        setStudents(prev => [...prev, studentToDelete]);
         toast.error(error.response?.data?.message || "Could not delete student");
     } finally {
         setDeleting(false);
+    }
+}
+
+
+function handleSelectGroup(status: "PAID" | "UNPAID" | "PARTIAL", e: React.MouseEvent) {
+    e.stopPropagation();
+
+    setSelectedGroup(status);
+    setSmsMenuOpen(false);
+    setGroupConfirmOpen(true);
+}
+
+async function handleConfirmGroupSend() {
+    if (!selectedGroup) return;
+
+    try {
+      setGroupSending(true);
+      const response = await api.post("/api/sms/students", {
+        status: selectedGroup,
+      });
+      const sent = response.data.sent || 0;
+      const failed = response.data.failed || 0;
+
+      toast.success(`SMS sent to ${sent} ${selectedGroup.toLowerCase()} student(s)`);
+      if (failed > 0) {
+        toast.error(`${failed} message(s) failed to send`);
+      }
+
+      fetchStudents();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to send group SMS");
+    } finally {
+      setGroupSending(false);
+      setGroupConfirmOpen(false);
+      setSelectedGroup("");
     }
 }
 
@@ -135,11 +179,57 @@ if (loading) {
     </select>
 </div>
 
-     <Link className="hover:opacity-50  bg-blue-700 font-bold p-2 text-white rounded-lg text-center justify-center" href={"/students/add"}>Add Student</Link>
+     <div className="relative flex items-center gap-3">
+       <button
+         type="button"
+         onClick={() => setSmsMenuOpen((prev) => !prev)}
+         className="bg-green-700 hover:opacity-80 text-white rounded-lg px-4 py-2 font-semibold"
+       >
+         Send SMS
+       </button>
+       {smsMenuOpen && (
+         <div className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-lg border bg-white shadow-lg">
+           <button
+             type="button"
+             onClick={(e) => handleSelectGroup("PAID", e)}
+             className="w-full px-4 py-3 text-left text-sm hover:bg-slate-50"
+           >
+             Send SMS to paid students
+           </button>
+           <button
+             type="button"
+             onClick={(e) => handleSelectGroup("UNPAID", e)}
+             className="w-full px-4 py-3 text-left text-sm hover:bg-slate-50"
+           >
+             Send SMS to unpaid students
+           </button>
+           <button
+             type="button"
+             onClick={(e) => handleSelectGroup("PARTIAL", e)}
+             className="w-full px-4 py-3 text-left text-sm hover:bg-slate-50"
+           >
+             Send SMS to partial paid students
+           </button>
+         </div>
+       )}
+
+     <Link className="hover:opacity-50 bg-blue-700 font-bold p-2 text-white rounded-lg text-center justify-center" href={"/students/add"}>Add Student</Link>
+     </div>
     </div>
     </section> 
 
          <StudentTable  students={students}  onRefresh={fetchStudents} onDelete={deleteStudent} deleting={deleting} />
+
+    <ConfirmModal
+      open={groupConfirmOpen}
+      title={`Send SMS to ${selectedGroup.toLowerCase()} students`}
+      message={`Send fee notification SMS to all ${selectedGroup.toLowerCase()} students now?`}
+      confirmLabel="Send SMS"
+      cancelLabel="Cancel"
+      onClose={() => setGroupConfirmOpen(false)}
+      onConfirm={handleConfirmGroupSend}
+      loading={groupSending}
+    />
 
     <Footer/>
     </>

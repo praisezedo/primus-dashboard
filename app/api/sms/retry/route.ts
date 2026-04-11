@@ -69,13 +69,15 @@ export async function POST() {
       student.smsAttempts = 0;
 
       await student.save();
+      console.log(`[SMS RETRY] ✓ Sent to ${student.parentPhone}`);
 
-    } catch {
+    } catch (error: any) {
 
       student.smsAttempts += 1;
       student.lastSmsAttemptAt = new Date();
 
       await student.save();
+      console.error(`[SMS RETRY] ✗ Failed for student ${student.studentName}:`, error?.message, {studentId: student._id, attempts: student.smsAttempts, phone: student.parentPhone});
 
     }
 

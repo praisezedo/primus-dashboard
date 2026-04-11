@@ -48,7 +48,8 @@ export async function POST(req: Request) {
              parentName: body.parentName,
              parentPhone: body.parentPhone,
              parentEmail: body.parentEmail,
-             smsStatus: body.notify ? "PENDING" : "",
+             smsStatus: body.notify ? "PENDING" : "FAILED",
+             smsAttempts: 0
         }
             const existingStudent = await Student.findOne({
             schoolId,
@@ -64,30 +65,42 @@ export async function POST(req: Request) {
             }
         const student = await Student.create(StudentState);
 
-         const feeTypes = await FeesType.find({ schoolId });
+        const [feeTypes, classConfigs] = await Promise.all([
+          FeesType.find({ schoolId }),
+          ClassFeeConfig.find({
+            schoolId,
+            sessionId: activeSession._id,
+            className: student.className,
+          }),
+        ]);
 
-          for (const feeType of feeTypes) {
-            const config = await ClassFeeConfig.findOne({
-                schoolId ,
-                sessionId: activeSession._id,
-                 className: student.className,
-                 feeTypeId: feeType._id,
-                }); 
+        const feeConfigMap = new Map<string, number>();
+        for (const config of classConfigs) {
+          feeConfigMap.set(config.feeTypeId.toString(), config.amount);
+        }
 
-                if (!config) continue;
-                 
-                await StudentFee.create({
-                    schoolId,
-                    sessionId: activeSession._id,
-                    studentId: student._id,
-                    className: student.className,
-                    feeTypeId: feeType._id,
-                    totalAmount: config.amount,
-                    amountPaid: 0,
-                    balance: config.amount
-                })
-          }
-                if(body.notify){
+        const studentFeeDocs: any[] = [];
+        for (const feeType of feeTypes) {
+          const amount = feeConfigMap.get(feeType._id.toString()) || 0;
+          if (!amount || amount <= 0) continue;
+
+          studentFeeDocs.push({
+            schoolId,
+            sessionId: activeSession._id,
+            studentId: student._id,
+            className: student.className,
+            feeTypeId: feeType._id,
+            totalAmount: amount,
+            amountPaid: 0,
+            balance: amount,
+          });
+        }
+
+        if (studentFeeDocs.length) {
+          await StudentFee.insertMany(studentFeeDocs);
+        }
+
+        if (body.notify) {
 
             try{
 
@@ -102,8 +115,9 @@ export async function POST(req: Request) {
                     smsAttempts:0
                 }
                 );
+                console.log(`[STUDENT SMS] ✓ Notification sent to ${student.parentPhone}`);
 
-            }catch{
+            } catch(error: any){
 
                 await Student.updateOne(
                 {_id:student._id},
@@ -113,6 +127,7 @@ export async function POST(req: Request) {
                     lastSmsAttemptAt:new Date()
                 }
                 );
+                console.error(`[STUDENT SMS] ✗ Failed to notify parent of ${student.studentName}:`, error?.message, {phone: student.parentPhone, studentId: student._id});
 
             }
 

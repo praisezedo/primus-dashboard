@@ -16,7 +16,7 @@ export default function BulkUploadForm() {
   const [errorMessage , setErrorMessage] = useState<string>('');
   const [uploadProgress , setUploadProgress] = useState<number>(0);
   const [uploading , setUploading] = useState<boolean>(false);
-  const [notify , setNotify] = useState<boolean>(true);
+  const [notify , setNotify] = useState<boolean>(false);
   const [message , setMessage] = useState<string>('');
   const [insertedCount , setInsertedCount] = useState<number>(0);
   const [messageColor , setMessageColor] = useState<string>("green-700");
@@ -152,7 +152,7 @@ export default function BulkUploadForm() {
     checked={notify}
     onChange={(e) => setNotify(e.target.checked)}
     />
-    Notify parents after succesful upload (SMS / Email)
+    Notify parents after successful upload (SMS)
 </label>
 
 <button

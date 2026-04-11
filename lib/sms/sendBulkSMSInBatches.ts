@@ -22,14 +22,16 @@ export async function sendBulkSMSInBatches(batchSize=50){
       sms.attempts=0;
 
       await sms.save();
+      console.log(`[SMS BATCH] ✓ Sent to ${sms.phone}`);
 
-    }catch{
+    }catch(error: any){
 
       sms.status="FAILED";
       sms.attempts+=1;
       sms.lastAttemptAt=new Date();
 
       await sms.save();
+      console.error(`[SMS BATCH] ✗ Failed to send to ${sms.phone}:`, error?.message, {id: sms._id, attempts: sms.attempts});
 
     }
 
