@@ -57,30 +57,30 @@ return (
 
 {/* HEADER — EXACTLY YOUR DESIGN */}
 
-<section className="relative bg-white px-6 py-10 mb-5 border-b border-gray-200 shadow-sm flex flex-col gap-7">
+<section className="relative bg-white px-4 lg:px-6 py-6 lg:py-10 mb-5 border-b border-gray-200 shadow-sm flex flex-col gap-4 lg:gap-7">
 
-<h1 className="font-bold text-3xl text-black">
+<h1 className="font-bold text-2xl lg:text-3xl text-black">
 Welcome , Admin
 {isLoading ?
 <SkeletonInlineText length={12}/> :
  <span className="text-blue-700"> {`  ${dashboardOverview?.adminName}`}</span>}
 </h1>
 
-<span className="font-bold flex gap-4">
+<span className="font-bold flex flex-col sm:flex-row gap-2 lg:gap-4">
 
-<p className="text-gray-500">{new Date().toDateString()}</p>
-
-{isLoading ?
-<SkeletonInlineText length={7}/> :
-<p>{academicSession} Academic Session</p>}
+<p className="text-gray-500 text-sm lg:text-base">{new Date().toDateString()}</p>
 
 {isLoading ?
 <SkeletonInlineText length={7}/> :
-<p>{semester}</p>}
+<p className="text-sm lg:text-base">{academicSession} Academic Session</p>}
+
+{isLoading ?
+<SkeletonInlineText length={7}/> :
+<p className="text-sm lg:text-base">{semester}</p>}
 
 </span>
 
-<p className="font-bold">
+<p className="font-bold text-sm lg:text-base">
 Embrace the challenges , for they are opportunities in disguise.
 </p>
 
@@ -89,11 +89,11 @@ Embrace the challenges , for they are opportunities in disguise.
 
 {/* DASHBOARD CARDS */}
 
-<section className="flex flex-col gap-7 mx-3 relative">
+<section className="flex flex-col gap-4 lg:gap-7 mx-0 lg:mx-3 relative">
 
-<h1 className="font-bold text-4xl">Dashboard Overview</h1>
+<h1 className="font-bold text-2xl lg:text-4xl px-4 lg:px-0">Dashboard Overview</h1>
 
-<div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6">
+<div className="relative grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 px-4 lg:px-0">
 
 <TotalStatsCard
 loadingState={isLoading}

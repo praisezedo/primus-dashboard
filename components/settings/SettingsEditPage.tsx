@@ -21,10 +21,10 @@ import { faSchool, faTags, faCog, faSms } from "@fortawesome/free-solid-svg-icon
 
 // ─── Tab definitions ─────────────────────────────────────────────────────────
 const TABS = [
-  { id: "academic",  label: "Academic",     icon: faSchool },
-  { id: "feetypes",  label: "Fee Types",    icon: faTags },
-  { id: "feeconfig", label: "Fee Config",   icon: faCog },
-  { id: "sms",       label: "SMS Templates",icon: faSms },
+  { id: "academic",  label: "Academic",     short: "Acad", icon: faSchool },
+  { id: "feetypes",  label: "Fee Types",    short: "Fees", icon: faTags },
+  { id: "feeconfig", label: "Fee Config",   short: "Config", icon: faCog },
+  { id: "sms",       label: "SMS Templates",short: "SMS", icon: faSms },
 ];
 
 export default function SettingsEditPage() {
@@ -166,35 +166,36 @@ export default function SettingsEditPage() {
 
   return (
     <div className="min-h-screen bg-linear-to-r from-slate-50 via-blue-50/30 to-white">
-      <div className="max-w-5xl mx-auto px-4 py-8 ml-20">
+      <div className="max-w-5xl mx-auto px-3 lg:px-4 py-6 lg:py-8 ml-0 lg:ml-20">
 
         {/* ── Page Header ── */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-1">
+        <div className="mb-6 lg:mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-1">
             <div className="w-10 h-10 rounded-xl bg-blue-700 flex items-center justify-center shadow-lg shadow-blue-200">
               <FontAwesomeIcon icon={faCog} className="text-white text-lg" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">School Settings</h1>
-              <p className="text-sm text-gray-500">Manage your school's academic and fee configuration</p>
+              <h1 className="text-xl lg:text-2xl font-bold text-gray-900 tracking-tight">School Settings</h1>
+              <p className="text-xs lg:text-sm text-gray-500">Manage your school's academic and fee configuration</p>
             </div>
           </div>
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex gap-1 bg-white border border-blue-100 rounded-2xl p-1.5 shadow-sm mb-6 w-fit">
+        <div className="flex gap-1 lg:gap-1.5 bg-white border border-blue-100 rounded-2xl p-1 lg:p-1.5 shadow-sm mb-6 overflow-x-auto w-full">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+              className={`flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-2 rounded-lg lg:rounded-xl text-xs lg:text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0 ${
                 activeTab === tab.id
                   ? "bg-blue-700 text-white shadow-md shadow-blue-200"
                   : "text-gray-500 hover:text-blue-700 hover:bg-blue-50"
               }`}
             >
-              <FontAwesomeIcon icon={tab.icon} className="w-4 h-4" />
-              {tab.label}
+              <FontAwesomeIcon icon={tab.icon} className="w-3 h-3 lg:w-4 lg:h-4" />
+              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="sm:hidden">{tab.short}</span>
             </button>
           ))}
         </div>

@@ -102,34 +102,36 @@ async function handlePay(fee: any) {
 
 
      return (
-    <div className={`fixed inset-0 bg-black/40 flex items-center justify-center z-50`}>
-      <div className="bg-white relative rounded-lg p-6 w-175 space-y-4">
+    <div className={`fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4`}>
+      <div className="bg-white relative rounded-lg p-4 lg:p-6 w-full max-w-4xl space-y-4 max-h-[90vh] overflow-y-auto">
 
-        <h2 className="text-lg font-bold">
+        <h2 className="text-base lg:text-lg font-bold">
           {studentName} Fees Record
         </h2>
 
         {loading ? (
           <LoadingSpinner />
         ) : (
-<table className="w-full border rounded-lg overflow-hidden">
-  <thead className="bg-gray-100 text-gray-700 text-sm">
+<div className="overflow-x-auto">
+<table className="w-full border rounded-lg overflow-hidden text-xs lg:text-sm min-w-200">
+  <thead className="bg-gray-100 text-gray-700">
     <tr>
-      <th className="p-3 text-left">Fee Type</th>
-      <th className="p-3">Total</th>
-      <th className="p-3">Paid</th>
-      <th className="p-3">Balance</th>
-      <th className="p-3">Status</th>
-      <th className="p-3">Action</th>
+      <th className="p-2 lg:p-3 text-left">Fee Type</th>
+      <th className="p-2 lg:p-3">Total</th>
+      <th className="p-2 lg:p-3">Paid</th>
+      <th className="p-2 lg:p-3">Balance</th>
+      <th className="p-2 lg:p-3">Status</th>
+      <th className="p-2 lg:p-3">Action</th>
     </tr>
   </thead>
 
-  <tbody className="text-sm">
+  <tbody>
 {fees.map((f) => (
   <>
+  <div key={f._id}>
     <tr key={f._id} className="border-t hover:bg-gray-50">
 
-      <td className="p-3 font-medium">
+      <td className="p-2 lg:p-3 font-medium">
         {f.feeTypeId?.name}
       </td>
 
@@ -147,7 +149,7 @@ async function handlePay(fee: any) {
 
       <td className="text-center">
         <span
-          className={`px-2 py-1 text-xs rounded-full
+          className={`px-1 lg:px-2 py-0.5 lg:py-1 text-xs rounded-full
           ${
             f.status === "PAID"
               ? "bg-green-100 text-green-700"
@@ -162,12 +164,12 @@ async function handlePay(fee: any) {
 
       <td className="text-center">
         {f.balance > 0 && (
-          <div className="flex items-center gap-2 justify-center">
+          <div className="flex flex-col  items-center gap-1 lg:gap-2 justify-center">
 
             <input
               type="number"
               placeholder="Amount"
-              className="border rounded px-2 py-1 w-24 text-sm"
+              className="border rounded px-1 lg:px-2 py-1 w-16 lg:w-24 text-xs lg:text-sm"
               value={paymentInputs[f._id] || ""}
               onChange={(e) =>
                 setPaymentInputs({
@@ -180,9 +182,9 @@ async function handlePay(fee: any) {
             <button
               disabled={paymentLoadingByFee[f._id]}
               onClick={() => handlePay(f)}
-              className="bg-blue-500 disabled:opacity-50 text-white px-3 py-1 rounded text-xs hover:bg-blue-600"
+              className="bg-blue-500 disabled:opacity-50 text-white px-2 lg:px-3 py-1 rounded text-xs hover:bg-blue-600"
             >
-             {paymentLoadingByFee[f._id] ? "Processing..." : "Pay"}
+             {paymentLoadingByFee[f._id] ? "..." : "Pay"}
             </button>
 
           </div>
@@ -190,10 +192,11 @@ async function handlePay(fee: any) {
       </td>
 
     </tr>
+  </div>
 
     {paymentHistory[f._id]?.length > 0 && (
       <tr key={`${f._id}-history`}>
-        <td colSpan={6} className="bg-gray-50 p-3">
+        <td colSpan={6} className="bg-gray-50 p-2 lg:p-3">
 
           <div className="text-xs space-y-1">
 
@@ -227,12 +230,13 @@ async function handlePay(fee: any) {
 ))}
   </tbody>
 </table>
+</div>
         )}
 
-        <div className="flex justify-end pt-3">
+        <div className="flex justify-end pt-2 lg:pt-3">
           <button
             onClick={onClose}
-            className="border px-4 py-2 bg-blue-700 text-white rounded hover:opacity-50"
+            className="border px-3 lg:px-4 py-2 bg-blue-700 text-white rounded hover:opacity-50 text-sm"
           >
             Close
           </button>

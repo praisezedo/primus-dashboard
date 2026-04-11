@@ -158,7 +158,7 @@ export default function BulkUploadForm() {
 <button
   onClick={handleUpload}
   disabled={!file || uploading}
-  className="mx-5 mt-4 w-275 rounded-lg hover:opacity-50 bg-blue-700 py-3 text-white disabled:opacity-50"
+  className="mx-4 lg:mx-5 mt-4 w-full lg:w-80 rounded-lg hover:opacity-50 bg-blue-700 py-2 lg:py-3 text-white disabled:opacity-50 text-sm lg:text-base font-semibold"
 >
   Upload Data
 </button>

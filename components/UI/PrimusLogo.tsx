@@ -5,11 +5,12 @@ export default function PrimusLogo () {
   return (
     <div className="flex text-center justify-center items-center">
       <svg
-        width="200"
-        height="50"
+        width="150"
+        height="37.5"
         viewBox="0 0 200 50"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        className="w-32 lg:w-40 h-auto"
       >
         <rect x="0" y="5" width="40" height="40" rx="8" fill="#2563EB" />
         <line x1="13" y1="5" x2="13" y2="45" stroke="white" strokeWidth="2" />

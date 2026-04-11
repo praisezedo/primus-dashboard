@@ -93,15 +93,15 @@ const classData = data.classFees || []
 
 return (
 
-<div className="flex flex-col gap-6 w-full px-6 pb-10">
+<div className="flex flex-col gap-4 lg:gap-6 w-full px-0 lg:px-6 pb-6 lg:pb-10">
 
 
 
-<div className="bg-white p-6 rounded-lg shadow border flex flex-col gap-6">
+<div className="bg-white p-4 lg:p-6 rounded-lg shadow border flex flex-col gap-4 lg:gap-6">
 
-<div className="flex justify-between items-center">
+<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
 
-<h2 className="font-bold text-lg">
+<h2 className="font-bold text-lg lg:text-xl">
 Fees Overview
 </h2>
 
@@ -113,7 +113,7 @@ Collection Rate: <span className="font-semibold text-green-600">{collectionRate}
 
 <div className="flex items-center justify-center">
 
-<ResponsiveContainer width="100%" height={320}>
+<ResponsiveContainer width="100%" height={280} className="max-w-md mx-auto lg:max-w-none">
 
 <PieChart>
 
@@ -123,8 +123,8 @@ dataKey="value"
 nameKey="name"
 cx="50%"
 cy="50%"
-innerRadius={80}
-outerRadius={120}
+innerRadius={60}
+outerRadius={100}
 paddingAngle={4}
 >
 
@@ -146,24 +146,24 @@ paddingAngle={4}
 {/* LEGEND */}
 
 <div className="flex flex-col gap-4">
-<div className="grid grid-cols-3 gap-4 text-sm">
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-4 text-sm">
 <div className="bg-blue-50 p-3 rounded-lg">
-  <p className="text-gray-600">Expected</p>
-  <p className="font-semibold text-lg">₦{totalExpected.toLocaleString()}</p>
+  <p className="text-gray-600 text-sm">Expected</p>
+  <p className="font-semibold text-base lg:text-lg">₦{totalExpected.toLocaleString()}</p>
 </div>
 
 <div className="bg-green-50 p-3 rounded-lg">
-  <p className="text-gray-600">Paid (Collected)</p>
-  <p className="font-semibold text-lg text-green-600">₦{totalPaid.toLocaleString()}</p>
+  <p className="text-gray-600 text-sm">Paid (Collected)</p>
+  <p className="font-semibold text-base lg:text-lg text-green-600">₦{totalPaid.toLocaleString()}</p>
 </div>
 
 <div className="bg-red-50 p-3 rounded-lg">
-  <p className="text-gray-600">Outstanding</p>
-  <p className="font-semibold text-lg text-red-600">₦{totalBalance.toLocaleString()}</p>
+  <p className="text-gray-600 text-sm">Outstanding</p>
+  <p className="font-semibold text-base lg:text-lg text-red-600">₦{totalBalance.toLocaleString()}</p>
 </div>
 </div>
 
-<div className="flex justify-center gap-10 text-sm border-t pt-4">
+<div className="flex flex-col sm:flex-row justify-center gap-4 lg:gap-10 text-sm border-t pt-4">
 <div className="flex items-center gap-2">
 <div className="w-3 h-3 bg-green-600 rounded-full"/>
 <p>Collected</p>
@@ -185,41 +185,44 @@ paddingAngle={4}
 </div>
 
 
-<div className="bg-white p-6 rounded-lg shadow border flex flex-col gap-4">
+<div className="bg-white p-4 lg:p-6 rounded-lg shadow border flex flex-col gap-4">
 
-<h2 className="font-bold text-lg">
+<h2 className="font-bold text-lg lg:text-xl">
 Fees Performance by Class
 </h2>
 
 <div className="w-full overflow-x-auto">
 
 <ResponsiveContainer
-width={Math.max(classData.length * 150,600)}
-height={350}
+width={Math.max(classData.length * 120, 600)}
+height={300}
+className="min-w-full"
 >
 
 <BarChart
 data={classData}
-barGap={8}
-barCategoryGap={20}
+barGap={6}
+barCategoryGap={15}
 >
 
 <XAxis
 dataKey="className"
-tick={{fontSize:12}}
+tick={{fontSize:11}}
 />
 
 <YAxis
 allowDecimals={false}
+tick={{fontSize:11}}
 />
 
-<Tooltip 
+<Tooltip
 cursor={{ fill: 'rgba(0,0,0,0.05)' }}
 contentStyle={{
   backgroundColor: '#fff',
   border: '1px solid #ccc',
   borderRadius: '4px',
-  padding: '8px'
+  padding: '8px',
+  fontSize: '12px'
 }}
 formatter={(value: any) => {
   if (typeof value === 'number') {
@@ -232,21 +235,21 @@ formatter={(value: any) => {
 <Bar
 dataKey="expected"
 fill="#3b82f6"
-barSize={20}
+barSize={16}
 name="Expected"
 />
 
 <Bar
 dataKey="paid"
 fill="#16a34a"
-barSize={20}
+barSize={16}
 name="Collected"
 />
 
 <Bar
 dataKey="balance"
 fill="#dc2626"
-barSize={20}
+barSize={16}
 name="Outstanding"
 />
 
@@ -262,18 +265,18 @@ name="Outstanding"
 
 <OutstandingStudentsTable/>
 
-<Link className="font-bold justify-end flex hover:underline" href={'/students'}>View All Students →</Link>
+<Link className="font-bold justify-end flex hover:underline text-sm lg:text-base px-4 lg:px-0" href={'/students'}>View All Students →</Link>
 
 <RecentPayments/>
 
 
-<div className="bg-white p-6 rounded-lg shadow border flex flex-col gap-4 xl:col-span-2">
+<div className="bg-white p-4 lg:p-6 rounded-lg shadow border flex flex-col gap-4">
 
-<h2 className="font-bold text-lg">
+<h2 className="font-bold text-lg lg:text-xl">
 Financial Insights
 </h2>
 
-<div className="grid md:grid-cols-4 gap-6">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
 
 <div className="flex flex-col gap-1">
 
@@ -281,7 +284,7 @@ Financial Insights
 Total Expected Fees
 </p>
 
-<p className="font-bold text-2xl text-blue-600">
+<p className="font-bold text-xl lg:text-2xl text-blue-600">
 ₦{totalExpected.toLocaleString()}
 </p>
 
@@ -293,7 +296,7 @@ Total Expected Fees
 Total Fees Collected
 </p>
 
-<p className="font-bold text-2xl text-green-600">
+<p className="font-bold text-xl lg:text-2xl text-green-600">
 ₦{totalPaid.toLocaleString()}
 </p>
 
@@ -305,7 +308,7 @@ Total Fees Collected
 Outstanding Fees
 </p>
 
-<p className="font-bold text-2xl text-red-600">
+<p className="font-bold text-xl lg:text-2xl text-red-600">
 ₦{totalBalance.toLocaleString()}
 </p>
 
@@ -317,7 +320,7 @@ Outstanding Fees
 Collection Rate
 </p>
 
-<p className="font-bold text-2xl text-blue-600">
+<p className="font-bold text-xl lg:text-2xl text-blue-600">
 {collectionRate}%
 </p>
 

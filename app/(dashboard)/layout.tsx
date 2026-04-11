@@ -1,7 +1,7 @@
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
+
 import { verifyAuth } from "@/lib/auth";
 import AcademicSession from "@/app/models/AcademicSession";
 import Settings from "@/app/models/Settings";
@@ -72,9 +72,9 @@ if (activeSessionData && (!settings || !settings.settingsCompleted) && !isSetupR
       >
         {header}
         {sidebar}
-      <div className="absolute left-50 top-17 right-0 overflow-y-scroll overflow-x-hidden">
+        <div className="lg:ml-50 mt-17 lg:mt-17 p-4 lg:p-6 overflow-y-auto overflow-x-hidden min-h-screen">
           {children}
-          </div>
+        </div>
        </main>
   );
 }

@@ -21,13 +21,14 @@ if(loading) return <LoadingSpinner/>
 
 return(
 
-<div className="bg-white p-6 rounded-lg shadow border">
+<div className="bg-white p-4 lg:p-6 rounded-lg shadow border">
 
-<h2 className="font-bold text-lg mb-4">
+<h2 className="font-bold text-base lg:text-lg mb-4">
 Recent Payments
 </h2>
 
-<table className="w-full text-sm">
+<div className="overflow-x-auto">
+<table className="w-full text-xs lg:text-sm min-w-150">
 
 <thead className="bg-gray-100">
 
@@ -46,7 +47,7 @@ Recent Payments
 {payments.length === 0 ? 
 
 <tr >
-    <td colSpan={5} className="text-center py-6 text-gray-500 text-sm">
+    <td colSpan={5} className="text-center py-6 text-gray-500 text-xs lg:text-sm">
         No recent payment made
     </td>
 </tr>
@@ -80,6 +81,7 @@ Recent Payments
 </tbody>
 
 </table>
+</div>
 
 </div>
 

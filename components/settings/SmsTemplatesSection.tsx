@@ -82,23 +82,23 @@ export default function SmsTemplatesSection({
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 lg:space-y-5">
       {/* Placeholder reference card */}
-      <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-5">
-        <div className="flex items-start gap-3">
+      <div className="bg-white rounded-2xl border border-blue-100 shadow-sm p-3 lg:p-5">
+        <div className="flex items-start gap-2 lg:gap-3">
           <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-sm shrink-0">
             <FontAwesomeIcon icon={faClipboard} className="text-blue-600" />
           </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-gray-800 mb-2">Available Placeholders</p>
-            <div className="flex flex-wrap gap-1.5">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs lg:text-sm font-semibold text-gray-800 mb-2">Available Placeholders</p>
+            <div className="flex flex-wrap gap-1 lg:gap-1.5">
               {SMS_PLACEHOLDER.map((p) => (
                 <span
                   key={p.key}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs rounded-lg font-mono"
+                  className="inline-flex items-center gap-1 px-2 lg:px-2.5 py-0.5 lg:py-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs rounded-lg font-mono whitespace-nowrap"
                 >
                   {p.key}
-                  <span className="text-blue-400 font-sans non-mono">— {p.label}</span>
+                  <span className="text-blue-400 font-sans non-mono hidden sm:inline">— {p.label}</span>
                 </span>
               ))}
             </div>
@@ -115,11 +115,11 @@ export default function SmsTemplatesSection({
           key={field}
           className="bg-white rounded-2xl border border-blue-100 shadow-sm overflow-hidden"
         >
-          <div className={`px-6 py-4 bg-linear-to-r ${colorMap[color]}`}>
+          <div className={`px-4 lg:px-6 py-3 lg:py-4 bg-linear-to-r ${colorMap[color]}`}>
             <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={icon} className="text-white text-lg" />
-              <div>
-                <h3 className="text-white font-semibold text-sm">{label} Message Template</h3>
+              <FontAwesomeIcon icon={icon} className="text-white text-base lg:text-lg shrink-0" />
+              <div className="min-w-0">
+                <h3 className="text-white font-semibold text-xs lg:text-sm">{label} Message Template</h3>
                 <p className="text-white/70 text-xs">
                   Sent when a student's fee status is{" "}
                   <strong className="text-white">{label.toUpperCase()}</strong>
@@ -128,23 +128,23 @@ export default function SmsTemplatesSection({
             </div>
           </div>
 
-          <div className="p-5 space-y-3">
+          <div className="p-3 lg:p-5 space-y-3">
             <textarea
               rows={4}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition resize-none"
+              className="w-full border border-gray-200 rounded-lg lg:rounded-xl px-2 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition resize-none"
               placeholder={placeholder}
               value={smsTemplate[field] || ""}
               onChange={(e) => setSmsTemplate({ ...smsTemplate, [field]: e.target.value })}
             />
 
             {/* Insert buttons */}
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1 lg:gap-1.5">
               {SMS_PLACEHOLDER.map((p) => (
                 <button
                   key={p.key}
                   type="button"
                   onClick={() => insertPlaceholder(field, p.key)}
-                  className={`text-xs border px-2.5 py-1 rounded-lg transition-colors font-medium ${badgeMap[color]}`}
+                  className={`text-xs border px-2 lg:px-2.5 py-0.5 lg:py-1 rounded-lg transition-colors font-medium whitespace-nowrap ${badgeMap[color]}`}
                 >
                   + {p.label}
                 </button>

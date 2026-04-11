@@ -10,7 +10,7 @@ return (
 <>
 <DashboardStats/>
 
-<div className="px-6 mt-6">
+<div className="px-4 lg:px-6 mt-4 lg:mt-6">
 <DashboardCharts/>
 </div>
 

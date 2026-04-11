@@ -29,13 +29,13 @@ export default  function AddStudentPage() {
   
   return (
     <>
-      <section className="p-7 flex flex-col gap-7">
-        <h1 className="text-3xl font-bold">Add Student</h1>
+      <section className="p-4 lg:p-7 flex flex-col gap-4 lg:gap-7">
+        <h1 className="text-2xl lg:text-3xl font-bold">Add Student</h1>
          <BulkUploadBanner/>
         <div className="shadow-sm rounded-md flex flex-col gap-3 border border-gray-200">
-          <div className="border-b border-gray-200 py-3  px-5 flex justify-between">
-           <h1 className="text-xl font-bold">Student & Parents Details</h1> 
-            {loading ? <SkeletonInlineText length={10}/> :  <p className="font-bold text-black"> Total Student:  {students?.totalStudents} </p>}
+          <div className="border-b border-gray-200 py-3 px-3 lg:px-5 flex flex-col sm:flex-row justify-between gap-2">
+           <h1 className="text-lg lg:text-xl font-bold">Student & Parents Details</h1> 
+            {loading ? <SkeletonInlineText length={10}/> :  <p className="font-bold text-black text-sm lg:text-base"> Total Student:  {students?.totalStudents} </p>}
           </div>
           <StudentDataForm />
         </div>

@@ -132,16 +132,16 @@ if (loading) {
     <p className="text-gray-500">View ,search and manage records , fees status , and communication details</p>
     </div>
 
-    <div className="flex justify-between items-center text-center">
+    <div className="flex flex-col sm:flex-row gap-2 lg:gap-3 items-start sm:items-center text-center px-4 lg:px-0 flex-wrap">
 
-<div className="flex gap-3">
- <input className="px-1 focus:outline-none focus:border-none w-80 border border-gray-200 shadow-sm rounded-lg" 
-  type="text" placeholder="Search Student Name or ID..."
+<div className="flex flex-col sm:flex-row gap-2 lg:gap-3 w-full sm:w-auto">
+ <input className="px-2 lg:px-3 py-2 focus:outline-none w-full sm:w-64 lg:w-80 border border-gray-200 shadow-sm rounded-lg text-sm lg:text-base" 
+  type="text" placeholder="Search by name or ID..."
   value={search}
   onChange={(e) => setSearch(e.target.value)}
   />
 
-    <select className="border border-gray-200 shadow-sm rounded-lg p-3" 
+    <select className="border border-gray-200 shadow-sm rounded-lg p-2 lg:p-3 text-sm lg:text-base w-full sm:w-48" 
     name="className" id="className"
     value={className}
     onChange={(e) => setClassName(e.target.value)}

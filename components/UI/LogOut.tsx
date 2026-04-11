@@ -28,18 +28,18 @@ export default function LogOut({open , onClose}: Props) {
         }
     }
     return <>
-       <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40"> 
-            <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-7 space-y-5">
-                <h2 className="text-xl font-bold">Logout</h2>
+       <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 p-4"> 
+            <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-5 lg:p-7 space-y-5">
+                <h2 className="text-lg lg:text-xl font-bold">Logout</h2>
 
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-sm lg:text-base">
                     Are you sure you want to logout ? 
                 </p>
 
                 <div className="flex justify-end gap-3">
                        <button
                         onClick={onClose}
-                        className="px-4 py-2  hover:opacity-50 rounded-lg border"
+                        className="px-3 lg:px-4 py-2 hover:opacity-50 rounded-lg border text-sm lg:text-base font-semibold"
                         disabled={loading}
                        >
                         Cancel
@@ -48,7 +48,7 @@ export default function LogOut({open , onClose}: Props) {
                        <button
                         onClick={handleLogout}
                         disabled={loading}
-                        className="px-4 py-2 hover:opacity-50 rounded-lg bg-red-600 text-white disabled:opacity-50"
+                        className="px-3 lg:px-4 py-2 hover:opacity-50 rounded-lg bg-red-600 text-white disabled:opacity-50 text-sm lg:text-base font-semibold"
                        >
                         {loading ? "Logging out..." : "Logout"}
                        </button>
