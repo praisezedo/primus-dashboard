@@ -12,11 +12,11 @@ const settings = await Setting.findOne({schoolId}).lean();
 
   const status = await getStudentFeesStatus(student._id);
 
-  let template = settings.smsTemplate.unpaid;
+  let template = Array.isArray(settings) ? settings[0]?.smsTemplate?.unpaid : settings?.smsTemplate?.unpaid;
 
-  if(status==="PAID") template=settings.smsTemplate.paid;
+  if(status==="PAID") template = Array.isArray(settings) ? settings[0]?.smsTemplate?.paid : settings?.smsTemplate?.paid;
 
-  if(status==="PARTIAL") template=settings.smsTemplate.partial;
+  if(status==="PARTIAL") template = Array.isArray(settings) ? settings[0]?.smsTemplate?.partial : settings?.smsTemplate?.partial;
 
   const message = renderSmsTemplate(
     template,
@@ -26,11 +26,12 @@ const settings = await Setting.findOne({schoolId}).lean();
       studentId: student.studentId,
       className: student.className,
       section: student.section,
-      semester: settings.semester,
+      semester: Array.isArray(settings) ? settings[0]?.semester : settings?.semester,
       feesSummary: summary
     }
   );
 
-  return `${admin.schoolName}\n\n${message}`;
+  const adminData = Array.isArray(admin) ? admin[0] : admin;
+  return `${adminData?.schoolName}\n\n${message}`;
 
 }

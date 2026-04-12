@@ -10,13 +10,20 @@ const africasTalking = AfricasTalking({
 
 const sms = africasTalking.SMS;
 
+type MySMSOptions = {
+    to: string[] | string;
+    message: string;
+    from?: string;
+}
+
 export async function sendViaAfricaTalking(to: string, message: string) {
     try {
 const response = await sms.send({
   to: [to],
   message,
-  enqueue: true,
-}); 
+  enqueue: true, 
+} as any); 
+
    console.log("SMS RESPONSE:", JSON.stringify(response, null, 2));
           return response;
     }  catch (error: any) {

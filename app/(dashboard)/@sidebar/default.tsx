@@ -1,7 +1,7 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faHouse  } from "@fortawesome/free-regular-svg-icons"
-import { faBell,  faUsers , faUserPlus , faCloudArrowUp  , faGear , faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons"
+import {  } from "@fortawesome/free-regular-svg-icons"
+import { faBell,  faUsers , faUserPlus , faCloudArrowUp  , faGear , faArrowRightFromBracket , faHouse } from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
