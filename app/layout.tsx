@@ -1,6 +1,10 @@
 "use client";
 import './globals.css';
 import { Toaster } from "sonner";
+// FontAwesome configuration
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
 
  export default  function RootLayout({
   children,
