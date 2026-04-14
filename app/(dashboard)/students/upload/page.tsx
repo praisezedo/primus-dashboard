@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 
 export default function BulkUploadPage() {
 
-    const [totalStudent , setTotalStudent] = useState<number>(0);
-    const [loading , setLoading] = useState<boolean>(true);
+    const [totalStudent , setTotalStudent] = useState(0);
+    const [loading , setLoading] = useState(true);
 
     const fetchTotalStudents =  async() => {
         try {

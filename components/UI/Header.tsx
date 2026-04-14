@@ -20,9 +20,9 @@ type Session = {
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [schoolName, setSchoolName] = useState<string>("");
-  const [sessions, setSessions] = useState<Session[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [schoolName, setSchoolName] = useState("");
+  const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
@@ -93,9 +93,9 @@ export default function Header() {
           <select
             value={activeSessionId}
             onChange={(e) => handleSessionChange(e.target.value)}
-            className="border border-gray-300 rounded-lg px-2 lg:px-3 py-2 text-xs lg:text-base font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all max-w-[120px] lg:max-w-none"
+            className="border border-gray-300 rounded-lg px-2 lg:px-3 py-2 text-xs lg:text-base font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all max-w-30 lg:max-w-none"
           >
-            {sessions.map((session) => (
+            {sessions.map((session:any) => (
               <option className="font-bold" key={session._id} value={session._id}>
                 {session.name} {session.isActive ? "(Active)" : ""}
               </option>

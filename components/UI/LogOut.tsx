@@ -7,7 +7,7 @@ import { toast } from "sonner";
 export default function LogOut({open , onClose}: Props) {
 
     const router = useRouter();
-    const [loading , setLoading] = useState<boolean>(false);
+    const [loading , setLoading] = useState(false);
 
     if (!open) return null;
 

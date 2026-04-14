@@ -1,6 +1,6 @@
 import StudentFee from "@/app/models/StudentFee";
 
-export async function generateFeesSummary(studentId:string){
+export async function generateFeesSummary( studentId:string ){
 
   const fees = await StudentFee.aggregate([
     {

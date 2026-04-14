@@ -19,7 +19,7 @@ export default function EditStudentModal({
   onClose,
   onUpdated,
 }: EditStudentModalProps) {
- const [saving , setSaving] = useState<boolean>(false);
+ const [saving , setSaving] = useState(false);
 
   const [form, setForm] = useState({
     studentName: student.studentName,

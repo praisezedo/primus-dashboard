@@ -4,13 +4,13 @@ import api from "@/lib/axios";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
 export default function OutstandingStudentsTable() {
-    const [students, setStudents] = useState<StudentDebt[]>([]);
-    const [loading , setLoading] = useState<boolean>(true);
+    const [students, setStudents] = useState([] as StudentDebt[]);
+    const [loading , setLoading] = useState(true);
 
     useEffect(() => {
 
         api.get("/api/dashboard/outstanding-students")
-        .then(res => {
+        .then((res: any) => {
             setStudents(res.data.students || []);
         })
         .finally(() => setLoading(false));
@@ -71,7 +71,7 @@ export default function OutstandingStudentsTable() {
 
             <tbody>
 
-              {students.map((student,index)=>{
+              {students.map((student: any,index: number)=>{
 
                 const status =
                   student.totalPaid === 0

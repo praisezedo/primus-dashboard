@@ -32,24 +32,25 @@ export default function SettingsEditPage() {
   const [activeTab, setActiveTab] = useState("academic");
 
   // ── Academic structure state ──────────────────────────────────────────────
-  const [classes,  setClasses]  = useState<string[]>([]);
-  const [sections, setSections] = useState<string[]>([]);
+  const [classes,  setClasses]  = useState([] as string[]);
+  const [sections, setSections] = useState([] as string[]);
   const [semester, setSemester] = useState("");
   const [academicSaving, setAcademicSaving] = useState(false);
 
   // ── Fee types state ───────────────────────────────────────────────────────
-  const [feeTypes, setFeeTypes] = useState<FeeType[]>([]);
+  const [feeTypes, setFeeTypes] = useState([] as FeeType[]);
   const [feeTypeInput, setFeeTypeInput] = useState("");
   const [feeTypeSaving, setFeeTypeSaving] = useState(false);
 
   // ── Class fee config state ────────────────────────────────────────────────
-  const [feeConfigs, setFeeConfigs] = useState<ClassFeeConfig[]>([]);
+  const [feeConfigs, setFeeConfigs] = useState([] as ClassFeeConfig[]);
   const [configSaving, setConfigSaving] = useState(false);
 
   // ── SMS template state ────────────────────────────────────────────────────
-  const [smsTemplate, setSmsTemplate] = useState<SmsTemplate>({
+  const [smsTemplate, setSmsTemplate] = useState({
     paid: "", unpaid: "", partial: "",
-  });
+  } as SmsTemplate);
+
   const [smsSaving, setSmsSaving] = useState(false);
 
   const [loading, setLoading] = useState(true);
@@ -116,7 +117,7 @@ export default function SettingsEditPage() {
     setFeeTypeSaving(true);
     try {
       const res = await api.post("/api/fees/feetype", { name: feeTypeInput.trim() });
-      setFeeTypes((prev) => [res.data, ...prev]);
+      setFeeTypes((prev: FeeType[]) => [res.data, ...prev]);
       setFeeTypeInput("");
       toast.success("Fee type added");
     } catch (err: any) {
@@ -130,7 +131,7 @@ export default function SettingsEditPage() {
   const deleteFeeType = async (id: string) => {
     try {
       await api.delete("/api/fees/feetype", { data: { id } });
-      setFeeTypes((prev) => prev.filter((f) => f._id !== id));
+      setFeeTypes((prev: FeeType[]) => prev.filter((f) => f._id !== id));
       toast.success("Fee type deleted");
     } catch {
       toast.error("Failed to delete fee type");
@@ -143,7 +144,7 @@ export default function SettingsEditPage() {
     setConfigSaving(true);
     try {
       const res = await api.post("/api/fees/class-config", { className, feeTypeId, amount });
-      setFeeConfigs((prev) => {
+      setFeeConfigs((prev: ClassFeeConfig[]) => {
         const idx = prev.findIndex(
           (c) => c.className === className && c.feeTypeId === feeTypeId
         );

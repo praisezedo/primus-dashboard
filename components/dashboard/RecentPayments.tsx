@@ -6,14 +6,14 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 
 export default function RecentPayments(){
 
-const [payments,setPayments] = useState<any[]>([])
+const [payments,setPayments] = useState([] as any[]);
 const [loading,setLoading] = useState(true)
 
 useEffect(()=>{
 
 api.get("/api/dashboard/recent-payments")
-.then(res=>setPayments(res.data))
-.finally(()=>setLoading(false))
+.then((res: any) => setPayments(res.data))
+.finally(() => setLoading(false))
 
 },[])
 
@@ -52,7 +52,7 @@ Recent Payments
     </td>
 </tr>
 
-:payments.map((p)=>(
+:payments.map((p: any)=>(
 <tr key={p._id} className="border-t">
 
 <td className="p-2">

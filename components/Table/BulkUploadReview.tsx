@@ -8,8 +8,8 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 
 
 export default function BulkUploadReview() {
-    const [logs , setLogs] = useState<BulkUploadLogs[]>([]);
-    const [loading , setLoading] = useState<boolean>(true);
+    const [logs , setLogs] = useState([] as BulkUploadLogs[]);
+    const [loading , setLoading] = useState(true);
     const [stats , setStats] = useState({
         totalUploads: 0,
         successCount: 0,
@@ -18,7 +18,7 @@ export default function BulkUploadReview() {
 
     useEffect(() => {
         api.get("/api/students/bulk-upload/logs")
-        .then((res) => {
+        .then((res: any) => {
             setLogs(res.data.logs);
             setStats({
                 totalUploads: res.data.totalUploads,
@@ -61,7 +61,7 @@ export default function BulkUploadReview() {
                 </thead>
 
                 <tbody>
-                    {logs.map((log) => (
+                    {logs.map((log: any) => (
                         <tr key={log._id} className="border-b">
                             <td className="p-2">{new Date(log.createdAt).toLocaleDateString()}</td>
                             <td className={`p-2 font-bold ${log.status === "SUCCESS" ? "text-green-900" : "text-red-600"}`}>{log.status}</td>

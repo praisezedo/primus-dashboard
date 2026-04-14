@@ -27,11 +27,11 @@ export default function StudentRow({
 
 
 {
-    const [showDelete , setShowDelete] = useState<boolean>(false);
-    const [showEdit , setShowEdit] = useState<boolean>(false);
-    const [showFees , setShowFees] = useState<boolean>(false);
-    const [showSendConfirm, setShowSendConfirm] = useState<boolean>(false);
-    const [sendingSms, setSendingSms] = useState<boolean>(false);
+    const [showDelete , setShowDelete] = useState(false);
+    const [showEdit , setShowEdit] = useState(false);
+    const [showFees , setShowFees] = useState(false);
+    const [showSendConfirm, setShowSendConfirm] = useState(false);
+    const [sendingSms, setSendingSms] = useState(false);
 
     async function handleSendSms() {
       try {

@@ -41,23 +41,7 @@ export async function sendViaTermii(phone: string, message: string) {
         phone,
         timestamp: new Date().toISOString()
       });
-
-      // Extract error message from Termii response
-      let errorMessage = res.statusText || "Unknown error";
-      if (data?.message) {
-        if (Array.isArray(data.message) && data.message.length > 0) {
-          const firstError = data.message[0];
-          if (typeof firstError === 'object' && firstError !== null) {
-            errorMessage = firstError.message || firstError.error || JSON.stringify(firstError);
-          } else {
-            errorMessage = String(firstError);
-          }
-        } else if (typeof data.message === 'string') {
-          errorMessage = data.message;
-        }
-      }
-
-      throw new Error(`SMS failed: ${errorMessage}`);
+      throw new Error(`SMS failed: ${data?.message || res.statusText || "Unknown error"}`);
     }
 
     console.log("[SMS SUCCESS] Message sent to", phone, data);

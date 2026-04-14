@@ -13,17 +13,17 @@ export default function StudentFeesModal({
     onClose,
 
 }: StudentFeeProps) {
-   const [fees , setFees] = useState<any[]>([]);
-   const [loading , setLoading] = useState<boolean>(false);
-   const [paymentInputs , setPaymentInputs] = useState<{[key: string]: number}>({});
-   const [paymentHistory , setPaymentHistory] = useState<{[key: string]: any[]}>({});
-   const [paymentLoadingByFee , setPaymentLoadingByFee] = useState<Record<string, boolean>>({});
+   const [fees , setFees] = useState([] as any[]);
+   const [loading , setLoading] = useState(false);
+   const [paymentInputs , setPaymentInputs] = useState({} as {[key: string]: number});
+   const [paymentHistory , setPaymentHistory] = useState({} as {[key: string]: any[]});
+   const [paymentLoadingByFee , setPaymentLoadingByFee] = useState({} as Record<string, boolean>);
 
 async function fetchHistory (feeId: string) {
 
   const res = await api.get(`/api/fees/history/${feeId}`);
 
-  setPaymentHistory(prev => ({
+  setPaymentHistory((prev: any) => ({
     ...prev,
     [feeId]: res.data
   }));
@@ -55,7 +55,7 @@ async function handlePay(fee: any) {
   const originalFees = [...fees];
 
   // Optimistic update
-  const optimisticFees = fees.map(f => {
+  const optimisticFees = fees.map((f: any) => {
     if (f._id === fee._id) {
       const newPaid = f.amountPaid + amount;
       return {
@@ -70,7 +70,7 @@ async function handlePay(fee: any) {
   setFees(optimisticFees);
 
   try {
-    setPaymentLoadingByFee((prev) => ({ ...prev, [fee._id]: true }));
+    setPaymentLoadingByFee((prev: Record<string, boolean>) => ({ ...prev, [fee._id]: true }));
     await api.post(`/api/fees/pay`, {
       feeId: fee._id,
       amount,
@@ -78,7 +78,7 @@ async function handlePay(fee: any) {
 
     toast.success("Payment recorded");
 
-    setPaymentInputs((prev) => ({
+    setPaymentInputs((prev: {[key: string]: number}) => ({
       ...prev,
       [fee._id]: 0,
     }));
@@ -90,7 +90,7 @@ async function handlePay(fee: any) {
     setFees(originalFees);
     toast.error("Payment failed");
   } finally {
-    setPaymentLoadingByFee((prev) => ({ ...prev, [fee._id]: false }));
+    setPaymentLoadingByFee((prev: Record<string, boolean>) => ({ ...prev, [fee._id]: false }));
   }
 }
 
@@ -126,7 +126,7 @@ async function handlePay(fee: any) {
   </thead>
 
   <tbody>
-{fees.map((f) => (
+{fees.map((f: any) => (
   <>
   <div key={f._id}>
     <tr key={f._id} className="border-t hover:bg-gray-50">

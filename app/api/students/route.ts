@@ -131,7 +131,7 @@ export async function POST(req: Request) {
 
             }
 
-            }
+ }
         return NextResponse.json(student , {status: 201});
       
     } catch (error) {

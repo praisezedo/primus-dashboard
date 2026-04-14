@@ -26,18 +26,18 @@ export default function StudentDataForm() {
 
 const router = useRouter();
 
-  const [classes, setClasses] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [saving , setSaving] = useState<boolean>(false);
- const [sections , setSections] = useState<string[]>([]);
-  const [message , setMessage] = useState<string>('');
+  const [classes, setClasses] = useState([] as string[]);
+  const [loading, setLoading] = useState(true);
+  const [saving , setSaving] = useState(false);
+ const [sections , setSections] = useState([] as string[]);
+  const [message , setMessage] = useState('');
 
   const [form, setForm] = useState(initialFormState);
 
   // 🔹 fetch settings (classes)
   useEffect(() => {
     async function fetchSettings() {
-      const res = await api.get<SettingsResponse>("/api/settings/get");
+      const res  = await api.get("/api/settings/get");
       setClasses(res.data?.classes || []);
       setSections(res.data?.sections || []);
       setLoading(false)
@@ -51,7 +51,7 @@ const router = useRouter();
   ) {
     const { name, value, type } = e.target;
 
-    setForm((prev) => ({
+    setForm((prev: any) => ({
       ...prev,
       [name]:
         type === "checkbox"
@@ -124,7 +124,7 @@ catch (err: any) {
             required
           >
             <option value="">Select Class</option>
-            {classes.map((c) => (
+            {classes.map((c: string) => (
               <option key={c} value={c}>
                 {c}
               </option>
@@ -143,7 +143,7 @@ catch (err: any) {
             required
           >
             <option value="">Select Section</option>
-            {sections.map((c) => (
+            {sections.map((c: string) => (
               <option key={c} value={c}>
                 {c}
               </option>

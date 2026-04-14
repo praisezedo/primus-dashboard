@@ -11,19 +11,19 @@ import PrimusLoader from "@/components/UI/PrimusLoader";
 
 export default function StudentsPage() {
 
-     const [students , setStudents] = useState<any[]>([]);
-     const [classes , setClasses] = useState<string[]>([]);
-     const [search , setSearch] = useState<string>("");
-     const [className , setClassName] = useState<string>("");
-     const [smsStatus, setSmsStatus] = useState<string>("");
-     const [loading , setLoading] = useState<boolean>(true);
-     const [sections , setSections] = useState<string[]>([]);
-     const [section , setSection] = useState<string>("");
-     const [deleting , setDeleting] = useState<boolean>(false);
-     const [smsMenuOpen, setSmsMenuOpen] = useState<boolean>(false);
-     const [groupConfirmOpen, setGroupConfirmOpen] = useState<boolean>(false);
-     const [selectedGroup, setSelectedGroup] = useState<"PAID" | "UNPAID" | "PARTIAL" | "">("");
-     const [groupSending, setGroupSending] = useState<boolean>(false);
+     const [students , setStudents] = useState([]);
+     const [classes , setClasses] = useState([]);
+     const [search , setSearch] = useState("");
+     const [className , setClassName] = useState("");
+     const [smsStatus, setSmsStatus] = useState("");
+     const [loading , setLoading] = useState(true);
+     const [sections , setSections] = useState([]);
+     const [section , setSection] = useState("");
+     const [deleting , setDeleting] = useState(false);
+     const [smsMenuOpen, setSmsMenuOpen] = useState(false);
+     const [groupConfirmOpen, setGroupConfirmOpen] = useState(false);
+     const [selectedGroup, setSelectedGroup] = useState("");
+     const [groupSending, setGroupSending] = useState(false);
 
 // fetching settings
 async function fetchSettings() {
@@ -55,11 +55,11 @@ async function fetchStudents() {
 
 // delete student 
 async function deleteStudent(id: string) {
-    const studentToDelete = students.find(s => s._id === id);
+    const studentToDelete = students.find((s: any)  => s._id === id);
     if (!studentToDelete) return;
 
     // Optimistic update: remove from list immediately
-    setStudents(prev => prev.filter(s => s._id !== id));
+    setStudents( (prev: any[]) => prev.filter((s: any) => s._id !== id));
  
     try {
         setDeleting(true)
@@ -68,7 +68,7 @@ async function deleteStudent(id: string) {
     
     } catch (error: any) {
         // Revert optimistic update on error
-        setStudents(prev => [...prev, studentToDelete]);
+        setStudents((prev: any[]) => [...prev, studentToDelete]);
         toast.error(error.response?.data?.message || "Could not delete student");
     } finally {
         setDeleting(false);
@@ -148,7 +148,7 @@ if (loading) {
     >
         <option value="">All Classes</option>
        {
-        classes.map((c) => (
+        classes.map((c: string) => (
             <option key={c} value={c}>{c}</option>
         ))
        }
@@ -161,7 +161,7 @@ if (loading) {
       >
         <option value="">All Sections</option>
         {
-            sections.map((s) => (
+            sections.map((s: string) => (
                 <option key={s} value={s}>{s}</option>
             ))
         }
@@ -182,7 +182,7 @@ if (loading) {
      <div className="relative flex items-center gap-3">
        <button
          type="button"
-         onClick={() => setSmsMenuOpen((prev) => !prev)}
+         onClick={() => setSmsMenuOpen((prev: boolean) => !prev)}
          className="bg-green-700 hover:opacity-80 text-white rounded-lg px-4 py-2 font-semibold"
        >
          Send SMS

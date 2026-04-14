@@ -29,9 +29,9 @@ import { toast } from "sonner";
  }
 export default function SignupPage () {
    const router = useRouter();
-const[show , setShow] = useState<boolean>(false)
+const[show , setShow] = useState(false)
 const [state , dispatch] = useReducer(reducer , intitalState);
-const [loading , setLoading] = useState<boolean>(false);
+const [loading , setLoading] = useState(false);
 
 async function handleSignUp (e: React.FormEvent) {
    e.preventDefault();

@@ -7,8 +7,8 @@ import PrimusLogo from '@/components/UI/PrimusLogo';
 
 export default function SetupPage() {
     const router = useRouter();
-const [classes, setClasses] = useState<string[]>([]);
-  const [sections, setSections] = useState<string[]>([]);
+const [classes, setClasses] = useState([] as string[]);
+  const [sections, setSections] = useState([] as string[]);
   const [semester, setSemester] = useState("");
 
     const [classInput, setClassInput] = useState("");
@@ -18,22 +18,22 @@ const [classes, setClasses] = useState<string[]>([]);
 
     const addClass = () => {
       if (!classInput.trim()) return;
-         setClasses((prev) => [...prev, classInput.trim()]);
+         setClasses((prev: string[]) => [...prev, classInput.trim()]);
          setClassInput("");
     }
 
   const addSection = () => {
     if (!sectionInput.trim()) return;
-    setSections((prev) => [...prev, sectionInput.trim()]);
+    setSections((prev: string[]) => [...prev, sectionInput.trim()]);
     setSectionInput("");
   };
 
   const deleteItem = (index: number, type: "class" | "section"): void => {
      if (type === "class") {
-        setClasses((prev) => prev.filter((_, i:number) => i !== index));
+        setClasses((prev: string[]) => prev.filter((_, i:number) => i !== index));
      } 
      else if (type === "section") {
-        setSections((prev) => prev.filter((_, i:number) => i !== index));
+        setSections((prev: string[]) => prev.filter((_, i:number) => i !== index));
      } else {
         return;
      }
@@ -111,7 +111,7 @@ const [classes, setClasses] = useState<string[]>([]);
             <input
               value={classInput}
               onChange={(e) => setClassInput(e.target.value)}
-              onKeyDown={(e: React.KeyboardEvent) => {
+              onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
                   addClass();
@@ -129,7 +129,7 @@ const [classes, setClasses] = useState<string[]>([]);
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {classes.map((c, i) => (
+            {classes.map((c: string, i: number) => (
               <span
                 key={i}
                 className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
@@ -159,7 +159,7 @@ const [classes, setClasses] = useState<string[]>([]);
             <input
               value={sectionInput}
               onChange={(e) => setSectionInput(e.target.value)}
-              onKeyDown={(e: React.KeyboardEvent) => {
+              onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
                   addSection();
@@ -177,7 +177,7 @@ const [classes, setClasses] = useState<string[]>([]);
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {sections.map((s, i) => (
+            {sections.map((s: string, i:number) => (
               <span
                 key={i}
                 className="bg-blue-50 border text-blue-700 px-3 py-1 rounded-full text-sm"

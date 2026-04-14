@@ -6,9 +6,9 @@ import { faSchool, faFolder, faCalendar } from "@fortawesome/free-solid-svg-icon
 
 interface Props {
   classes: string[];
-  setClasses: React.Dispatch<React.SetStateAction<string[]>>;
+  setClasses: any;
   sections: string[];
-  setSections: React.Dispatch<React.SetStateAction<string[]>>;
+  setSections: any;
   semester: string;
   setSemester: (v: string) => void;
   saving: boolean;
@@ -26,20 +26,20 @@ export default function AcademicStructureSection({
 
   const addClass = () => {
     if (!classInput.trim()) return;
-    setClasses((p) => [...p, classInput.trim()]);
+    setClasses((p: string[]) => [...p, classInput.trim()]);
     setClassInput("");
   };
 
   const addSection = () => {
     if (!sectionInput.trim()) return;
-    setSections((p) => [...p, sectionInput.trim()]);
+    setSections((p: string[]) => [...p, sectionInput.trim()]);
     setSectionInput("");
   };
 
   const removeItem = (
     index: number,
-    setter: React.Dispatch<React.SetStateAction<string[]>>
-  ) => setter((p) => p.filter((_, i) => i !== index));
+    setter: any
+  ) => setter((p: string[]) => p.filter((_: string, i: number) => i !== index));
 
   return (
     <div className="space-y-5">
@@ -94,7 +94,7 @@ export default function AcademicStructureSection({
           <option value="2nd Term">2nd Term</option>
           <option value="3rd Term">3rd Term</option>
         </select>
-      </Card>
+      </Card>ReactNode
 
       <SaveBar saving={saving} onSave={onSave} />
     </div>
@@ -106,7 +106,7 @@ export default function AcademicStructureSection({
 function Card({
   title, description, icon, children,
 }: {
-  title: string; description: string; icon: any; children: React.ReactNode;
+  title: string; description: string; icon: any; children: any;
 }) {
   return (
     <div className="bg-white rounded-2xl border border-blue-100 shadow-sm overflow-hidden">

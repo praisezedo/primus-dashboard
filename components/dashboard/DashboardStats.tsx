@@ -12,18 +12,18 @@ import TotalStatsCard from "./TotalStatsCard";
 
 
 export default function DashboardStats() {
-    const [dashboardOverview , setDashboardOverview] = useState<DashboardOverview | null>({
+    const [dashboardOverview , setDashboardOverview] = useState({
             totalStudents:0,
             totalExpected:0,
             totalPaid:0,
             totalBalance:0,
             studentsWithDebt:0,
             adminName:""
-    });  
+    } as DashboardOverview);  
 
-    const [ academicSession , setAcademicSession ] = useState<string>("");
-    const [semester , setSemester] = useState<string>("");
-    const [isLoading , setIsLoading] = useState<boolean>(true);
+    const [ academicSession , setAcademicSession ] = useState("");
+    const [semester , setSemester] = useState("");
+    const [isLoading , setIsLoading] = useState(true);
 
 
 

@@ -14,7 +14,7 @@ import { toast } from "sonner";
  const [adminPassword, setAdminPassword] = useState("");
  const [error, setError] = useState("");
  const [loading, setLoading] = useState(false);
- const [show , setShow] = useState<boolean>(false);
+ const [show , setShow] = useState(false);
 
 async function handleLogin(e: React.FormEvent) {
 

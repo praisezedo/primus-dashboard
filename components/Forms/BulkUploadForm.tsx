@@ -10,16 +10,16 @@ import { useRouter } from "next/navigation";
 
 export default function BulkUploadForm() {
   const router = useRouter();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [errorMessage , setErrorMessage] = useState<string>('');
-  const [uploadProgress , setUploadProgress] = useState<number>(0);
-  const [uploading , setUploading] = useState<boolean>(false);
-  const [notify , setNotify] = useState<boolean>(false);
-  const [message , setMessage] = useState<string>('');
-  const [insertedCount , setInsertedCount] = useState<number>(0);
-  const [messageColor , setMessageColor] = useState<string>("green-700");
+  const [file, setFile] = useState(null);
+  const [errorMessage , setErrorMessage] = useState('');
+  const [uploadProgress , setUploadProgress] = useState(0);
+  const [uploading , setUploading] = useState(false);
+  const [notify , setNotify] = useState(false);
+  const [message , setMessage] = useState('');
+  const [insertedCount , setInsertedCount] = useState(0);
+  const [messageColor , setMessageColor] = useState("green-700");
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ export default function BulkUploadForm() {
     setUploadProgress(0);
     try {
       const response = await api.post("/api/students/bulk-upload", formData, {
-        onUploadProgress(progressEvent) {
+        onUploadProgress(progressEvent: ProgressEvent) {
           if (!progressEvent.total) return;
           const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           setUploadProgress(percent);

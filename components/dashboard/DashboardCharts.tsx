@@ -21,20 +21,20 @@ import RecentPayments from "./RecentPayments";
 
 export default function DashboardCharts() {
 
-const [data,setData] = useState<any>(null)
+const [data,setData] = useState(null)
 const [loading,setLoading] = useState(true)
-const [error, setError] = useState<string | null>(null)
+const [error, setError] = useState(null)
 
 useEffect(()=>{
 
 api.get("/api/dashboard/overview/chart")
-.then(res => {
+.then((res: any) => {
   if (res.data) {
     setData(res.data)
     setError(null)
   }
 })
-.catch((err) => {
+.catch((err:any) => {
   console.error("Chart error:", err)
   setError("Failed to load chart data")
 })

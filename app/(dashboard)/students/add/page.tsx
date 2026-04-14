@@ -11,14 +11,14 @@ import BulkUploadBanner from "@/components/UI/BulkUploadBanner";
 
 
 export default  function AddStudentPage() {
-  const [students , setStudents] = useState<DashboardOverview>();
-  const [loading , setLoading] = useState<boolean>(true);
+  const [students , setStudents] = useState();
+  const [loading , setLoading] = useState(true);
 
 
   const  fetchStudentsOverview = async () => {
       try {
       const res = await api.get("/api/dashboard/overview");
-      setStudents(res.data);
+      setStudents(res.data as DashboardOverview);
     } finally {
       setLoading(false);
     }

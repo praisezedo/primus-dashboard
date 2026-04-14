@@ -13,7 +13,7 @@ interface SideBarProps {
 }
 
 export default function SideBar({ isMobileMenuOpen = false, onMobileMenuClose }: SideBarProps) {
-    const [showLogout , setShowLogout] = useState<boolean>(false);
+    const [showLogout , setShowLogout] = useState(false);
     const pathname = usePathname();
     const isActive = (href: string) => pathname === href;
 

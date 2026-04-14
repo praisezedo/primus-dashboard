@@ -24,9 +24,9 @@ function configKey(className: string, feeTypeId: string) {
 export default function ClassFeeConfigSection({
   classes, feeTypes, feeConfigs, saving, onSave,
 }: Props) {
-  const [grid, setGrid] = useState<GridState>({});
-  const [savingCell, setSavingCell] = useState<string | null>(null);
-  const [savedCells, setSavedCells] = useState<Set<string>>(new Set());
+  const [grid, setGrid] = useState({} as GridState);
+  const [savingCell, setSavingCell] = useState(null  as string | null);
+  const [savedCells, setSavedCells] = useState(new Set() as Set<string>);
 
   // Populate grid from fetched configs
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function ClassFeeConfigSection({
   }, [feeConfigs]);
 
   const handleChange = (className: string, feeTypeId: string, value: string) => {
-    setGrid((prev) => ({ ...prev, [configKey(className, feeTypeId)]: value }));
+    setGrid((prev: GridState) => ({ ...prev, [configKey(className, feeTypeId)]: value }));
   };
 
   const handleSaveCell = async (className: string, feeTypeId: string) => {
@@ -50,9 +50,9 @@ export default function ClassFeeConfigSection({
     setSavingCell(key);
     await onSave(className, feeTypeId, amount);
     setSavingCell(null);
-    setSavedCells((prev) => new Set(prev).add(key));
+    setSavedCells((prev: Set<string>) => new Set(prev).add(key));
     setTimeout(() => {
-      setSavedCells((prev) => {
+      setSavedCells((prev: Set<string>) => {
         const next = new Set(prev);
         next.delete(key);
         return next;

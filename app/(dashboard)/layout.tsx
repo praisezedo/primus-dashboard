@@ -1,5 +1,5 @@
 
-import type { Metadata } from "next";
+
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { verifyAuth } from "@/lib/auth";
@@ -9,6 +9,9 @@ import { connectDB } from "@/lib/mongodb";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import Admin from "../models/Admin";
+import Header from "@/components/UI/Header";
+import SideBar from "@/components/UI/SideBar"; 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -19,7 +22,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Primus Dashboard",
   description: " Primus School Automation",
 };
@@ -27,12 +30,8 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-   header ,
-   sidebar,
 }: Readonly<{
   children: React.ReactNode;
-  header: React.ReactNode;
-  sidebar: React.ReactNode;
 }>) {
 
   const { schoolId } = await verifyAuth();
@@ -70,8 +69,8 @@ if (activeSessionData && (!settings || !settings.settingsCompleted) && !isSetupR
       <main
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {header}
-        {sidebar}
+        <Header />
+        <SideBar/>
         <div className="lg:ml-50 mt-17 lg:mt-17 p-4 lg:p-6 overflow-y-auto overflow-x-hidden min-h-screen">
           {children}
         </div>
