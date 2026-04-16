@@ -36,11 +36,8 @@ async function handleLogin(e: React.FormEvent) {
         return;
     }  else {
         toast.success("Login Successful");
-    }
-    // prevent setup process on another login
-    const activeSession =  await api.get("api/session/current");
-     
-    if (activeSession) {
+        // Don't check session here - just redirect to dashboard
+        // The dashboard layout will handle the setup flow
         router.push("/")
     }
     }catch (error: any) {
@@ -51,29 +48,30 @@ async function handleLogin(e: React.FormEvent) {
 }
      return (
         <>
-        <div className="w-120 gap-7 rounded-lg items-center flex flex-col justify-center bg-white border border-gray-300 shadow-lg p-7">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="w-full max-w-md gap-7 rounded-lg items-center flex flex-col justify-center bg-white border border-gray-300 shadow-lg p-6 md:p-7">
             <div className="gap-4 flex flex-col items-center text-center">
             <h1 className="mb-5"><PrimusLogo/></h1>
-            <h1 className="font-bold text-3xl">Login</h1>
+            <h1 className="font-bold text-2xl md:text-3xl text-black">Login</h1>
             </div>  
 
-            {error && <div className="text-red-500 text-sm">{error}</div>}
+            {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
-            <form className="flex flex-col justify-between gap-7" onSubmit={handleLogin}>
+            <form className="flex flex-col justify-between gap-7 w-full" onSubmit={handleLogin}>
 
                 <div className="flex flex-col gap-3">
-                <label className="font-bold text-lg"  htmlFor="admin-email">Admin Email</label>
+                <label className="font-bold text-lg text-black"  htmlFor="admin-email">Admin Email</label>
                     <span className="flex p-3 gap-2 rounded-lg  border border-gray-300 shadow-sm  justify-between items-center">
-                          <FontAwesomeIcon icon={faEnvelope} className={'text-sm h-5 w-5'}/>
-                          <input className="w-80 px-2 items-center justify-center focus:outline-none focus:border-none" type="text" name="admin-email" id="admin-email" placeholder="Enter your email adress.." value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)}/>
+                          <FontAwesomeIcon icon={faEnvelope} className={'text-sm h-5 w-5 text-gray-500'}/>
+                          <input className="flex-1 px-2 items-center justify-center focus:outline-none focus:border-none text-black" type="text" name="admin-email" id="admin-email" placeholder="Enter your email adress.." value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)}/>
                     </span>
                 </div>
 
                 <div className="flex flex-col gap-3">
-                    <label className="font-bold text-lg" htmlFor="admin-password">Password</label>
+                    <label className="font-bold text-lg text-black" htmlFor="admin-password">Password</label>
                     <span className="flex gap-2 border rounded-lg p-3 border-gray-300 shadow-sm justify-between items-center">
-                       <span className="hover:opacity-50" onClick={() => setShow(!show)}>{show ?  <FontAwesomeIcon icon={faLockOpen} className={'text-xs h-5 w-5'}/> :  <FontAwesomeIcon icon={faLock} className={'text-xs h-5 w-5'}/> }</span>
-                        <input className="w-80 px-2 items-center justify-center focus:outline-none focus:border-none" 
+                       <span className="hover:opacity-50 cursor-pointer" onClick={() => setShow(!show)}>{show ?  <FontAwesomeIcon icon={faLockOpen} className={'text-xs h-5 w-5 text-gray-500'}/> :  <FontAwesomeIcon icon={faLock} className={'text-xs h-5 w-5 text-gray-500'}/> }</span>
+                        <input className="flex-1 px-2 items-center justify-center focus:outline-none focus:border-none text-black" 
                         type={show ? "text" : "password"} 
                          name="admin-password" 
                          id="admin-password" 
@@ -81,12 +79,13 @@ async function handleLogin(e: React.FormEvent) {
                     </span>
                 </div>
 
-                <button type="submit" disabled={loading} className="w-100 hover:bg-blue-400 rounded-lg bg-blue-700 text-white p-3 font-bold text-lg disabled:opacity-50">{loading ? "Logging in..." : "Login"}</button>
+                <button type="submit" disabled={loading} className="w-full hover:bg-blue-400 rounded-lg bg-blue-700 text-white p-3 font-bold text-lg disabled:opacity-50">{loading ? "Logging in..." : "Login"}</button>
              </form> 
-       <span className="flex gap-1">
+       <span className="flex gap-1 text-black">
         <p >Don't have account?</p>
         <Link className="text-blue-500 hover:text-blue-200" href={'/signup'}>Sign Up</Link>
        </span> 
+        </div>
         </div>
         </>
      )

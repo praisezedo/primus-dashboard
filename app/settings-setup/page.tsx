@@ -91,17 +91,17 @@ const [classes, setClasses] = useState([] as string[]);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4 md:p-6">
 
-      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-lg p-10 space-y-10">
+      <div className="bg-white w-full max-w-4xl rounded-2xl shadow-lg p-6 md:p-10 space-y-6 md:space-y-10">
 
         {/* HEADER */}
         <div className="text-center space-y-2">
           <PrimusLogo />
-          <h1 className="text-3xl font-bold text-blue-700 my-4">
-            Welcome to Primus 
+          <h1 className="text-2xl md:text-3xl font-bold text-blue-700 my-4 ">
+            Welcome to Primus
           </h1>
-          <p className="text-gray-500">
+          <p className="text-gray-500 ">
             Let’s set up your school structure. This only takes 2 minutes.
           </p>
         </div>
@@ -109,8 +109,8 @@ const [classes, setClasses] = useState([] as string[]);
 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3 items-start text-sm text-blue-700">
   <span className="text-lg">ℹ️</span>
   <div>
-    <p className="font-semibold">Don’t worry</p>
-    <p>
+    <p className="font-semibold text-black">Don’t worry</p>
+    <p className="text-black">
       You can edit classes, sections, semester and configure fees later
       from the Settings page in your dashboard.
     </p>
@@ -118,14 +118,14 @@ const [classes, setClasses] = useState([] as string[]);
 </div>
         {/* STEP 1 - CLASSES */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-gray-800">
+          <h2 className="text-lg font-semibold text-gray-800 ">
             Step 1: Add Your Classes
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 ">
             Example: JSS1, JSS2, SS1, Grade 1, Grade 2
           </p>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               value={classInput}
               onChange={(e) => setClassInput(e.target.value)}
@@ -136,11 +136,11 @@ const [classes, setClasses] = useState([] as string[]);
                 }
               }}
               placeholder="Enter class name"
-              className="flex-1 border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none"
+              className="flex-1 border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none text-black"
             />
             <button
               onClick={addClass}
-              className="bg-blue-700 text-white px-5 rounded-lg hover:bg-blue-800 transition"
+              className="bg-blue-700 text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition whitespace-nowrap"
             >
               Add
             </button>
@@ -152,7 +152,7 @@ const [classes, setClasses] = useState([] as string[]);
                 key={i}
                 className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
               >
-                {c}  
+                {c}
                 <button
                   onClick={() => deleteItem(i, "class")}
                   className="ml-1 text-blue-600 hover:text-blue-900"
@@ -166,14 +166,14 @@ const [classes, setClasses] = useState([] as string[]);
 
         {/* STEP 2 - SECTIONS */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-gray-800">
+          <h2 className="text-lg font-semibold  text-black">
             Step 2: Add Sections (Optional)
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 ">
             Example: A, B, C (Leave empty if not applicable)
           </p>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               value={sectionInput}
               onChange={(e) => setSectionInput(e.target.value)}
@@ -184,11 +184,11 @@ const [classes, setClasses] = useState([] as string[]);
                 }
               }}
               placeholder="Enter section"
-              className="flex-1 border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none"
+              className="flex-1 border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none text-black"
             />
             <button
               onClick={addSection}
-              className="bg-blue-700 text-white px-5 rounded-lg hover:bg-blue-800 transition"
+              className="bg-blue-700 text-white px-5 py-3 rounded-lg hover:bg-blue-800 transition whitespace-nowrap"
             >
               Add
             </button>
@@ -214,14 +214,14 @@ const [classes, setClasses] = useState([] as string[]);
 
         {/* STEP 3 - SEMESTER */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-gray-800">
+          <h2 className="text-lg font-semibold text-black">
             Step 3: Current Semester / Term
           </h2>
 
           <select
             value={semester}
             onChange={(e) => setSemester(e.target.value)}
-            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none"
+            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none text-black"
           >
             <option value="">Select Term</option>
             <option value="First Term">First Term</option>
