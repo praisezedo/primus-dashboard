@@ -20,5 +20,6 @@ declare module "next";
 declare module "react";
 declare module "react-dom";
 declare module "next/server";
+declare module "*.css";
 
 

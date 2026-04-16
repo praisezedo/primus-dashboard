@@ -17,7 +17,8 @@
     "jsx": "preserve",
     "incremental": false,
     "plugins": [{ "name": "next" }],
-    "paths": { "@/*": ["./*"] }
+    "paths": { "@/*": ["./*"] },
+    "types": ["node" , "react" , "react-dom"]
   },
   "include": [
     "next-env.d.ts",

@@ -8,10 +8,15 @@ export async function verifyAuth() {
     throw new Error("Unauthenticated");
   }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-    adminId: string;
-    schoolId: string;
-  };
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      adminId: string;
+      schoolId: string;
+    };
+  } catch (error) {
+    throw new Error("Invalid or expired authentication token");
+  }
 
   return decoded;
 }

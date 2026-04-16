@@ -33,38 +33,60 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const { schoolId } = await verifyAuth();
-
-  await connectDB();
-
   const pathname = (await headers()).get("x-pathname") ?? "";
+  let schoolId: string | null = null;
 
-const activeSessionData = await AcademicSession.findOne({
-  schoolId,
-  isActive: true,
-});
+  try {
+    const decoded = await verifyAuth();
+    schoolId = decoded.schoolId;
+  } catch (error) {
+    if (pathname !== "/") {
+      redirect("/login");
+    }
+  }
 
-const settings = await Settings.findOne({ schoolId });
+  let activeSessionData = null;
+  let settings = null;
+  let admin = null;
 
-const admin = await Admin.findOne({schoolId});
+  if (schoolId) {
+    await connectDB();
 
-const isSetupRoute =
-  pathname.startsWith("/academic-session") ||
-  pathname.startsWith("/settings-setup");
+    activeSessionData = await AcademicSession.findOne({
+      schoolId,
+      isActive: true,
+    });
 
-if (!admin.hasCompletedSetup) {
-  // 1️⃣ Academic session guard
-if (!activeSessionData && !isSetupRoute) {
-  redirect("/academic-session");
-}
+    settings = await Settings.findOne({ schoolId });
+    admin = await Admin.findOne({ schoolId });
 
-// 2️⃣ Settings guard (ONLY after session exists)
-if (activeSessionData && (!settings || !settings.settingsCompleted) && !isSetupRoute) {
-  redirect("/settings-setup");
-}
+    if (!admin) {
+      redirect("/login");
+    }
+  }
 
-} 
+  const isSetupRoute =
+    pathname.startsWith("/academic-session") ||
+    pathname.startsWith("/settings-setup");
+
+  if (schoolId && admin && !admin.hasCompletedSetup) {
+    const isDashboardHome = pathname === "/";
+
+    // 1️⃣ Academic session guard
+    if (!activeSessionData && !isSetupRoute) {
+      redirect("/academic-session");
+    }
+
+    // 2️⃣ Settings guard (ONLY after session exists)
+    if (
+      activeSessionData &&
+      (!settings || !settings.settingsCompleted) &&
+      !isSetupRoute &&
+      !isDashboardHome
+    ) {
+      redirect("/settings-setup");
+    }
+  }
   return (
       <main
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -24,7 +24,6 @@ const SmsQueueSchema = new Schema(
     type: String,
     enum: ["PENDING","SENT","FAILED"],
     default: "PENDING",
-    index: true
   },
 
   attempts: {

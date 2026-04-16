@@ -18,8 +18,8 @@ export default function AcademicSessionSignUp() {
 
     try {
       await api.post("/api/session/create", { name });
-       toast.success("Academic session created successfully");
-      router.push("/settings-setup");
+      toast.success("Academic session created successfully");
+      router.push("/");
     } catch (err) {
       console.error(err);
       toast.error("Failed to create academic session");

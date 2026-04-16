@@ -5,12 +5,10 @@ const PaymentSchema = new Schema (
     schoolId: {
         type: String,
         required: true,
-        index: true,
     },
     sessionId: {
         type: String,
         required: true,
-        index: true,
     },
 
 studentId: {

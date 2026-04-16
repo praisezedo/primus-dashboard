@@ -94,7 +94,7 @@ export default function AcademicStructureSection({
           <option value="2nd Term">2nd Term</option>
           <option value="3rd Term">3rd Term</option>
         </select>
-      </Card>ReactNode
+      </Card>
 
       <SaveBar saving={saving} onSave={onSave} />
     </div>

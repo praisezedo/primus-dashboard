@@ -28,7 +28,6 @@ const StudentSchema = new Schema(
     schoolId: {
       type: String,
       required: true,
-      index: true,
     },
 
     sessionId: {
@@ -80,11 +79,9 @@ StudentSchema.index(
   { schoolId: 1, studentId: 1 },
   { unique: true }
 );
-StudentSchema.index({ schoolId: 1 });
-StudentSchema.index({ schoolId: 1, createdAt: -1 });
-StudentSchema.index({ schoolId: 1, className: 1 });
-StudentSchema.index({ schoolId: 1 });
-StudentSchema.index({ schoolId: 1, smsStatus: 1 });
+
+StudentSchema.index({ schoolId: 1, className: 1 , smsStatus: 1 , createdAt: -1 });
+
 
 const Student = models.Student || model("Student", StudentSchema);
 export default Student;

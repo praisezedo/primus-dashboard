@@ -19,20 +19,17 @@ const StudentFeeSchema = new Schema<IStudentFee> (
     schoolId: {
       type: String,
       required: true,
-      index: true,
     },
 
     sessionId: {
       type: String,
       required: true,
-      index: true,
     },
 
      studentId: {
       type: Schema.Types.ObjectId,
       ref: "Student",
       required: true,
-      index: true,
     },
 
     className: {

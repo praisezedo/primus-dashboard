@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { toast } from 'sonner';
 import api from '@/lib/axios';
 import PrimusLogo from '@/components/UI/PrimusLogo';
+import { useEffect } from 'react';
 
 export default function SetupPage() {
     const router = useRouter();
@@ -21,6 +22,23 @@ const [classes, setClasses] = useState([] as string[]);
          setClasses((prev: string[]) => [...prev, classInput.trim()]);
          setClassInput("");
     }
+ 
+    const fetchSettings = async () => {
+      try {
+        const res = await api.get("/api/settings/get");
+        if (res?.data) {
+           setClasses(res.data.classes || []);
+            setSections(res.data.sections || []);
+            setSemester(res.data.semester || "");
+        }
+      } catch (error: any) {
+        console.error("Error fetching settings:", error);
+      }
+    }
+
+    useEffect(() => {
+       fetchSettings();
+    }, []);
 
   const addSection = () => {
     if (!sectionInput.trim()) return;
@@ -205,7 +223,7 @@ const [classes, setClasses] = useState([] as string[]);
             onChange={(e) => setSemester(e.target.value)}
             className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-200 outline-none"
           >
-            <option value="">Select Semester</option>
+            <option value="">Select Term</option>
             <option value="First Term">First Term</option>
             <option value="Second Term">Second Term</option>
             <option value="Third Term">Third Term</option>

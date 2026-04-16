@@ -1,6 +1,5 @@
-"use client";
+import { Providers } from '@/components/UI/Toaster';
 import './globals.css';
-import { Toaster } from "sonner";
 // FontAwesome configuration
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -14,9 +13,9 @@ config.autoAddCss = false;
 
   return (
     <html lang="en">
-      <body>
+      <body className='bg-white'>
         {children}
-        <Toaster position='top-right' richColors/>
+       <Providers/>
       </body>
     </html>
   );

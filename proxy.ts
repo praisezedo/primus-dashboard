@@ -1,15 +1,15 @@
 // proxy.ts (Edge safe)
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 
-export async function proxy(req: NextRequest) {
+export async function proxy(req: any) {
   const token = req.cookies.get("primus_token")?.value;
   const pathname = req.nextUrl.pathname;
 
   // public routes
 if (
+  pathname === "/" ||
   pathname.startsWith("/login") ||
   pathname.startsWith("/signup") ||
   pathname.startsWith("/academic-session") ||
