@@ -26,7 +26,7 @@ return (
 
 </div>
 
-<h1 className="font-bold text-2xl lg:text-3xl">
+<h1 className="font-bold text-black text-2xl lg:text-3xl">
 ₦{amount.toLocaleString()}
 </h1>
 

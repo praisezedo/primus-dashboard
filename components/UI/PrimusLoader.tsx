@@ -1,6 +1,6 @@
 export default function PrimusLoader() {
   return (
-    <div className="fixed inset-0 z-70 flex items-center text-center h-screen justify-center">
+    <div className="fixed inset-0 z-70 flex bg-white items-center text-center h-screen justify-center">
           <svg
       width="200"
       height="50"
@@ -40,7 +40,7 @@ export default function PrimusLoader() {
       ))}
 
       {/* Horizontal lines */}
-      {[18, 31].map((y, i) => (
+      {[18, 31].map((y: number, i: number) => (
         <line
           key={i}
           x1="0"
@@ -68,6 +68,7 @@ export default function PrimusLoader() {
         fontSize="25"
         fontWeight="bold"
         fill="#1F2937"
+        className="text-black"
       >
         Primus
         <animate

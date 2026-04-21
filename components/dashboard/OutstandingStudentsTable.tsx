@@ -17,7 +17,6 @@ export default function OutstandingStudentsTable() {
 
     }, []);
 
-    if (loading) return <LoadingSpinner/>;
 
   return (
 
@@ -25,7 +24,7 @@ export default function OutstandingStudentsTable() {
 
       <div className="flex justify-between items-center">
 
-        <h2 className="font-bold text-lg">
+        <h2 className="font-bold text-lg text-black">
           Students With Outstanding Fees
         </h2>
 
@@ -45,25 +44,25 @@ export default function OutstandingStudentsTable() {
 
         <div className="overflow-x-auto">
 
-          <table className="w-full text-sm">
+          <table className="w-full text-xs lg:text-sm min-w-150">
 
             <thead className="border-b text-gray-500">
 
               <tr>
 
-                <th className="text-left py-3">Student Name</th>
+                <th className="text-left py-3 text-black">Student Name</th>
 
-                <th className="text-left">Class</th>
+                <th className="text-left text-black">Class</th>
 
-                 <th className="text-left">Section</th>
+                 <th className="text-left text-black">Section</th>
                  
-                <th className="text-left">Total Fee</th>
+                <th className="text-left text-black">Total Fee</th>
 
-                <th className="text-left">Paid</th>
+                <th className="text-left text-black">Paid</th>
 
-                <th className="text-left">Balance</th>
+                <th className="text-left text-black">Balance</th>
 
-                <th className="text-left">Status</th>
+                <th className="text-left text-black">Status</th>
 
               </tr>
 
@@ -82,22 +81,22 @@ export default function OutstandingStudentsTable() {
 
                   <tr
                     key={index}
-                    className="border-b hover:bg-gray-50 transition"
+                    className="border-b hover:bg-gray-50  transition"
                   >
 
                     <td className="py-3 font-medium text-gray-800">
                       {student.studentName || "--"}
                     </td>
 
-                    <td>
+                    <td className="text-black">
                       {student.className || "--"}
                     </td>
 
-                     <td>
+                     <td className="text-black">
                         {student.section || "--"}
                      </td>
 
-                    <td>
+                    <td className="text-black font-semibold">
                       ₦{student.totalAmount.toLocaleString() || "--"}
                     </td>
 

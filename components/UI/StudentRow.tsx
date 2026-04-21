@@ -60,14 +60,14 @@ export default function StudentRow({
     return (
        <>
         <tr className="border-b">
-        <td className="p-4  w-10">{serial}</td>
-        <td className="p-4 w-50">{student.studentName}</td>
-        <td className="p-4 w-40">{student.studentId}</td>
-        <td className="p-4 w-40">{student.className}</td>
-        <td className="p-4 w-40">{student.section || "-"}</td>
-        <td className="p-4 w-40">{student.parentName || "-"}</td>
-        <td className="p-4 w-40">{student.parentPhone || "-"}</td>
-        <td className="p-4 w-40">{student.parentEmail || "-"}</td>
+        <td className="p-4  w-10 text-black">{serial}</td>
+        <td className="p-4 w-50 text-black">{student.studentName}</td>
+        <td className="p-4 w-40 text-black">{student.studentId}</td>
+        <td className="p-4 w-40 text-black">{student.className}</td>
+        <td className="p-4 w-40 text-black">{student.section || "-"}</td>
+        <td className="p-4 w-40 text-black">{student.parentName || "-"}</td>
+        <td className="p-4 w-40 text-black">{student.parentPhone || "-"}</td>
+        <td className="p-4 w-40 text-black">{student.parentEmail || "-"}</td>
 
         <td className={`p-4 w-20 `}> 
           <p className={`font-bold text-sm p-2 rounded-full ${

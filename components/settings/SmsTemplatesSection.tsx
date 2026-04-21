@@ -131,7 +131,7 @@ export default function SmsTemplatesSection({
           <div className="p-3 lg:p-5 space-y-3">
             <textarea
               rows={4}
-              className="w-full border border-gray-200 rounded-lg lg:rounded-xl px-2 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition resize-none"
+              className="w-full border border-gray-200 text-black rounded-lg lg:rounded-xl px-2 lg:px-4 py-2 lg:py-3 text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition resize-none"
               placeholder={placeholder}
               value={smsTemplate[field] || ""}
               onChange={(e) => setSmsTemplate({ ...smsTemplate, [field]: e.target.value })}

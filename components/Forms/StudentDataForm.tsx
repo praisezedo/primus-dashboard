@@ -80,7 +80,9 @@ catch (err: any) {
 
   if (loading) {
 
-    return <LoadingSpinner/>;
+    return <div className="fixed inset-0 flex items-center  justify-center bg-white ">
+            <div className="h-8 w-8 animate-spin rounded-full border-5 border-gray-300 border-t-blue-700" />
+        </div>;
   }
 
 
@@ -89,12 +91,12 @@ catch (err: any) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-4 lg:p-5 gap-3 lg:gap-5">
         {/* Student Name */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-sm lg:text-base">Student Name</label>
+          <label className="font-bold text-sm lg:text-base text-black">Student Name</label>
           <input
             name="studentName"
             value={form.studentName}
             onChange={updateField}
-            className="focus:outline-none focus:border border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
+            className="focus:outline-none focus:border border text-black p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
             placeholder="Enter student full name"
             required
           />
@@ -102,12 +104,12 @@ catch (err: any) {
 
         {/* Student ID */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-sm lg:text-base">Student ID</label>
+          <label className="font-bold text-sm lg:text-base text-black">Student ID</label>
           <input
             name="studentId"
             value={form.studentId}
             onChange={updateField}
-            className="border focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
+            className="border focus:outline-none focus:border text-black p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
             placeholder="e.g., STU001"
             required
           />
@@ -115,12 +117,12 @@ catch (err: any) {
 
         {/* Class */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-sm lg:text-base">Class</label>
+          <label className="font-bold text-sm lg:text-base text-black">Class</label>
           <select
             name="className"
             value={form.className}
             onChange={updateField}
-            className="border focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
+            className="border focus:outline-none text-black focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
             required
           >
             <option value="">Select Class</option>
@@ -134,12 +136,12 @@ catch (err: any) {
 
         {/* Section */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-sm lg:text-base">Section</label>
+          <label className="font-bold text-sm text-black lg:text-base">Section</label>
           <select
             name="section"
             value={form.section}
             onChange={updateField}
-            className="border focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
+            className="border text-black focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
             required
           >
             <option value="">Select Section</option>
@@ -153,37 +155,37 @@ catch (err: any) {
 
         {/* Parent Name */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-sm lg:text-base">Parent Name</label>
+          <label className="font-bold  text-black text-sm lg:text-base">Parent Name</label>
           <input
             name="parentName"
             value={form.parentName}
             onChange={updateField}
-            className="border focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
+            className="border text-black focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
             placeholder="Enter parent Name"
           />
         </div>
 
         {/* Parent Phone */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-sm lg:text-base">Parent Phone</label>
+          <label className="font-bold text-sm lg:text-base text-black">Parent Phone</label>
           <input
             name="parentPhone"
             value={form.parentPhone}
             onChange={updateField}
-            className="border focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
+            className="border text-black focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
             placeholder="Parent Phone  e.g., 07050243807"
           />
         </div>
 
         {/* Parent Email */}
         <div className="flex flex-col gap-2">
-          <label className="font-bold text-sm lg:text-base">Parent Email (Optional)</label>
+          <label className="font-bold text-sm lg:text-base text-black">Parent Email (Optional)</label>
           <input
             type="email"
             name="parentEmail"
             value={form.parentEmail}
             onChange={updateField}
-            className="border focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
+            className="border text-black focus:outline-none focus:border p-2 lg:p-3 rounded-lg w-full text-sm lg:text-base"
             placeholder="Enter parents Email e.g fake@gmail.com"
           />
         </div>
@@ -197,7 +199,7 @@ catch (err: any) {
             onChange={updateField}
             className="w-4 h-4"
           />
-          <label className="font-bold text-sm lg:text-base">Notify Parent (SMS)</label>
+          <label className="font-bold text-black text-sm lg:text-base">Notify Parent (SMS)</label>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import { StudentFeeProps } from "../types/student";
 import api from "@/lib/axios";
 import LoadingSpinner from "./LoadingSpinner";
 import { toast } from "sonner";
+import React from "react";
 
 export default function StudentFeesModal({
     open,
@@ -105,7 +106,7 @@ async function handlePay(fee: any) {
     <div className={`fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4`}>
       <div className="bg-white relative rounded-lg p-4 lg:p-6 w-full max-w-4xl space-y-4 max-h-[90vh] overflow-y-auto">
 
-        <h2 className="text-base lg:text-lg font-bold">
+        <h2 className="text-base lg:text-lg font-bold text-black">
           {studentName} Fees Record
         </h2>
 
@@ -113,29 +114,29 @@ async function handlePay(fee: any) {
           <LoadingSpinner />
         ) : (
 <div className="overflow-x-auto">
-<table className="w-full border rounded-lg overflow-hidden text-xs lg:text-sm min-w-200">
+<table className="w-full border rounded-lg overflow-hidden  text-xs lg:text-sm min-w-200">
   <thead className="bg-gray-100 text-gray-700">
     <tr>
-      <th className="p-2 lg:p-3 text-left">Fee Type</th>
-      <th className="p-2 lg:p-3">Total</th>
-      <th className="p-2 lg:p-3">Paid</th>
-      <th className="p-2 lg:p-3">Balance</th>
-      <th className="p-2 lg:p-3">Status</th>
-      <th className="p-2 lg:p-3">Action</th>
+      <th className="p-2 lg:p-3 text-left text-black ">Fee Type</th>
+      <th className="p-2 lg:p-3 text-black ">Total</th>
+      <th className="p-2 lg:p-3 text-black ">Paid</th>
+      <th className="p-2 lg:p-3 text-black ">Balance</th>
+      <th className="p-2 lg:p-3 text-black ">Status</th>
+      <th className="p-2 lg:p-3 text-black ">Action</th>
     </tr>
   </thead>
 
   <tbody>
 {fees.map((f: any) => (
-  <>
-  <div key={f._id}>
+  < React.Fragment>
+ 
     <tr key={f._id} className="border-t hover:bg-gray-50">
 
-      <td className="p-2 lg:p-3 font-medium">
+      <td className="p-2 lg:p-3 text-black text-left font-medium">
         {f.feeTypeId?.name}
       </td>
 
-      <td className="text-center">
+      <td className="text-center text-black font-medium">
         ₦{f.totalAmount.toLocaleString()}
       </td>
 
@@ -164,18 +165,26 @@ async function handlePay(fee: any) {
 
       <td className="text-center">
         {f.balance > 0 && (
-          <div className="flex flex-col  items-center gap-1 lg:gap-2 justify-center">
+          <div className="flex  items-center gap-2 lg:gap-2 justify-center">
 
             <input
               type="number"
               placeholder="Amount"
-              className="border rounded px-1 lg:px-2 py-1 w-16 lg:w-24 text-xs lg:text-sm"
+              className="border border-black text-black rounded px-1 lg:px-2 py-1 w-16 lg:w-24 text-xs lg:text-sm"
               value={paymentInputs[f._id] || ""}
               onChange={(e) =>
                 setPaymentInputs({
                   ...paymentInputs,
                   [f._id]: Number(e.target.value)
                 })
+              }
+
+              onKeyDown={
+                (e) => {
+                  if (e.key === "Enter") {
+                    handlePay(f);
+                  }
+                }
               }
             />
 
@@ -192,7 +201,7 @@ async function handlePay(fee: any) {
       </td>
 
     </tr>
-  </div>
+
 
     {paymentHistory[f._id]?.length > 0 && (
       <tr key={`${f._id}-history`}>
@@ -210,11 +219,11 @@ async function handlePay(fee: any) {
                 className="flex justify-between border-b py-1"
               >
 
-                <span>
+                <span className="text-black ">
                   ₦{p.amount.toLocaleString()}
                 </span>
 
-                <span>
+                <span className="text-gray-500">
                   {new Date(p.createdAt).toLocaleDateString()}
                 </span>
 
@@ -226,7 +235,7 @@ async function handlePay(fee: any) {
         </td>
       </tr>
     )}
-  </>
+  </React.Fragment>
 ))}
   </tbody>
 </table>

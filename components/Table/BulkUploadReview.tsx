@@ -36,7 +36,7 @@ export default function BulkUploadReview() {
  return (
     <section className="mx-5 mt-10 border border-gray-200 rounded-lg p-5 shadow-sm">
         <div className="flex justify-center items-center mb-4 gap-10 font-bold">
-            <h2 className="font-bold text-lg">Bulk Upload Review</h2>
+            <h2 className="font-bold text-black text-lg">Bulk Upload Review</h2>
             <div className="text-sm text-gray-600 flex gap-4">
                 <span>Total: {stats.totalUploads}</span>
                 <span className="text-green-700">Success: {stats.successCount}</span>
@@ -51,23 +51,23 @@ export default function BulkUploadReview() {
                <table className="w-full text-sm text-center">
                 <thead className="border-b font-semibold">
                     <tr>
-                        <td className="p-2">Date</td>
-                        <td className="p-2">Status</td>
-                        <td className="p-2">Rows</td>
-                        <td className="p-2">Inserted</td>
-                        <td className="p-2">Notify</td>
-                        <td className="p-2">Error</td>
+                        <td className="p-2 text-black">Date</td>
+                        <td className="p-2 text-black">Status</td>
+                        <td className="p-2 text-black">Rows</td>
+                        <td className="p-2 text-black">Inserted</td>
+                        <td className="p-2 text-black">Notify</td>
+                        <td className="p-2 text-black">Error</td>
                     </tr>
                 </thead>
 
                 <tbody>
                     {logs.map((log: any) => (
                         <tr key={log._id} className="border-b">
-                            <td className="p-2">{new Date(log.createdAt).toLocaleDateString()}</td>
+                            <td className="p-2 text-black">{new Date(log.createdAt).toLocaleDateString()}</td>
                             <td className={`p-2 font-bold ${log.status === "SUCCESS" ? "text-green-900" : "text-red-600"}`}>{log.status}</td>
-                            <td className="p-2">{log.totalRows}</td>
-                            <td className="p-2">{log.insertedRows}</td>
-                            <td className="p-2">{log.notifyParents ? "Yes" : "No"}</td>
+                            <td className="p-2 text-black">{log.totalRows}</td>
+                            <td className="p-2 text-black">{log.insertedRows}</td>
+                            <td className="p-2 text-black">{log.notifyParents ? "Yes" : "No"}</td>
                             <td className="p-2 text-center">
                                 {log.status === "FAILED" ? (
                                     <span className="text-red-600">

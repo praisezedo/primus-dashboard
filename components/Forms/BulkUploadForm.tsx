@@ -111,7 +111,7 @@ export default function BulkUploadForm() {
         <div className="flex flex-col items-center gap-2">
           <span className="text-4xl"><FontAwesomeIcon icon={faCloudUpload} className={'text-gray-500 w-7 h-7'}/></span>
 
-          <p className="font-medium">
+          <p className="font-medium text-gray-500">
             Drag and drop your CSV file here
           </p>
 
@@ -146,7 +146,7 @@ export default function BulkUploadForm() {
       </div>
   )}
 
-<label className="mx-5 mt-4 flex items-center gap-2 text-sm">
+<label className="mx-5 mt-4 text-black flex items-center gap-2 text-sm">
     <input 
     type="checkbox" 
     checked={notify}
@@ -158,7 +158,7 @@ export default function BulkUploadForm() {
 <button
   onClick={handleUpload}
   disabled={!file || uploading}
-  className="mx-4 lg:mx-5 mt-4 w-full lg:w-80 rounded-lg hover:opacity-50 bg-blue-700 py-2 lg:py-3 text-white disabled:opacity-50 text-sm lg:text-base font-semibold"
+  className="mx-4 lg:mx-5 mt-4 w-full  rounded-lg hover:opacity-50 bg-blue-700 py-2 lg:py-3 text-white disabled:opacity-50 text-sm lg:text-base font-semibold"
 >
   Upload Data
 </button>

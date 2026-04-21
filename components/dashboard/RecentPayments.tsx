@@ -17,13 +17,11 @@ api.get("/api/dashboard/recent-payments")
 
 },[])
 
-if(loading) return <LoadingSpinner/>
-
 return(
 
 <div className="bg-white p-4 lg:p-6 rounded-lg shadow border">
 
-<h2 className="font-bold text-base lg:text-lg mb-4">
+<h2 className="font-bold text-base lg:text-lg mb-4 text-black">
 Recent Payments
 </h2>
 
@@ -33,11 +31,11 @@ Recent Payments
 <thead className="bg-gray-100">
 
 <tr>
-<th className="p-2 text-left">Student</th>
-<th className="p-2">Class</th>
-<th className="p-2">Section</th>
-<th className="p-2">Amount</th>
-<th className="p-2">Date</th>
+<th className="p-2 text-left text-black">Student</th>
+<th className="p-2 text-black">Class</th>
+<th className="p-2 text-black">Section</th>
+<th className="p-2 text-black">Amount</th>
+<th className="p-2 text-black">Date</th>
 </tr>
 
 </thead>
@@ -55,15 +53,15 @@ Recent Payments
 :payments.map((p: any)=>(
 <tr key={p._id} className="border-t">
 
-<td className="p-2">
+<td className="p-2 text-black font-medium">
 {p.studentId?.studentName || "--"}
 </td>
 
-<td className="text-center">
+<td className="text-center text-black">
 {p.studentId?.className || "--"}
 </td>
 
-<td className="text-center">
+<td className="text-center text-black">
 {p.studentId?.section || "--"}
 </td>
 

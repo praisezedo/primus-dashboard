@@ -25,11 +25,11 @@ return (
 
 </div>
 
-<h1 className="font-bold text-2xl lg:text-3xl">
+<h1 className="font-bold text-2xl text-black lg:text-3xl">
 ₦{amount.toLocaleString()}
 </h1>
 
-<p className="text-gray-500 text-xs lg:text-sm">
+<p className="text-gray-500 text-xs  lg:text-sm">
 {studentsWithDebt?.toLocaleString()} students with outstanding balances.
 </p>
 

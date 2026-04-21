@@ -18,7 +18,7 @@ export default function TotalStatsCard ({
             </span>
           </div>
 
-          <h1 className="font-bold text-2xl lg:text-3xl">
+          <h1 className="font-bold text-2xl text-black lg:text-3xl">
             {totalStudents.toLocaleString()}
           </h1>
 

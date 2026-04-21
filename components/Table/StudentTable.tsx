@@ -11,7 +11,7 @@ export default function StudentTable({
     return (
         <section className="relative overflow-x-scroll flex mx-7 p-3 flex-col gap-4 border border-gray-200 shadow-sm rounded-md">
            <div className="flex flex-col gap-2">
-        <h1 className="font-bold text-xl">Student Records</h1>
+        <h1 className="font-bold text-xl text-black">Student Records</h1>
                 <p className="text-gray-500">
                     Displaying {students.length} student(s)
                 </p>
@@ -20,16 +20,16 @@ export default function StudentTable({
            <table className="text-center justify-center w-fit">
             <thead>
                 <tr>
-            <td className="p-4 w-10 font-bold">S/N</td>      
-            <th className="p-4 w-40">Student Name</th>
-            <th className="p-4 w-40">Student ID</th>
-            <th className="p-4 w-40">Class</th>
-            <th className="p-4 w-40">Section</th>
-            <th className="p-4 w-40">Parent Name</th>
-            <th className="p-4 w-40">Parent Phone</th>
-            <th className="p-4 w-40">Parent Email</th>
-            <th className="p-4 w-40">SMS Status</th>
-            <th className="p-4 w-40 font-bold">Actions</th>
+            <td className="p-4 w-10 font-bold text-black">S/N</td>      
+            <th className="p-4 w-40 text-black">Student Name</th>
+            <th className="p-4 w-40 text-black">Student ID</th>
+            <th className="p-4 w-40 text-black">Class</th>
+            <th className="p-4 w-40 text-black">Section</th>
+            <th className="p-4 w-40 text-black">Parent Name</th>
+            <th className="p-4 w-40 text-black">Parent Phone</th>
+            <th className="p-4 w-40 text-black">Parent Email</th>
+            <th className="p-4 w-40 text-black">SMS Status</th>
+            <th className="p-4 w-40 font-bold text-black">Actions</th>
                 </tr>
             </thead>
 

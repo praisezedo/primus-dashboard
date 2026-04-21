@@ -6,6 +6,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import LogOut from "@/components/UI/LogOut";
+import api from "@/lib/axios";
 
 interface SideBarProps {
   isMobileMenuOpen?: boolean;
@@ -16,6 +17,12 @@ export default function SideBar({ isMobileMenuOpen = false, onMobileMenuClose }:
     const [showLogout , setShowLogout] = useState(false);
     const pathname = usePathname();
     const isActive = (href: string) => pathname === href;
+    const [schoolName , setSchoolName] = useState("");
+
+
+
+
+
 
     // Close mobile menu when route changes
     useEffect(() => {
@@ -49,7 +56,7 @@ export default function SideBar({ isMobileMenuOpen = false, onMobileMenuClose }:
             {navigationItems.map((item) => (
               <Link
                 key={item.href}
-                className={`flex gap-3 p-2 rounded-lg hover:cursor-pointer group relative font-bold transition-colors ${
+                className={`flex gap-3 p-2 text-black rounded-lg hover:cursor-pointer group relative font-bold transition-colors ${
                   isActive(item.href) ? 'bg-blue-50 text-blue-700' : 'bg-white hover:bg-gray-50'
                 }`}
                 href={item.href}
@@ -76,7 +83,7 @@ export default function SideBar({ isMobileMenuOpen = false, onMobileMenuClose }:
                   {item.tooltip}
                 </span>
                 <FontAwesomeIcon icon={item.icon} className="w-5 h-5 text-blue-700 shrink-0"/>
-                <span className="font-bold truncate">{item.label}</span>
+                <span className="font-bold text-black truncate">{item.label}</span>
               </Link>
             ))}
 

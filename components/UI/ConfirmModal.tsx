@@ -36,7 +36,7 @@ export default function ConfirmModal({
     >
       <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">{title}</h2>
+          <h2 className="text-xl font-bold text-black">{title}</h2>
           <button
             type="button"
             onClick={onClose}
@@ -54,7 +54,7 @@ export default function ConfirmModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md border px-4 py-2 text-sm hover:opacity-80"
+            className="rounded-md  text-black border px-4 py-2 border-black text-sm hover:opacity-80"
           >
             {cancelLabel}
           </button>

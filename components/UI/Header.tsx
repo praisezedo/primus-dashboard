@@ -86,17 +86,17 @@ export default function Header() {
 
           {/* Mobile Logo Placeholder */}
           <div className="lg:hidden">
-            <h1 className="text-xl font-bold text-blue-700">Primus</h1>
+            <h1 className="text-xl font-bold text-blue-700"><PrimusLogo /></h1>
           </div>
 
           {/* Session Selector - Responsive */}
           <select
             value={activeSessionId}
             onChange={(e) => handleSessionChange(e.target.value)}
-            className="border border-gray-300 rounded-lg px-2 lg:px-3 py-2 text-xs lg:text-base font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all max-w-30 lg:max-w-none"
+            className="border  border-black text-black  rounded-lg px-2 lg:px-3 py-2 text-xs lg:text-base font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all max-w-30 lg:max-w-none"
           >
             {sessions.map((session:any) => (
-              <option className="font-bold" key={session._id} value={session._id}>
+              <option className="font-bold text-black" key={session._id} value={session._id}>
                 {session.name} {session.isActive ? "(Active)" : ""}
               </option>
             ))}
@@ -109,10 +109,10 @@ export default function Header() {
               <SkeletonInlineText length={10} />
             ) : (
               <span className="font-bold text-white bg-blue-700 py-2 px-4 rounded-full text-sm">
-                {schoolName.trim()[0]}
+                {schoolName.trim()[0].toUpperCase()}
               </span>
             )}
-            <h1 className="font-bold text-lg">
+            <h1 className="font-bold text-lg text-black">
               {schoolName || <SkeletonInlineText length={12} />}
             </h1>
           </div>
@@ -122,32 +122,22 @@ export default function Header() {
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setIsMenuOpen(false)}>
-<div className="fixed top-0 left-0 h-full w-80 max-w-[90vw] bg-white shadow-xl transform transition-transform duration-300 ease-in-out" onClick={(e) => e.stopPropagation()}>
-            <div className="p-4 lg:p-6 border-b border-gray-200">
+<div className="fixed top-10 left-0 h-full w-80 max-w-[90vw] bg-white shadow-xl transform transition-transform duration-300 ease-in-out" onClick={(e) => e.stopPropagation()}>
+
+
+            {/* Mobile Navigation Menu */}
+            <nav className="flex flex-col gap-3 lg:gap-6 px-4 lg:px-6 py-5 lg:py-6">
+            <div className=" p-4 lg:p-6">
               <div className="flex items-center gap-2 lg:gap-3">
                 {/* Primus Logo Icon */}
-                <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 200 50"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 lg:w-8 lg:h-8"
-                >
-                  <rect x="0" y="5" width="40" height="40" rx="8" fill="#2563EB" />
-                  <line x1="13" y1="5" x2="13" y2="45" stroke="white" strokeWidth="2" />
-                  <line x1="26" y1="5" x2="26" y2="45" stroke="white" strokeWidth="2" />
-                  <line x1="0" y1="18" x2="40" y2="18" stroke="white" strokeWidth="2" />
-                  <line x1="0" y1="31" x2="40" y2="31" stroke="white" strokeWidth="2" />
-                </svg>
-                <h1 className="font-bold text-sm lg:text-lg">
+           <span className="bg-blue-700 p-2 rounded-full flex items-center justify-center">
+              <h1 className="text-white">{schoolName.charAt(0).toUpperCase()}</h1>
+           </span>
+                <h1 className="font-bold text-black text-sm lg:text-lg">
                   {schoolName || <SkeletonInlineText length={12} />}
                 </h1>
               </div>
             </div>
-
-            {/* Mobile Navigation Menu */}
-            <nav className="flex flex-col gap-3 lg:gap-6 px-4 lg:px-6 py-5 lg:py-6">
               <Link
                 className={`flex gap-3 p-2 lg:p-3 rounded-lg hover:cursor-pointer font-bold transition-colors text-sm lg:text-base ${
                   pathname === '/' ? 'bg-blue-50 text-blue-700' : 'bg-white hover:bg-gray-50'
@@ -156,7 +146,7 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FontAwesomeIcon className="w-4 h-4 lg:w-5 lg:h-5 text-blue-700 shrink-0" icon={faHouse}/>
-                <span>Dashboard</span>
+                <span className="text-black">Dashboard</span>
               </Link>
 
               <Link
@@ -167,7 +157,7 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FontAwesomeIcon className="w-4 h-4 lg:w-5 lg:h-5 text-blue-700 shrink-0" icon={faUsers}/>
-                <span>Students</span>
+                <span className="text-black">Students</span>
               </Link>
 
               <Link
@@ -178,7 +168,7 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FontAwesomeIcon className="w-4 h-4 lg:w-5 lg:h-5 text-blue-700 shrink-0" icon={faUserPlus}/>
-                <span>Add Student</span>
+                <span className="text-black">Add Student</span>
               </Link>
 
               <Link
@@ -189,7 +179,7 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FontAwesomeIcon className="w-4 h-4 lg:w-5 lg:h-5 text-blue-700 shrink-0" icon={faCloudArrowUp}/>
-                <span>Bulk Upload</span>
+                <span className="text-black">Bulk Upload</span>
               </Link>
             </nav>
 
@@ -202,7 +192,7 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FontAwesomeIcon icon={faGear} className="w-4 h-4 lg:w-5 lg:h-5 text-blue-700 shrink-0"/>
-                <span className="font-bold">Settings</span>
+                <span className="font-bold text-black">Settings</span>
               </Link>
 
               <button
@@ -213,7 +203,7 @@ export default function Header() {
                 className="flex gap-3 p-2 lg:p-3 rounded-lg hover:cursor-pointer font-bold transition-colors w-full text-left bg-white hover:bg-gray-50 text-sm lg:text-base"
               >
                 <FontAwesomeIcon icon={faArrowRightFromBracket} className="w-4 h-4 lg:w-5 lg:h-5 text-blue-700 shrink-0"/>
-                <span className="font-bold">Logout</span>
+                <span className="font-bold text-black">Logout</span>
               </button>
             </div>
           </div>

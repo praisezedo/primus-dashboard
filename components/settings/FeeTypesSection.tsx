@@ -38,7 +38,7 @@ export default function FeeTypesSection({
           {/* Input row */}
           <div className="flex flex-col sm:flex-row gap-2">
             <input
-              className="flex-1 w-full border border-gray-200 rounded-lg lg:rounded-xl px-2 lg:px-3 py-2 text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+              className="flex-1 w-full border border-gray-200 text-black rounded-lg lg:rounded-xl px-2 lg:px-3 py-2 text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               placeholder="e.g. Tuition Fee, PTA Levy"
               value={feeTypeInput}
               onChange={(e) => setFeeTypeInput(e.target.value)}

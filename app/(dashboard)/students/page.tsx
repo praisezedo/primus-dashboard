@@ -128,20 +128,20 @@ if (loading) {
     return <>
     <section className="p-7 flex flex-col gap-10">
     <div className="flex flex-col gap-3">
-    <h1 className="font-bold text-2xl">Students Management</h1>
-    <p className="text-gray-500">View ,search and manage records , fees status , and communication details</p>
+    <h1 className="font-bold text-2xl text-black">Students Management</h1>
+    <p className="text-gray-600">View ,search and manage records , fees status , and communication details</p>
     </div>
 
     <div className="flex flex-col sm:flex-row gap-2 lg:gap-3 items-start sm:items-center text-center px-4 lg:px-0 flex-wrap">
 
 <div className="flex flex-col sm:flex-row gap-2 lg:gap-3 w-full sm:w-auto">
- <input className="px-2 lg:px-3 py-2 focus:outline-none w-full sm:w-64 lg:w-80 border border-gray-200 shadow-sm rounded-lg text-sm lg:text-base" 
+ <input className="px-2 text-black lg:px-3 py-2 focus:outline-none w-full sm:w-64 lg:w-80 border border-gray-200 shadow-sm rounded-lg text-sm lg:text-base" 
   type="text" placeholder="Search by name or ID..."
   value={search}
   onChange={(e) => setSearch(e.target.value)}
   />
 
-    <select className="border border-gray-200 shadow-sm rounded-lg p-2 lg:p-3 text-sm lg:text-base w-full sm:w-48" 
+    <select className="border text-black border-gray-200 shadow-sm rounded-lg p-2 lg:p-3 text-sm lg:text-base w-full sm:w-48" 
     name="className" id="className"
     value={className}
     onChange={(e) => setClassName(e.target.value)}
@@ -154,7 +154,7 @@ if (loading) {
        }
     </select>
 
-     <select className="border border-gray-200 shadow-sm rounded-lg p-3"
+     <select className="border text-black border-gray-200 shadow-sm rounded-lg p-3"
       name="section" id="section"
       value={section}
       onChange={(e) => setSection(e.target.value)}
@@ -167,7 +167,7 @@ if (loading) {
         }
       </select>
 
-    <select className="border border-gray-200 shadow-sm rounded-lg p-3" 
+    <select className="border text-black border-gray-200 shadow-sm rounded-lg p-3" 
     name="smsStatus" id="smsStatus"
     value={smsStatus}
     onChange={(e) => setSmsStatus(e.target.value)}
@@ -192,21 +192,21 @@ if (loading) {
            <button
              type="button"
              onClick={(e) => handleSelectGroup("PAID", e)}
-             className="w-full px-4 py-3 text-left text-sm hover:bg-slate-50"
+             className="w-full px-4  text-black py-3 text-left text-sm hover:bg-slate-50"
            >
              Send SMS to paid students
            </button>
            <button
              type="button"
              onClick={(e) => handleSelectGroup("UNPAID", e)}
-             className="w-full px-4 py-3 text-left text-sm hover:bg-slate-50"
+             className="w-full text-black px-4 py-3 text-left text-sm hover:bg-slate-50"
            >
              Send SMS to unpaid students
            </button>
            <button
              type="button"
              onClick={(e) => handleSelectGroup("PARTIAL", e)}
-             className="w-full px-4 py-3 text-left text-sm hover:bg-slate-50"
+             className="w-full text-black  px-4 py-3 text-left text-sm hover:bg-slate-50"
            >
              Send SMS to partial paid students
            </button>

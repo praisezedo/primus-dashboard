@@ -72,15 +72,15 @@ Welcome , Admin
 
 {isLoading ?
 <SkeletonInlineText length={7}/> :
-<p className="text-sm lg:text-base">{academicSession} Academic Session</p>}
+<p className="text-sm lg:text-base text-black">{academicSession} Academic Session</p>}
 
 {isLoading ?
 <SkeletonInlineText length={7}/> :
-<p className="text-sm lg:text-base">{semester}</p>}
+<p className="text-sm lg:text-base text-black">{semester}</p>}
 
 </span>
 
-<p className="font-bold text-sm lg:text-base">
+<p className="font-bold text-sm lg:text-base text-black">
 Embrace the challenges , for they are opportunities in disguise.
 </p>
 
@@ -89,9 +89,9 @@ Embrace the challenges , for they are opportunities in disguise.
 
 {/* DASHBOARD CARDS */}
 
-<section className="flex flex-col gap-4 lg:gap-7 mx-0 lg:mx-3 relative">
+<section className="flex flex-col gap-4 lg:gap-7 mx-0 lg:mx-3 relative bg-white">
 
-<h1 className="font-bold text-2xl lg:text-4xl px-4 lg:px-0">Dashboard Overview</h1>
+<h1 className="font-bold text-2xl lg:text-4xl px-4 lg:px-0 text-black">Dashboard Overview</h1>
 
 <div className="relative grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 px-4 lg:px-0">
 

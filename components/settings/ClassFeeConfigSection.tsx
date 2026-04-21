@@ -113,7 +113,7 @@ export default function ClassFeeConfigSection({
 
         {/* Grid table */}
         <div className="overflow-x-auto rounded-lg lg:rounded-xl border border-gray-100">
-          <table className="w-full text-xs lg:text-sm">
+          <table className="w-full text-xs  lg:text-sm">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
                 <th className="text-left px-2 lg:px-4 py-2 lg:py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide w-24 lg:w-32">
@@ -151,7 +151,7 @@ export default function ClassFeeConfigSection({
                             <input
                               type="number"
                               min={0}
-                              className="w-full lg:w-28 border border-gray-200 rounded-lg pl-4 lg:pl-6 pr-1 lg:pr-2 py-1 lg:py-1.5 text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+                              className="w-20 text-black lg:w-28 border  border-gray-200 rounded-lg pl-4 lg:pl-6 pr-1 lg:pr-2 py-1 lg:py-1.5 text-xs lg:text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
                               placeholder="0"
                               value={grid[key] ?? ""}
                               onChange={(e) => handleChange(cls, ft._id, e.target.value)}

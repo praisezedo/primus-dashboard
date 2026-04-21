@@ -11,6 +11,8 @@ interface Props {
   setSections: any;
   semester: string;
   setSemester: (v: string) => void;
+  schoolName: string;
+  setSchoolName: (v: string) => void;
   saving: boolean;
   onSave: () => void;
 }
@@ -19,6 +21,7 @@ export default function AcademicStructureSection({
   classes, setClasses,
   sections, setSections,
   semester, setSemester,
+  schoolName, setSchoolName,
   saving, onSave,
 }: Props) {
   const [classInput,   setClassInput]   = useState("");
@@ -44,11 +47,21 @@ export default function AcademicStructureSection({
   return (
     <div className="space-y-5">
 
+      {/* ── School Name card ── */}
+      <Card title="School Name" description="Update your school's name" icon={faSchool}>
+        <input
+          className="input w-full px-2 py-2 text-black lg:py-2 text-sm lg:text-base"
+          placeholder="Enter school name"
+          value={schoolName}
+          onChange={(e) => setSchoolName(e.target.value)}
+        />
+      </Card>
+
       {/* ── Classes card ── */}
       <Card title="Classes" description="Add the class levels available in your school" icon={faSchool}>
         <div className="flex flex-col sm:flex-row gap-2">
           <input
-            className="input flex-1 w-full px-2 py-2 lg:py-2 text-sm lg:text-base"
+            className="input flex-1 w-full text-black px-2 py-2 lg:py-2 text-sm lg:text-base"
             placeholder="e.g. JSS 1, SS 2"
             value={classInput}
             onChange={(e) => setClassInput(e.target.value)}
@@ -67,7 +80,7 @@ export default function AcademicStructureSection({
       <Card title="Sections" description="Define the sections or streams in your school" icon={faFolder}>
         <div className="flex flex-col sm:flex-row gap-2">
           <input
-            className="input flex-1 w-full px-2 py-2 lg:py-2 text-sm lg:text-base"
+            className="input flex-1 w-full text-black px-2 py-2 lg:py-2 text-sm lg:text-base"
             placeholder="e.g. A, Science B"
             value={sectionInput}
             onChange={(e) => setSectionInput(e.target.value)}
@@ -85,7 +98,7 @@ export default function AcademicStructureSection({
       {/* ── Semester card ── */}
       <Card title="Current Semester / Term" description="Set the active academic period" icon={faCalendar}>
         <select
-          className="input w-full px-2 py-2 lg:py-2 text-sm lg:text-base"
+          className="input w-full px-2  text-black py-2 lg:py-2 text-sm lg:text-base"
           value={semester}
           onChange={(e) => setSemester(e.target.value)}
         >

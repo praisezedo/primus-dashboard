@@ -89,11 +89,11 @@ export default async function RootLayout({
   }
   return (
       <main
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
       >
         <Header />
         <SideBar/>
-        <div className="lg:ml-50 mt-17 lg:mt-17 p-4 lg:p-6 overflow-y-auto overflow-x-hidden min-h-screen">
+        <div className="lg:ml-50 mt-16 lg:mt-16 p-4 lg:p-6 overflow-y-auto overflow-x-hidden min-h-screen bg-white">
           {children}
         </div>
        </main>

@@ -50,10 +50,10 @@ export default function EditStudentModal({
         onSubmit={handleSubmit}
         className="bg-white rounded-lg p-6 w-125 space-y-4"
       >
-        <h2 className="text-lg font-bold">Edit Student</h2>
+        <h2 className="text-lg font-bold text-black ">Edit Student</h2>
 
         <input
-          className="w-full border p-2 rounded"
+          className="w-full text-black  border p-2 rounded"
           value={form.studentName}
           onChange={(e) =>
             setForm({ ...form, studentName: e.target.value })
@@ -62,7 +62,7 @@ export default function EditStudentModal({
         />
          
          <input
-          className="w-full border p-2 rounded"
+          className="w-full text-black  border p-2 rounded"
           value={form.studentId}
           onChange={(e) =>
             setForm({ ...form, studentId: e.target.value })
@@ -71,7 +71,7 @@ export default function EditStudentModal({
         />
 
         <input
-          className="w-full border p-2 rounded"
+          className="w-full text-black  border p-2 rounded"
           value={form.className}
           onChange={(e) =>
             setForm({ ...form, className: e.target.value })
@@ -80,7 +80,7 @@ export default function EditStudentModal({
         />
 
         <input
-          className="w-full border p-2 rounded"
+          className="w-full text-black  border p-2 rounded"
           value={form.section}
           onChange={(e) =>
             setForm({ ...form, section: e.target.value })
@@ -89,7 +89,7 @@ export default function EditStudentModal({
         />
          
         <input
-          className="w-full border p-2 rounded"
+          className="w-full text-black  border p-2 rounded"
           value={form.parentName}
           onChange={(e) =>
             setForm({ ...form, parentName: e.target.value })
@@ -98,7 +98,7 @@ export default function EditStudentModal({
         />
 
         <input
-          className="w-full border p-2 rounded"
+          className="w-full border text-black  p-2 rounded"
           value={form.parentPhone}
           onChange={(e) =>
             setForm({ ...form, parentPhone: e.target.value })
@@ -107,7 +107,7 @@ export default function EditStudentModal({
         />
 
         <input
-          className="w-full border p-2 rounded"
+          className="w-full text-black  border p-2 rounded"
           value={form.parentEmail}
           onChange={(e) =>
             setForm({ ...form, parentEmail: e.target.value })
@@ -119,7 +119,7 @@ export default function EditStudentModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 hover:opacity-50 border rounded"
+            className="px-4 py-2 hover:opacity-50 text-black  border border-black rounded"
           >
             Cancel
           </button>

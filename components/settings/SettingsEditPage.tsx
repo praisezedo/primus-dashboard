@@ -35,6 +35,7 @@ export default function SettingsEditPage() {
   const [classes,  setClasses]  = useState([] as string[]);
   const [sections, setSections] = useState([] as string[]);
   const [semester, setSemester] = useState("");
+  const [schoolName, setSchoolName] = useState("");
   const [academicSaving, setAcademicSaving] = useState(false);
 
   // ── Fee types state ───────────────────────────────────────────────────────
@@ -59,10 +60,11 @@ export default function SettingsEditPage() {
   useEffect(() => {
     async function fetchAll() {
       try {
-        const [settingsRes, feeTypesRes, feeConfigsRes] = await Promise.all([
+        const [settingsRes, feeTypesRes, feeConfigsRes, headerRes] = await Promise.all([
           api.get("/api/settings/get"),
           api.get("/api/fees/feetype"),
           api.get("/api/fees/class-config"),
+          api.get("/api/dashboard/headerdata"),
         ]);
 
         if (settingsRes.data) {
@@ -70,6 +72,10 @@ export default function SettingsEditPage() {
           setSections(settingsRes.data.sections || []);
           setSemester(settingsRes.data.semester || "");
           setSmsTemplate(settingsRes.data.smsTemplate || { paid: "", unpaid: "", partial: "" });
+        }
+
+        if (headerRes.data?.body) {
+          setSchoolName(headerRes.data.body.schoolName || "");
         }
 
         setFeeTypes(feeTypesRes.data || []);
@@ -88,7 +94,10 @@ export default function SettingsEditPage() {
     if (academicSaving) return;
     setAcademicSaving(true);
     try {
-      await api.put("/api/settings/update", { classes, sections, semester, smsTemplate });
+      await Promise.all([
+        api.put("/api/settings/update", { classes, sections, semester, smsTemplate }),
+        api.put("/api/admin/update-school-name", { schoolName }),
+      ]);
       toast.success("Academic structure saved");
     } catch {
       toast.error("Failed to save academic structure");
@@ -211,6 +220,8 @@ export default function SettingsEditPage() {
               setSections={setSections}
               semester={semester}
               setSemester={setSemester}
+              schoolName={schoolName}
+              setSchoolName={setSchoolName}
               saving={academicSaving}
               onSave={saveAcademic}
             />

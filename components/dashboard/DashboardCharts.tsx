@@ -42,7 +42,7 @@ api.get("/api/dashboard/overview/chart")
 
 },[])
 
-if(loading) return <LoadingSpinner/>
+
 
 if(error) return (
   <div className="bg-white p-6 rounded-lg shadow border">
@@ -101,7 +101,7 @@ return (
 
 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
 
-<h2 className="font-bold text-lg lg:text-xl">
+<h2 className="font-bold text-lg lg:text-xl text-black">
 Fees Overview
 </h2>
 
@@ -149,7 +149,7 @@ paddingAngle={4}
 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-4 text-sm">
 <div className="bg-blue-50 p-3 rounded-lg">
   <p className="text-gray-600 text-sm">Expected</p>
-  <p className="font-semibold text-base lg:text-lg">₦{totalExpected.toLocaleString()}</p>
+  <p className="font-semibold text-base text-blue-600 lg:text-lg">₦{totalExpected.toLocaleString()}</p>
 </div>
 
 <div className="bg-green-50 p-3 rounded-lg">
@@ -166,16 +166,16 @@ paddingAngle={4}
 <div className="flex flex-col sm:flex-row justify-center gap-4 lg:gap-10 text-sm border-t pt-4">
 <div className="flex items-center gap-2">
 <div className="w-3 h-3 bg-green-600 rounded-full"/>
-<p>Collected</p>
-<span className="font-semibold">
+<p className="text-black">Collected</p>
+<span className="font-semibold text-black">
 ₦{totalPaid.toLocaleString()}
 </span>
 </div>
 
 <div className="flex items-center gap-2">
 <div className="w-3 h-3 bg-red-600 rounded-full"/>
-<p>Outstanding</p>
-<span className="font-semibold">
+<p className="text-black">Outstanding</p>
+<span className="font-semibold text-black">
 ₦{totalBalance.toLocaleString()}
 </span>
 </div>
@@ -187,7 +187,7 @@ paddingAngle={4}
 
 <div className="bg-white p-4 lg:p-6 rounded-lg shadow border flex flex-col gap-4">
 
-<h2 className="font-bold text-lg lg:text-xl">
+<h2 className="font-bold text-lg lg:text-xl text-black">
 Fees Performance by Class
 </h2>
 
@@ -265,14 +265,14 @@ name="Outstanding"
 
 <OutstandingStudentsTable/>
 
-<Link className="font-bold justify-end flex hover:underline text-sm lg:text-base px-4 lg:px-0" href={'/students'}>View All Students →</Link>
+<Link className="font-bold justify-end flex hover:underline text-sm  text-black lg:text-base px-4 lg:px-0" href={'/students'}>View All Students →</Link>
 
 <RecentPayments/>
 
 
 <div className="bg-white p-4 lg:p-6 rounded-lg shadow border flex flex-col gap-4">
 
-<h2 className="font-bold text-lg lg:text-xl">
+<h2 className="font-bold text-lg lg:text-xl text-black">
 Financial Insights
 </h2>
 
